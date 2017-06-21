@@ -7,15 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ConfigHeader.h"
+#import "NothingView.h"
 #import <MJRefresh.h>
 @interface BaseViewController : UIViewController
 @property (nonatomic, strong) MJRefreshNormalHeader * refreshHeader;
 @property (nonatomic, strong) MJRefreshAutoNormalFooter * refreshFooter;
 @property (nonatomic) SelectorBackType backType;
-
+@property (nonatomic, strong) NothingView * nullView;
 - (void)doBack;
 - (void)RefreshSetting;
 - (void)setNavTitle:(NSString *)title;
 - (void)drawBackButton;
+- (void)showNullViewWithMessage:(NSString *)message;
+- (void)getData;
 @end

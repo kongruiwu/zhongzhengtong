@@ -18,10 +18,16 @@
 
 //发送短信验证码
 #define Page_SendSms    @"SendSmsCode/SendSms"
+//验证code码
+#define Page_CheckSms   @"CheckSmsCode/CheckSms"
 //用户注册
 #define Page_Register   @"User/UserRegister"
 //用户登陆
 #define Page_login      @"User/UserLogin"
+//修改密码
+#define Page_ChangePwd  @"Password/UpdatePassword"
+//重置密码
+#define Page_ResetPwd   @"Password/FogetPassword"
 //获取用户信息
 #define Page_UserInfo   @"User/UserLoginCheck"
 //首页banner
@@ -45,6 +51,11 @@
 
 //推送信息
 #define Page_PushMes    @"Message/GetUserPopupMessagebyApp"
-
+//推送信息列表
+#define Page_PushList   @"Message/GetUserPopupMessageListbyApp"
+//系统消息
+#define Page_SysMes     @"Message/GetSystemMessagebyApp"
+//系统消息列表
+#define Page_SysList    @"Message/GetSystemMessageListbyApp"
 
 #endif /* API_h */

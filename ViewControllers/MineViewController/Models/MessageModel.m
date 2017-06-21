@@ -10,4 +10,13 @@
 
 @implementation MessageModel
 
+- (instancetype)initWithDictionary:(NSDictionary *)dic{
+    self = [super initWithDictionary:dic];
+    if (self) {
+        self.isOpen = NO;
+    }
+    return self;
+}
+
+
 @end

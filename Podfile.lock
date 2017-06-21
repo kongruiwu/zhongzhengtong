@@ -24,6 +24,8 @@ PODS:
   - SDWebImage (4.0.0):
     - SDWebImage/Core (= 4.0.0)
   - SDWebImage/Core (4.0.0)
+  - SVProgressHUD (2.1.2)
+  - WechatOpenSDK (1.7.7)
 
 DEPENDENCIES:
   - AFNetworking
@@ -34,6 +36,8 @@ DEPENDENCIES:
   - ReactiveObjC
   - SDCycleScrollView
   - SDWebImage
+  - SVProgressHUD
+  - WechatOpenSDK
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
@@ -44,7 +48,9 @@ SPEC CHECKSUMS:
   ReactiveObjC: ce79989e8684b9086b5f8d0c74bc7b81a8729c9e
   SDCycleScrollView: e3ade90e9b3159bec04330b208fbfd81c3f3b671
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+  SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
+  WechatOpenSDK: cbd332148eb792d444ed4eec94f421d98f2046ee
 
-PODFILE CHECKSUM: c8b3f878d2b2a5d9518cb6561ba3a02973a7b140
+PODFILE CHECKSUM: 40db9285b30d2f3ebc6cae87e688936ee4acbf30
 
 COCOAPODS: 1.1.1

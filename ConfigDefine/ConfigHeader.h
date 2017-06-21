@@ -15,12 +15,16 @@
 #import "NetWorkManager.h"
 #import <ReactiveObjC.h>
 #import "UserManager.h"
+#import <SVProgressHUD.h>
 //全局返回通用配置选项
 typedef NS_ENUM(NSInteger, SelectorBackType){
     SelectorBackTypePopBack = 0,
     SelectorBackTypeDismiss,
     SelectorBackTypePoptoRoot
 };
+
+#define WeCharUserID    @"gh_53368af0ad62"
+#define WXAPPKEY        @"wx62b05b5904c384b3"
 
 //750状态下字体适配
 #define font750(x) ((x)/ 1334.0f) * UI_HEGIHT

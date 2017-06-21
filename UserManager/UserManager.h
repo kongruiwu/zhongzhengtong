@@ -20,7 +20,10 @@
 @property (nonatomic, strong) NSString * deviceId;
 /**用户信息*/
 @property (nonatomic, strong) UserModel * userInfo;
+/**是否保存了密码*/
+@property (nonatomic, assign) BOOL isSavePwd;
 
-
+- (void)checkUserLogin;
+- (void)userLogOut;
 - (void)updateUserInfo;
 @end

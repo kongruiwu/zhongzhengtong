@@ -31,7 +31,7 @@
     return self;
 }
 - (void)creatUI{
-    self.time = 59;
+    
     self.inputTextf = [[UITextField alloc]init];
     self.inputTextf.textAlignment = NSTextAlignmentLeft;
     self.inputTextf.font = [UIFont systemFontOfSize:font750(28)];
@@ -71,33 +71,10 @@
     }];
 }
 - (void)getTheCode{
-    self.getcode.enabled = NO;
-    self.getcode.layer.borderColor = KTColor_lightGray.CGColor;
-    [self.getcode setTitle:@"59秒后重试" forState:UIControlStateNormal];
-    [self.getcode setTitleColor:KTColor_darkGray forState:UIControlStateNormal];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(changeButttonTime) userInfo:nil repeats:YES];
     
     if ([self.delegate respondsToSelector:@selector(userGetCode)]) {
         [self.delegate userGetCode];
     }
 }
 
-- (void)changeButttonTime{
-    if (self.time == 1) {
-        self.time = 59;
-        self.getcode.enabled = YES;
-        [self.getcode setTitleColor:MainRed forState:UIControlStateNormal];
-        [self.getcode setTitle:@"获取验证码" forState:UIControlStateNormal];
-        self.getcode.layer.borderColor = MainRed.CGColor;
-        [self.timer invalidate];
-        self.timer = nil;
-    }else{
-        self.time -- ;
-        [self.getcode setTitle:[NSString stringWithFormat:@"%d秒后重试",self.time] forState:UIControlStateNormal];
-    }
-}
-- (void)dealloc{
-    [self.timer invalidate];
-    self.timer = nil;
-}
 @end

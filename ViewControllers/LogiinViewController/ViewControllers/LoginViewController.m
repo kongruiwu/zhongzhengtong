@@ -15,6 +15,8 @@
 @property (nonatomic, strong) UITextField * nameT;
 @property (nonatomic, strong) UITextField * pwdT;
 
+
+
 @end
 
 @implementation LoginViewController
@@ -90,6 +92,8 @@
                                               textSize:font750(26)];
     [savePwd setImage:[UIImage imageNamed:@"unselect"] forState:UIControlStateNormal];
     [savePwd setImage:[UIImage imageNamed:@"select"] forState:UIControlStateSelected];
+    savePwd.selected = [UserManager instance].isSavePwd;
+    [savePwd addTarget:self action:@selector(savePassword:) forControlEvents:UIControlEventTouchUpInside];
     UIButton * forgetBtn = [Factory creatButtonWithTitle:@"忘记密码？"
                                          backGroundColor:[UIColor clearColor]
                                                textColor:MainRed
@@ -152,10 +156,19 @@
     }
     if (indexPath.row == 0) {
         [cell updateWithTitle:@"帐号" placeHolder:@"手机号/邮箱"];
+        NSString * name = @"";
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:@"UserName"]) {
+            name = [[NSUserDefaults standardUserDefaults] objectForKey:@"UserName"];
+        }
+        cell.textF.text = name;
         self.nameT = cell.textF;
     }else{
         [cell updateWithTitle:@"登录密码" placeHolder:@"请输入密码"];
         self.pwdT = cell.textF;
+        cell.textF.secureTextEntry = YES;
+        if ([UserManager instance].isSavePwd) {
+            cell.textF.text =[[NSUserDefaults standardUserDefaults] objectForKey:@"PassWord"];
+        }
     }
     return cell;
 }
@@ -171,6 +184,12 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 - (void)userLogin{
+    [[NSUserDefaults standardUserDefaults] setValue:self.nameT.text forKey:@"UserName"];
+    if ([UserManager instance].isSavePwd) {
+        [[NSUserDefaults standardUserDefaults] setValue:self.pwdT.text forKey:@"PassWord"];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     NSDictionary * params = @{
                               @"UserName":self.nameT.text,
                               @"UserPws":self.pwdT.text,
@@ -179,10 +198,21 @@
     [[NetWorkManager manager] GET:Page_login tokenParams:params complete:^(id result) {
         NSDictionary * dic = (NSDictionary *)result;
         [UserManager instance].userInfo = [[UserModel alloc]initWithDictionary:dic];
+        [[UserManager instance] checkUserLogin];
         [self dismissViewControllerAnimated:YES completion:nil];
     } error:^(JSError *error) {
         
     }];
 }
+- (void)savePassword:(UIButton *)button{
+    button.selected = !button.selected;
+    if (!button.selected) {
+        [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"PassWord"];
+    }else{
+        [[NSUserDefaults standardUserDefaults] setValue:self.pwdT.text forKey:@"PassWord"];
+    }
+    [UserManager instance].isSavePwd = button.selected;
+}
+
 
 @end

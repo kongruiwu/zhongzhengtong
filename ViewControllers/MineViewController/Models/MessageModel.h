@@ -20,4 +20,5 @@
 @property (nonatomic, strong) NSString * ReceiveID;
 /**1:成功的计划2：发布计划 0:失败计划  3 3.0策略  4策略股池 5问答 6股池超过5% 7消息管理）*/
 @property (nonatomic, strong) NSString * Flag;
+@property (nonatomic, assign) BOOL isOpen;
 @end

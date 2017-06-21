@@ -14,6 +14,8 @@
 
 @property (nonatomic, strong) UITableView * tabview;
 @property (nonatomic, strong) NSMutableArray * dataArray;
+@property (nonatomic, strong) NSString * pushMessage;
+@property (nonatomic, strong) NSString * sysMessage;
 
 @end
 
@@ -57,9 +59,9 @@
         cell = [[MessageListCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid];
     }
     if (indexPath.row ==0) {
-        [cell updateWithImage:@"push" title:@"推送消息" desc:@"尊敬的用户，您订阅的大时代进计划涨了"];
+        [cell updateWithImage:@"push" title:@"推送消息" desc:self.pushMessage];
     }else{
-        [cell updateWithImage:@"system" title:@"系统消息" desc:@"尊敬的用户，您订阅的大时代进计划涨了"];
+        [cell updateWithImage:@"system" title:@"系统消息" desc:self.sysMessage];
     }
     return cell;
 }
@@ -74,15 +76,43 @@
 }
 
 - (void)getData{
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_group_enter(group);
     NSDictionary * params = @{
                             @"UserId":[UserManager instance].userInfo.ID,
                             @"TopCount":@1
                              };
     [[NetWorkManager manager] POST:Page_PushMes tokenParams:params complete:^(id result) {
-        NSLog(@"%@",result);
+        NSArray * arr = (NSArray *)result;
+        if (arr.count>0) {
+            MessageModel * model = [[MessageModel alloc]initWithDictionary:arr[0]];
+            self.pushMessage = model.MsgContent;
+            dispatch_group_leave(group);
+        }
     } error:^(JSError *error) {
-        
+       self.pushMessage = @"";
+        dispatch_group_leave(group);
     }];
+    dispatch_group_enter(group);
+    params = @{
+              @"UserId":[UserManager instance].userInfo.ID,
+              @"TopCount":@1
+              };
+    [[NetWorkManager manager] POST:Page_SysMes tokenParams:params complete:^(id result) {
+        NSArray * arr = (NSArray *)result;
+        if (arr.count>0) {
+            MessageModel * model = [[MessageModel alloc]initWithDictionary:arr[0]];
+            self.sysMessage = model.MsgContent;
+            dispatch_group_leave(group);
+        }
+    } error:^(JSError *error) {
+        self.sysMessage = @"";
+        dispatch_group_leave(group);
+    }];
+    dispatch_queue_t mainquene = dispatch_get_main_queue();
+    dispatch_group_notify(group, mainquene, ^{
+        [self.tabview reloadData];
+    });
 }
 
 @end

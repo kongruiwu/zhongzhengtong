@@ -143,6 +143,7 @@
 }
 
 - (void)getBannerData{
+    [SVProgressHUD show];
     NSDictionary * params = @{
                               @"TopCount": @5
                               };
@@ -160,8 +161,9 @@
         }
         self.bannerViw.imageURLStringsGroup = imgs;
         self.bannerViw.titlesGroup = titles;
+        [SVProgressHUD dismiss];
     } error:^(JSError *error) {
-        
+        [SVProgressHUD dismiss];
     }];
 }
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index{

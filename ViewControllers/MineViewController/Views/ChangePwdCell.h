@@ -23,8 +23,7 @@
 @property (nonatomic, strong) UIView * lineView;
 @property (nonatomic, assign) id<ChangePwdCellDelegate> delegate;
 @property (nonatomic, strong) UIButton * getcode;
-@property (nonatomic, strong) NSTimer * timer;
-@property (nonatomic, assign) int time;
+
 
 
 @end

@@ -85,7 +85,9 @@
                 [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:[NSString stringWithFormat:@"错误码：%@  \n 错误信息 %@",jserror.code,jserror.message] duration:2.0f];
     #endif
             }
+            [SVProgressHUD dismiss];
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            [SVProgressHUD dismiss];
             JSError * jserror = [[JSError alloc]init];
             jserror.code = [NSString stringWithFormat:@"%ld",error.code];
             jserror.message = error.description;
@@ -159,7 +161,9 @@
             [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:[NSString stringWithFormat:@"错误码：%@  \n 错误信息 %@",jserror.code,jserror.message] duration:2.0f];
 #endif
         }
+        [SVProgressHUD dismiss];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [SVProgressHUD dismiss];
         JSError * jserror = [[JSError alloc]init];
         jserror.code = [NSString stringWithFormat:@"%ld",error.code];
         jserror.message = error.description;
@@ -203,5 +207,6 @@
 #endif
     }];
 }
+
 
 @end

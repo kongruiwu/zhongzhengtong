@@ -110,6 +110,7 @@
 
 #pragma mark -意见反馈
 - (IBAction)feedback:(id)sender {
+    [SVProgressHUD dismiss];
     NSDictionary * params =@{
                              @"Question":self.feedbackContent.text,
                              @"IsDisplay":@0,

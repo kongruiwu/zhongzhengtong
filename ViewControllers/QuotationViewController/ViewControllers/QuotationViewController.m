@@ -33,7 +33,7 @@
 }
 - (void)creatUI{
     self.dataArray = [NSMutableArray new];
-    self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT - 64) style:UITableViewStylePlain];
+    self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT - 64 - 49) style:UITableViewStylePlain];
     self.tabview.delegate = self;
     self.tabview.dataSource = self;
     [self.view addSubview:self.tabview];
@@ -64,10 +64,12 @@
     [self.tabview reloadData];
 }
 - (void)getData{
+    [SVProgressHUD show];
     [self.dataArray removeAllObjects];
     NSDictionary * params = @{@"UserId":[UserManager instance].userInfo.ID,
                               @"VersionType":@3};
     [[NetWorkManager manager] GET:Page_Quotation tokenParams:params complete:^(id result) {
+        self.nullView.hidden = YES;
         NSArray * arr = (NSArray *)result;
         for (int i = 0; i<arr.count; i++) {
             QuotationModel * model = [[QuotationModel alloc]initWithDictionary:arr[i]];
@@ -75,7 +77,11 @@
         }
         [self.tabview reloadData];
     } error:^(JSError *error) {
-        
+        if (error.code.integerValue == 103) {
+            [self showNullViewWithMessage:@"暂时没有数据..."];
+        }else{
+            [self showNullViewWithMessage:@"网络请求超时..."];
+        }
     }];
 }
 

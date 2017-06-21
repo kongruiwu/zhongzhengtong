@@ -19,9 +19,25 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barTintColor = MainRed;
+    [self creatNullView];
     // Do any additional setup after loading the view.
 }
-
+- (void)creatNullView{
+    self.nullView = [[NothingView alloc]initWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT)];
+    [self.view addSubview:self.nullView];
+    self.nullView.hidden = YES;
+    
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(getData)];
+    [self.nullView addGestureRecognizer:tap];
+}
+- (void)getData{
+    
+}
+- (void)showNullViewWithMessage:(NSString *)message{
+    self.nullView.hidden = NO;
+    [self.view bringSubviewToFront:self.nullView];
+    self.nullView.message =  message;
+}
 - (void)doBack{
     switch (self.backType) {
         case SelectorBackTypeDismiss:

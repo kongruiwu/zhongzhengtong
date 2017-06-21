@@ -13,6 +13,7 @@
 #import "VersionViewController.h"
 #import "ChangePwdViewController.h"
 #import "PayMoenyViewController.h"
+#import <WXApi.h>
 //测试
 #import "LoginViewController.h"
 @interface MineViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -32,6 +33,7 @@
     clearView.backgroundColor = [UIColor clearColor];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self.view addSubview:clearView];
+    [self.header updateUseinfo];
     self.tabBarController.tabBar.hidden = NO;
 }
 - (void)viewWillDisappear:(BOOL)animated{
@@ -140,7 +142,10 @@
     }
 }
 - (void)payMoney{
-    [self.navigationController pushViewController:[PayMoenyViewController new] animated:YES];
+    JumpToBizProfileReq * req = [[JumpToBizProfileReq alloc]init];
+    req.profileType = WXBizProfileType_Device;
+    req.username = WeCharUserID;
+    [WXApi sendReq:req];
 }
 - (void)userLogin{
     UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];

@@ -10,9 +10,14 @@
 #import "ConfigHeader.h"
 #import "RootViewController.h"
 #import "NetWorkManager.h"
+#import <IQKeyboardManager.h>
+#import "FristViewController.h"
+#import "LoginViewController.h"
+#import <WXApi.h>
+@interface AppDelegate ()<WXApiDelegate>
 
-@interface AppDelegate ()
-
+@property (nonatomic, strong) NSTimer * timer;
+@property (nonatomic, assign)BOOL isShow;
 @end
 
 @implementation AppDelegate
@@ -20,15 +25,47 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:@"userLogOut" object:nil];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(checkUserInfo) userInfo:nil repeats:YES];
+    
     [[NetWorkManager manager] requestToken];
     [[UserManager instance] updateUserInfo];
+    [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
+    [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
+    [IQKeyboardManager sharedManager].shouldShowTextFieldPlaceholder = NO;
     self.window = [[UIWindow alloc]initWithFrame:UI_BOUNDS];
     [self.window makeKeyAndVisible];
-    [self.window setRootViewController:[RootViewController new]];
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"Frist"]) {
+        [self.window setRootViewController:[FristViewController new]];
+    }else{
+        [self.window setRootViewController:[RootViewController new]];
+    }
+    [WXApi registerApp:WXAPPKEY];
     
     return YES;
 }
 
+- (void)checkUserInfo{
+    [[UserManager instance] updateUserInfo];
+}
+- (void)userLogOut{
+    if (self.isShow) {
+        return;
+    }
+    UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
+    UINavigationController  *nvc = tbc.selectedViewController;
+    UIViewController *vc = nvc.visibleViewController;
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"下线通知" message:@"您的帐号已经在其他设备登录" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * cannceAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        self.isShow = NO;
+        [[UserManager instance] userLogOut];
+        UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
+        [vc presentViewController:nav animated:YES completion:nil];
+    }];
+    [alert addAction:cannceAction];
+    [vc presentViewController:alert animated:YES completion:nil];
+    self.isShow = YES;
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

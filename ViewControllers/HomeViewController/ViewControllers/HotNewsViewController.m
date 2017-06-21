@@ -42,7 +42,7 @@
 - (void)creatUI{
     self.page = 1;
     self.dataArray = [NSMutableArray new];
-    self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT -Anno750(30)) style:UITableViewStylePlain];
+    self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT -49) style:UITableViewStylePlain];
     self.tabview.delegate = self;
     self.tabview.dataSource = self;
     [self.view addSubview:self.tabview];
@@ -82,6 +82,7 @@
     [self.tabview reloadData];
 }
 - (void)getData{
+    [SVProgressHUD show];
     NSDictionary * params = @{
                             @"PageIndex":@(self.page),
                             @"PageSize":@10
@@ -89,12 +90,7 @@
     [[NetWorkManager manager] GET:Page_HotNews tokenParams:params complete:^(id result) {
         NSDictionary * dic = (NSDictionary *)result;
         NSArray * arr = dic[@"List"];
-        if (self.dataArray.count != 0 && arr.count< 10) {
-            if (arr.count == 0) {
-                self.page -= 1;
-            }
-            [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"没有更多了" duration:1.0f];
-        }
+        self.page ++;
         for (int i = 0; i<arr.count; i++) {
             HotNewsModel * model = [[HotNewsModel alloc]initWithDictionary:arr[i]];
             [self.dataArray addObject:model];
@@ -103,11 +99,18 @@
         [self.refreshHeader endRefreshing];
         [self.refreshFooter endRefreshing];
     } error:^(JSError *error) {
-        if (self.page != 1) {
-            self.page -- ;
-        }
         [self.refreshHeader endRefreshing];
         [self.refreshFooter endRefreshing];
+        if (error.code.integerValue == 103) {
+            if (self.dataArray.count == 0) {
+                [self showNullViewWithMessage:@"暂无热点信息..."];
+            }else{
+                [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"没有更多了" duration:1.0f];
+            }
+            
+        }else{
+            [self showNullViewWithMessage:@"网络好像有问题..."];
+        }
     }];
 }
 - (void)updatedata{
@@ -116,7 +119,6 @@
     [self getData];
 }
 - (void)LoadMoreData{
-    self.page++;
     [self getData];
 }
 

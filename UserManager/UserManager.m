@@ -18,12 +18,15 @@
         if (manger == nil) {
             manger = [[UserManager alloc]init];
             [manger checkUserLogin];
+            NSString * pwd = [[NSUserDefaults standardUserDefaults] objectForKey:@"PassWord"];
+            manger.isSavePwd = pwd.length ==0 ? NO:YES;
         }
     });
     return manger;
 }
 
 - (void)updateUserInfo{
+    
     if (!self.isLog) {
         return;
     }
@@ -34,6 +37,7 @@
     [[NetWorkManager manager] GET:Page_UserInfo tokenParams:params complete:^(id result) {
         self.userInfo = [[UserModel alloc]initWithDictionary:(NSDictionary *)result];
     } error:^(JSError *error) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"userLogOut" object:nil];
     }];
     
 }
@@ -49,8 +53,6 @@
 - (void)userLogOut{
     self.userInfo = nil;
     self.isLog = NO;
-    [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"UserName"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

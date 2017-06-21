@@ -55,6 +55,7 @@
         make.width.equalTo(@(Anno750(70)));
         make.height.equalTo(@(Anno750(70)));
     }];
+    
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.leftImg.mas_right).offset(Anno750(24));
         make.top.equalTo(self.leftImg.mas_top);
@@ -64,7 +65,7 @@
         make.centerY.equalTo(@0);
     }];
     [self.descLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.nameLabel.mas_left);
+        make.left.equalTo(self.leftImg.mas_right).offset(Anno750(24));
         make.bottom.equalTo(self.leftImg.mas_bottom);
         make.right.equalTo(@(Anno750(-60)));
     }];
@@ -78,8 +79,12 @@
 
 - (void)updateWithImage:(NSString *)img title:(NSString *)title desc:(NSString *)desc{
     self.leftImg.image = [UIImage imageNamed:img];
+    if (desc == nil|| desc.length == 0) {
+        self.descLabel.text = @"暂无最新信息";
+    }else{
+        self.descLabel.text = desc;
+    }
     self.nameLabel.text = title;
-    self.descLabel.text = desc;
 }
 
 @end

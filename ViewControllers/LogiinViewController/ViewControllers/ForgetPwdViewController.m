@@ -17,10 +17,22 @@
 @property (nonatomic, strong) UITextField * codeTextF;
 @property (nonatomic, strong) UIButton * nextBtn;
 @property (nonatomic, strong) UIButton * selctBtn;
+@property (nonatomic, strong) NSTimer * timer;
+@property (nonatomic, strong) UIButton * getCodeBtn;
+@property (nonatomic, assign) int time;
 
 @end
 
 @implementation ForgetPwdViewController
+
+//- (void)viewWillDisappear:(BOOL)animated{
+//    [super viewWillDisappear:animated];
+//}
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [self.timer invalidate];
+    self.timer = nil;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -127,7 +139,6 @@
         }];
         self.selctBtn = selctBtn;
         [self.selctBtn addTarget:self action:@selector(agreePortocol) forControlEvents:UIControlEventTouchUpInside];
-        [protoBtn addTarget:self action:@selector(checkProtocol) forControlEvents:UIControlEventTouchUpInside];
     }
     
     return footer;
@@ -140,7 +151,9 @@
     }
     if (indexPath.row == 1) {
         if (self.logType == LOGINTYPEFOGET) {
+            self.time = 59;
             cell.getcode.hidden =NO;
+            self.getCodeBtn = cell.getcode;
         }
         self.codeTextF = cell.inputTextf;
     }else{
@@ -153,29 +166,85 @@
 }
 - (void)sureBtnClick{
     if (self.logType == LOGINTYPEFOGET) {
-        ForgetPwdViewController * vc = [ForgetPwdViewController new];
-        vc.logType = LOGINTYPESETPWD;
-        [self.navigationController pushViewController:vc animated:YES];
+        [self checkCode];
     }else if(self.logType == LOGINTYPEREGISTER){
         [self userRegister];
     }else{
-        
+        [self resetPassWord];
     }
 }
+#pragma mark 查看协议
 - (void)pushToProtocolView{
     WkWebViewController * vc = [[WkWebViewController alloc]initWithTitle:@"服务协议" content:@""];
     [self.navigationController pushViewController:vc animated:YES];
 }
+#pragma mark 获取验证码
 - (void)userGetCode{
+    [SVProgressHUD show];
     NSDictionary * params = @{
                               @"TelPhone":self.phoneTextF.text
                               };
     [[NetWorkManager manager] POST:Page_SendSms tokenParams:params complete:^(id result) {
         [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"短信验证码已发出" duration:2.0f];
+        self.getCodeBtn.enabled = NO;
+        self.getCodeBtn.layer.borderColor = KTColor_lightGray.CGColor;
+        [self.getCodeBtn setTitle:@"59秒后重试" forState:UIControlStateNormal];
+        [self.getCodeBtn setTitleColor:KTColor_darkGray forState:UIControlStateNormal];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(changeButttonTime) userInfo:nil repeats:YES];
     } error:^(JSError *error) {
-        
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:error.message duration:1.0f];
     }];
 }
+- (void)changeButttonTime{
+    if (self.time == 1) {
+        self.time = 59;
+        self.getCodeBtn.enabled = YES;
+        [self.getCodeBtn setTitleColor:MainRed forState:UIControlStateNormal];
+        [self.getCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+        self.getCodeBtn.layer.borderColor = MainRed.CGColor;
+        [self.timer invalidate];
+        self.timer = nil;
+    }else{
+        self.time -- ;
+        [self.getCodeBtn setTitle:[NSString stringWithFormat:@"%d秒后重试",self.time] forState:UIControlStateNormal];
+    }
+}
+
+#pragma mark 验证验证码
+- (void)checkCode{
+    NSDictionary * params =@{
+                             @"TelPhone":self.phoneTextF.text,
+                             @"Code":self.codeTextF.text
+                             };
+    [[NetWorkManager manager] POST:Page_CheckSms tokenParams:params complete:^(id result) {
+        ForgetPwdViewController * vc = [ForgetPwdViewController new];
+        vc.logType = LOGINTYPESETPWD;
+        vc.phoneNum = self.phoneTextF.text;
+        [self.navigationController pushViewController:vc animated:YES];
+    } error:^(JSError *error) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:error.message duration:1.0f];
+    }];
+}
+
+#pragma mark 用户重置密码
+- (void)resetPassWord{
+    if (![self.phoneTextF.text isEqualToString:self.codeTextF.text]) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"两次密码不一致，请重新输入" duration:1.0f];
+    }
+    NSDictionary * params = @{
+                              @"Phone":self.phoneNum,
+                              @"NewPassword":self.phoneTextF.text,
+                              @"ConfirmPassword":self.codeTextF.text
+                              };
+    [[NetWorkManager manager] POST:Page_ResetPwd tokenParams:params complete:^(id result) {
+        [ToastView presentToastWithin:self.view.window withIcon:APToastIconNone text:@"修改成功" duration:1.0f];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    } error:^(JSError *error) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:error.message duration:1.0f];
+    }];
+}
+
+#pragma mark 用户注册
 - (void)userRegister{
     if (!self.selctBtn.selected) {
         [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"您还没有同意服务条款" duration:2.0f];
@@ -186,16 +255,15 @@
                               @"UserPws":self.codeTextF.text
                               };
     [[NetWorkManager manager] POST:Page_Register tokenParams:params complete:^(id result) {
-        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"注册成功" duration:2.0f];
-        [self dismissViewControllerAnimated:YES completion:nil];
+        [ToastView presentToastWithin:self.view.window withIcon:APToastIconNone text:@"注册成功" duration:2.0f];
+        [self.navigationController popToRootViewControllerAnimated:YES];
     } error:^(JSError *error) {
         
     }];
 }
+#pragma mark 同意协议
 - (void)agreePortocol{
     self.selctBtn.selected = !self.selctBtn.selected;
 }
-- (void)checkProtocol{
-    
-}
+
 @end

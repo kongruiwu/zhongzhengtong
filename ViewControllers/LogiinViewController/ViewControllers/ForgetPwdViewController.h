@@ -16,4 +16,5 @@ typedef NS_ENUM(NSInteger,LOGINTYPE){
 
 @interface ForgetPwdViewController : BaseViewController
 @property (nonatomic, assign) LOGINTYPE logType;
+@property (nonatomic, strong) NSString * phoneNum;
 @end

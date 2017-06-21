@@ -8,5 +8,7 @@ pod 'SDWebImage'
 pod 'IQKeyboardManager'
 pod 'SDCycleScrollView'
 pod 'ReactiveObjC'
+pod ‘SVProgressHUD'
+pod 'WechatOpenSDK'
 end
 

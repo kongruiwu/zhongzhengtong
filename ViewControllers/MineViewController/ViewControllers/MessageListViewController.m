@@ -8,10 +8,12 @@
 
 #import "MessageListViewController.h"
 #import "MessageDetailCell.h"
+#import "MessageModel.h"
 @interface MessageListViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView * tabview;
-@property (nonatomic, strong) NSMutableArray * dataArray;
+@property (nonatomic, strong) NSMutableArray<MessageModel *> * dataArray;
+@property (nonatomic) int page;
 
 @end
 
@@ -31,19 +33,35 @@
     
     [self drawBackButton];
     [self creatUI];
+    [self getData];
+    [self addRefreshView];
 }
 
 - (void)creatUI{
-    self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT -Anno750(30)) style:UITableViewStylePlain];
+    self.page = 1;
+    self.dataArray = [NSMutableArray new];
+    self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT - 49) style:UITableViewStylePlain];
     self.tabview.delegate = self;
     self.tabview.dataSource = self;
     [self.view addSubview:self.tabview];
 }
+- (void)addRefreshView{
+    self.refreshHeader = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(updatedata)];
+    self.refreshFooter = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(LoadMoreData)];
+    self.tabview.mj_footer = self.refreshFooter;
+    self.tabview.mj_header = self.refreshHeader;
+}
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 10;
+    return self.dataArray.count;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (self.dataArray[indexPath.row].isOpen) {
+        CGSize size = [Factory getSize:self.dataArray[indexPath.row].MsgContent maxSize:CGSizeMake(Anno750(750 - 78), 999999) font:[UIFont systemFontOfSize:font750(28)]];
+        return Anno750(120)+ size.height;
+    }
     return Anno750(180);
 }
 //设置cell为可编辑
@@ -75,8 +93,61 @@
     if (!cell) {
         cell = [[MessageDetailCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid];
     }
-    
+    [cell updateWithMessageModel:self.dataArray[indexPath.row]];
     return cell;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    CGSize size = [Factory getSize:self.dataArray[indexPath.row].MsgContent maxSize:CGSizeMake(999999, Anno750(28)) font:[UIFont systemFontOfSize:font750(28)]];
+    if (size.width >= 2 * Anno750(750 - 78) ? NO : YES) {
+        return;
+    }
+
+    self.dataArray[indexPath.row].isOpen = !self.dataArray[indexPath.row].isOpen;
+    [self.tabview reloadData];
+}
+- (void)updatedata{
+    self.page = 1;
+    [self.dataArray removeAllObjects];
+    [self getData];
+}
+- (void)LoadMoreData{
+    [self getData];
+}
+- (void)getData{
+    [SVProgressHUD show];
+    NSDictionary * params = @{
+                              @"UserId":[UserManager instance].userInfo.ID,
+                              @"PageIndex":@(self.page),
+                              @"PageSize":@10
+                              };
+    NSString * pageUrl = Page_SysList;
+    if (self.isPush) {
+        pageUrl = Page_PushList;
+    }
+    [[NetWorkManager manager] GET:pageUrl tokenParams:params complete:^(id result) {
+        NSArray * arr = (NSArray *)result;
+        self.page++;
+        for (int i = 0; i<arr.count; i++) {
+            MessageModel * model = [[MessageModel alloc]initWithDictionary:arr[i]];
+            [self.dataArray addObject:model];
+        }
+        [self.tabview reloadData];
+        [self.refreshHeader endRefreshing];
+        [self.refreshFooter endRefreshing];
+    } error:^(JSError *error) {
+        [self.refreshHeader endRefreshing];
+        [self.refreshFooter endRefreshing];
+        if (error.code.integerValue == 103) {
+            if (self.dataArray.count == 0) {
+                [self showNullViewWithMessage:@"暂时还没有您的消息..."];
+            }else{
+                [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"没有更多了" duration:1.0f];
+            }
+            
+        }else{
+            [self showNullViewWithMessage:@"网络好像有问题..."];
+        }
+    }];
 }
 
 @end
