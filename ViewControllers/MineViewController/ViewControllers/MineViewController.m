@@ -51,7 +51,7 @@
 
 - (void)creatUI{
     self.view.backgroundColor = GroundColor;
-    self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, -20, UI_WIDTH, UI_HEGIHT+20) style:UITableViewStyleGrouped];
+    self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT- 49) style:UITableViewStyleGrouped];
     self.tabview.delegate = self;
     self.tabview.dataSource = self;
     [self.view addSubview:self.tabview];
