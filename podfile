@@ -1,0 +1,12 @@
+platform :ios,'8.0'
+target 'ZhongZhengTong' do
+pod 'AFNetworking'
+pod 'MJRefresh'
+pod 'Masonry'
+pod 'HMSegmentedControl'
+pod 'SDWebImage'
+pod 'IQKeyboardManager'
+pod 'SDCycleScrollView'
+pod 'ReactiveObjC'
+end
+
