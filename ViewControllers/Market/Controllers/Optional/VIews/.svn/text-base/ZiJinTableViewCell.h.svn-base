@@ -1,0 +1,21 @@
+//
+//  ZiJinTableViewCell.h
+//  GuBaProject
+//
+//  Created by pipiwu on 15/7/6.
+//  Copyright (c) 2015年 pipiwu. All rights reserved.
+
+#import <UIKit/UIKit.h>
+#import "OptionalModel.h"
+
+@interface ZiJinTableViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIView  *zhangdieBackView;
+@property (weak, nonatomic) IBOutlet UILabel *stockNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stockCodeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *zuiXinJia;
+@property (weak, nonatomic) IBOutlet UILabel *jingLiuRu;
+@property (weak, nonatomic) IBOutlet UILabel *zhangDie;
+@property (weak, nonatomic) IBOutlet UILabel *zhangFu;
+
+@property (nonatomic,strong)OptionalModel *stockModel;
+@end

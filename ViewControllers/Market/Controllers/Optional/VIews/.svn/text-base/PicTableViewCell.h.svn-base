@@ -1,0 +1,15 @@
+//
+//  PicTableViewCell.h
+//  YYT
+//
+//  Created by pipiwu on 15/4/9.
+//  Copyright (c) 2015年 pipiwu. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface PicTableViewCell : UITableViewCell
+@property (strong, nonatomic) IBOutlet UIImageView *cellImageView;
+@property (strong, nonatomic) IBOutlet UILabel *cellTitle;
+@property (strong, nonatomic) IBOutlet UILabel *cellTime;
+@end

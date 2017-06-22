@@ -1,0 +1,26 @@
+//
+//  PicTableViewCell.m
+//  YYT
+//
+//  Created by pipiwu on 15/4/9.
+//  Copyright (c) 2015年 pipiwu. All rights reserved.
+//
+
+#import "PicTableViewCell.h"
+
+@implementation PicTableViewCell
+@synthesize cellImageView,cellTime,cellTitle;
+
+- (void)awakeFromNib {
+    // Initialization code
+    [super awakeFromNib];
+    //cellTitle.adjustsFontSizeToFitWidth = YES;
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

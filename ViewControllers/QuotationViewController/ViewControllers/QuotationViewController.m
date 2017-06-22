@@ -76,7 +76,9 @@
             [self.dataArray addObject:model];
         }
         [self.tabview reloadData];
+        [self.refreshHeader endRefreshing];
     } error:^(JSError *error) {
+        [self.refreshHeader endRefreshing];
         if (error.code.integerValue == 103) {
             [self showNullViewWithMessage:@"暂时没有数据..."];
         }else{

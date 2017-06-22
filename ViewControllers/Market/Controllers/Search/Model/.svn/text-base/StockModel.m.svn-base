@@ -1,0 +1,13 @@
+//
+//  StockModel.m
+//  NiuBa
+//
+//  Created by JopYin on 2016/10/31.
+//  Copyright © 2016年 安徽黄埔. All rights reserved.
+//
+
+#import "StockModel.h"
+
+@implementation StockModel
+
+@end

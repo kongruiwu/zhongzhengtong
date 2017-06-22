@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="70" id="KGk-i7-Jjw" customClass="InvestNoDataCell">
+            <rect key="frame" x="0.0" y="0.0" width="314" height="70"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="314" height="69"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pQH-nz-gAC">
+                        <rect key="frame" x="142" y="20" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="LRk-uN-D84"/>
+                            <constraint firstAttribute="height" constant="30" id="P1B-BI-EmA"/>
+                        </constraints>
+                        <state key="normal" backgroundImage="add.png"/>
+                        <connections>
+                            <action selector="addStock:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Fwh-87-FEN"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="pQH-nz-gAC" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Bu9-fF-p7L"/>
+                    <constraint firstItem="pQH-nz-gAC" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="e9n-0t-KOz"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="addBtn" destination="pQH-nz-gAC" id="LtL-Z5-NsA"/>
+            </connections>
+            <point key="canvasLocation" x="59" y="143"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="add.png" width="44" height="44"/>
+    </resources>
+</document>

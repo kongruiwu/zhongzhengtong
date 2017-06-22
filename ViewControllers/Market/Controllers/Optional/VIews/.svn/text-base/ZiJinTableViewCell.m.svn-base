@@ -1,0 +1,59 @@
+//
+//  ZiJinTableViewCell.m
+//  GuBaProject
+//
+//  Created by pipiwu on 15/7/6.
+//  Copyright (c) 2015年 pipiwu. All rights reserved.
+//
+
+#import "ZiJinTableViewCell.h"
+
+#define makeFloat(fmt) [NSString stringWithFormat:@"%.2f",fmt]
+
+@implementation ZiJinTableViewCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    [super awakeFromNib];
+    self.contentView.backgroundColor = [UIColor colorWithHexString:@"#f5f4f9" withAlpha:1.0];
+    self.jingLiuRu.font = [UIFont systemFontOfSize:15.0];
+    
+}
+- (void)setStockModel:(OptionalModel *)stockModel {
+    _stockModel = stockModel;
+    if (stockModel)
+    {
+        if (stockModel.newPrice == 0.0)
+        {
+            self.zuiXinJia.text = makeFloat(stockModel.closePrice);
+            self.zhangDie.text  = @"--";
+            self.zhangFu.text   = @"--";
+            self.zhangdieBackView.backgroundColor = [UIColor grayColor];
+        }
+        else
+        {
+            self.zuiXinJia.text = makeFloat(stockModel.newPrice);
+            self.zhangDie.text  = makeFloat(stockModel.upAndDowVolume);
+            self.zhangFu.text   = [NSString stringWithFormat:@"%.2f%%",stockModel.upAndDowRate];;
+            if (stockModel.upAndDowVolume > 0.0)
+            {
+                self.zhangdieBackView.backgroundColor = [UIColor colorWithHexString:@"#dd2123" withAlpha:1.0];
+            }
+            else
+            {
+                self.zhangdieBackView.backgroundColor = [UIColor colorWithHexString:@"#41a72d" withAlpha:1.0];
+            }
+        }
+    }
+    else
+    {
+        self.zuiXinJia.text = @"--";
+        self.zhangFu.text   = @"--";
+        self.zhangDie.text  = @"--";
+        self.jingLiuRu.text = @"--";
+        self.zhangdieBackView.backgroundColor = [UIColor colorWithHexString:@"#dd2123" withAlpha:1.0];
+    }
+    
+}
+
+@end

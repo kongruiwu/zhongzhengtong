@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FindeStock">
+            <connections>
+                <outlet property="HeadView" destination="iN0-l3-epB" id="Rr0-tE-J6u"/>
+                <outlet property="searchTextF" destination="MMq-Su-c7H" id="4rv-ad-K0d"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add" translatesAutoresizingMaskIntoConstraints="NO" id="6vf-Er-VI6">
+                    <rect key="frame" x="6" y="7.5" width="35" height="35"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="35" id="SpI-6g-UXb"/>
+                        <constraint firstAttribute="width" constant="35" id="icd-Wk-omX"/>
+                    </constraints>
+                </imageView>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入股票代码/简拼" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MMq-Su-c7H" customClass="WMXPickerTF">
+                    <rect key="frame" x="49" y="10" width="318" height="30"/>
+                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+            </subviews>
+            <color key="backgroundColor" red="0.43529411764705883" green="0.44313725490196076" blue="0.47450980392156861" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="MMq-Su-c7H" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="9bl-Gg-xXA"/>
+                <constraint firstItem="6vf-Er-VI6" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="EoX-wi-QXx"/>
+                <constraint firstItem="6vf-Er-VI6" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="6" id="SEK-Jc-bUw"/>
+                <constraint firstAttribute="trailing" secondItem="MMq-Su-c7H" secondAttribute="trailing" constant="8" id="VhT-1d-rxC"/>
+                <constraint firstItem="MMq-Su-c7H" firstAttribute="leading" secondItem="6vf-Er-VI6" secondAttribute="trailing" constant="8" id="Z51-dd-mB1"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-292" y="-509"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="add" width="45" height="43"/>
+    </resources>
+</document>

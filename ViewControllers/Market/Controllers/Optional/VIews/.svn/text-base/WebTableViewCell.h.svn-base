@@ -1,0 +1,23 @@
+//
+//  WebTableViewCell.h
+//  FuWengFactory
+//
+//  Created by pipiwu on 15/5/21.
+//  Copyright (c) 2015年 pipiwu. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "OptionalModel.h"
+
+@interface WebTableViewCell : UITableViewCell
+
+@property (weak, nonatomic) IBOutlet UILabel *stockNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *stockCodeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *priceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *zhangdieLabel;
+@property (weak, nonatomic) IBOutlet UILabel *zhangfuLabel;
+@property (weak, nonatomic) IBOutlet UIView  *zhangdieView;
+
+@property (nonatomic,strong)OptionalModel *optionalModel;
+
+@end

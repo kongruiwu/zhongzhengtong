@@ -1,0 +1,36 @@
+//
+//  NewsTableViewController.h
+//  BigTimeStrategy
+//
+//  @Author: JopYin on 16/7/7.
+//  Copyright © 2016年 安徽黄埔. All rights reserved.
+//
+
+#import "BasicTableViewController.h"
+
+typedef NS_ENUM(NSInteger, NEWSTYPE) {
+    NEWSTYPE_XinWen,  //新闻
+    NEWSTYPE_YanBao,  //研报
+};
+
+@protocol NewsDelegate <NSObject>
+
+//点击cellpush到详情协议方法
+- (void)pushZWViewController:(NSString *)zhengWenURL withType:(NSInteger)ZhengWenType;
+
+@end
+
+@interface NewsTableViewController : BasicTableViewController
+
+@property(nonatomic,assign) id <NewsDelegate> delegate;
+
+@property (assign,nonatomic) NEWSTYPE newsType;
+
+@property (nonatomic, assign) BOOL isFromHangqingToGeguhangqing;
+
+@property (nonatomic ,strong) UINavigationController *navi;
+
+- (void)updateWith:(NEWSTYPE)type withStockCodes:(NSArray *)arr;
+
+- (id)initwithNavigation:(UINavigationController *)navi;
+@end

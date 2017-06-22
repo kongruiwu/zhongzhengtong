@@ -1,0 +1,128 @@
+//
+//  YDSXZenWenVC.m
+//  DZCJ
+//
+//  Created by pipiwu on 15/1/1.
+//  Copyright (c) 2015年 Scasy. All rights reserved.
+//
+
+#import "YDSXZenWenVC.h"
+#import "BTSReloadActivityButton.h"
+
+@interface YDSXZenWenVC ()
+{
+    NSString *currentZhengWenURL; //上个页面传过来的具体url接口
+}
+@property (nonatomic, strong) BTSReloadActivityButton *activityButton;//刷新按钮
+@end
+
+@implementation YDSXZenWenVC
+@synthesize biaoti,shijian,zhengwen;
+
+- (id)initWithZhengWen:(NSString *)zhengWenURL withType:(ZhengWenType)type {
+    self = [super init];
+    if (self) {
+        currentZhengWenURL = zhengWenURL;
+        _zhengwenStyle = type;
+        
+    }
+    return self;
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [Commond naviTitle:self.navigationItem withString:@"资讯"];
+    self.tabBarController.tabBar.hidden = YES;
+    [self setNavigationLeftItem];
+    [self setNavigationRightItem];
+    
+    CGRect vf = self.view.frame;
+    CGRect biaotiRect = CGRectMake(10, vf.origin.y + NavHeight + 5, vf.size.width-20, 45);
+    biaoti = [[UILabel alloc] initWithFrame:biaotiRect];
+    biaoti.numberOfLines = 0;
+    biaoti.textAlignment = NSTextAlignmentCenter;
+    biaoti.textColor = [UIColor blackColor];
+    
+    CGRect shijianRect = CGRectMake(biaotiRect.origin.x, biaotiRect.origin.y + biaotiRect.size.height + 5, biaotiRect.size.width - 20, 20);
+    shijian = [[UILabel alloc] initWithFrame:shijianRect];
+    shijian.font = [UIFont systemFontOfSize:14.0];
+    shijian.textAlignment = NSTextAlignmentRight;
+    shijian.textColor = [UIColor grayColor];
+    
+    CGRect zhengwenRect = CGRectMake(shijianRect.origin.x + 5, shijianRect.origin.y + shijianRect.size.height + 10, biaotiRect.size.width - 10, vf.size.height - (shijianRect.origin.y + shijianRect.size.height + 20));
+    zhengwen = [[UITextView alloc] initWithFrame:zhengwenRect];
+    zhengwen.backgroundColor = RGB(230, 230, 230);
+    zhengwen.textColor = [UIColor blackColor];
+    zhengwen.editable =  NO;
+    
+    [self.view addSubview:biaoti];
+    [self.view addSubview:shijian];
+    [self.view addSubview:zhengwen];
+    [self.view setBackgroundColor:RGB(230, 230, 230)];
+    
+    [self fetchEntries:currentZhengWenURL];
+}
+
+#pragma mark - 请求详情页内容
+- (void)fetchEntries:(NSString*)URLString {
+    __weak typeof(self) bself = self;
+    [[DataProvide sharedStore] HTTPRequestOperationByGet:URLString successBlock:^(NSString* responseBody) {
+        if (responseBody.length == 0) {
+            return ;
+        }
+        [bself analisysResult:responseBody];
+        [bself.activityButton stopAnimating];
+        ShowSuccess(@"加载成功");
+    } failureBlock:^(NSString *error) {
+        [LeafNotification showInController:self withText:@"网络出错!" type:LeafNotificationTypeSuccess];
+        [bself.activityButton stopAnimating];
+    }];
+}
+
+#pragma mark - 分析处理请求下来的正文，strReslut:后台返回的字符串数据
+- (void)analisysResult:(NSString *)strReslut {
+    if (strReslut.length > 11) {
+        if ([strReslut hasSuffix:@"\"]"])
+        {
+            strReslut = [strReslut substringToIndex:strReslut.length-2];
+        }
+        NSArray *stringArray = [strReslut  componentsSeparatedByCharactersInSet: [NSCharacterSet  characterSetWithCharactersInString:@","]];
+        if (_zhengwenStyle == ZhengWenType_XinWen) {
+            
+            [biaoti setText:stringArray[2]];
+            ;
+            shijian.text = [stringArray[3] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
+            zhengwen.attributedText = [Commond getStringFromHTML5String:stringArray[4]];
+            
+        } else if (_zhengwenStyle == ZhengWenType_YanBao){
+            [biaoti setText:stringArray[4]];
+            shijian.text = [stringArray[5] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
+            zhengwen.attributedText = [Commond getStringFromHTML5String:stringArray[6]];
+        }
+        [[self view] setNeedsDisplay];
+    }
+}
+
+
+#pragma mark - 设置导航栏右侧的刷新按钮
+- (void)setNavigationRightItem {
+    self.activityButton = [[BTSReloadActivityButton alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
+    [self.activityButton addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem* someBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityButton];
+    [self.navigationItem setRightBarButtonItem:someBarButtonItem];
+}
+
+#pragma mark - 刷新按钮的点击事件
+- (void)refresh:(BTSReloadActivityButton *)button {
+    [button startAnimating];
+    [self fetchEntries:currentZhengWenURL];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:YES];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+@end

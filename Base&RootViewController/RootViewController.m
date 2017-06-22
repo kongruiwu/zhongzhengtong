@@ -11,6 +11,7 @@
 #import "EquityViewController.h"
 #import "QuotationViewController.h"
 #import "HomeViewController.h"
+#import "MarketViewController.h"
 @interface RootViewController ()
 
 @end
@@ -37,7 +38,7 @@
     nav_home.tabBarItem.image = [[UIImage imageNamed:images[0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     nav_home.tabBarItem.selectedImage = [[UIImage imageNamed:selectImages[0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
-    UINavigationController * nav_equt = [[UINavigationController alloc]initWithRootViewController:[EquityViewController new]];
+    UINavigationController * nav_equt = [[UINavigationController alloc]initWithRootViewController:[MarketViewController new]];
     nav_equt.title = titles[1];
     nav_equt.tabBarItem.image = [[UIImage imageNamed:images[1]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     nav_equt.tabBarItem.selectedImage = [[UIImage imageNamed:selectImages[1]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];

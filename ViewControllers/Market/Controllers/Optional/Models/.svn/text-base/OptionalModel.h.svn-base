@@ -1,0 +1,37 @@
+//
+//  OptionalModel.h
+//  YunZhangCaiJing
+//
+//  @Author: JopYin on 16/4/28.
+//  Copyright © 2016年 JopYin. All rights reserved.
+//
+
+#import "BaseModel.h"
+
+@interface OptionalModel : BaseModel
+
+@property (nonatomic,copy)NSString *stockCode;
+@property (nonatomic,copy)NSString *stockName;
+@property (nonatomic,assign)float  newPrice;           //最新价
+@property (nonatomic,assign)float  closePrice;         //收盘价
+@property (nonatomic,assign)float  openPrice;          //开盘价
+@property (nonatomic,assign)float  highPrice;          //最高价
+@property (nonatomic,assign)float  lowPriece;          //最低价
+@property (nonatomic,assign)float  upAndDowVolume;     //涨跌额
+@property (nonatomic,assign)float  upAndDowRate;       //涨跌幅
+@property (nonatomic,assign)double  volume;            //成交量
+@property (nonatomic,assign)double  amount;            //成交额
+@property (nonatomic,assign)float  maxUpAnddownRate;    //最大涨幅（跌幅）
+
+@property (nonatomic,strong)NSMutableArray *buyPrice;           //五档行情
+
+@property (nonatomic,strong) NSMutableArray *buyAmount;
+@property (nonatomic,strong) NSMutableArray *sellPrice;
+@property (nonatomic,strong) NSMutableArray *sellAmount;
+
+/** 开关 yes 为开的状态   No 为关的状态 */
+@property(assign, nonatomic)BOOL on_off;
+/** 标记那个cell  */
+@property(nonatomic, assign)NSInteger index_row;
+
+@end

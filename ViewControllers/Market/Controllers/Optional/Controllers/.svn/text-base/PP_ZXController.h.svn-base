@@ -1,0 +1,25 @@
+//
+//  PP_ZXController.h
+//  GuBaProject
+//
+//  Created by pipiwu on 15/6/27.
+//  Copyright (c) 2015年 pipiwu. All rights reserved.
+//
+#import "StockBaseViewController.h"
+#import "wmxScrollerview.h"
+
+@interface PP_ZXController : StockBaseViewController<wmxScrollerviewDataSource,wmxScrollerviewDelegate>
+
+@property (weak, nonatomic) IBOutlet UIView *NewBackView;  //整个自选视图
+
+@property (weak, nonatomic) IBOutlet UIView *addStockBackView; //自选中没有股票的时候显示的界面 
+
+@property (weak, nonatomic) IBOutlet wmxScrollerview *scrollerView; //行情、新闻、研报、资金的滚动视图
+
+@end
+
+
+
+
+
+

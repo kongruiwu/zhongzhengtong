@@ -1,0 +1,15 @@
+//
+//  OptionalModel.m
+//  YunZhangCaiJing
+//
+//  @Author: JopYin on 16/4/28.
+//  Copyright © 2016年 JopYin. All rights reserved.
+//
+
+#import "OptionalModel.h"
+
+@implementation OptionalModel
+
+
+
+@end

@@ -1,0 +1,18 @@
+//
+//  FindeStock.h
+//  NiuBa
+//
+//  Created by JopYin on 2016/10/28.
+//  Copyright © 2016年 安徽黄埔. All rights reserved.
+//
+
+#import "BasicTableViewController.h"
+#import "WMXPickerTF.h"
+
+@interface FindeStock : BasicTableViewController <UITextFieldDelegate,WMXPickerTFDelegate,UIScrollViewDelegate>
+
+@property (strong, nonatomic) IBOutlet UIView *HeadView; // Headview.xib
+
+@property (weak, nonatomic) IBOutlet WMXPickerTF *searchTextF;
+
+@end

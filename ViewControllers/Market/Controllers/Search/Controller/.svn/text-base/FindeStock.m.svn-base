@@ -1,0 +1,175 @@
+//
+//  FindeStock.m
+//  NiuBa
+//
+//  Created by JopYin on 2016/10/28.
+//  Copyright © 2016年 安徽黄埔. All rights reserved.
+//
+
+#import "FindeStock.h"
+#import "SearchStockCell.h"
+#import "SearchStock.h"
+#import "StockModel.h"
+#import "GeGuDetailViewController.h"
+@interface FindeStock ()
+
+@property (nonatomic, strong)NSMutableArray *stockArr; //显示在界面的股票 即满足用户查询条件的
+
+@end
+
+static NSString *const cellID = @"SearchStockCell";
+
+@implementation FindeStock
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.parentViewController.tabBarController.tabBar.hidden = YES;
+    self.searchTextF.text = @"";
+    [self showStock:nil];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    [Commond naviTitle:self.navigationItem withString:@"个股搜索"];
+    [self setNavigationLeftItem];
+    self.tableView.backgroundColor = [UIColor colorWithHexString:@"#f5f4f9" withAlpha:1.0];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.showsVerticalScrollIndicator = NO;
+    UINib *nib = [UINib nibWithNibName:cellID bundle:nil];
+    [[self tableView] registerNib:nib forCellReuseIdentifier:cellID];
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+    
+    //设置wmx搜索框的代理
+    [self searchHead];
+    self.searchTextF.delegate = self;
+}
+#pragma mark -加载搜索的头部输入框
+- (void)searchHead {
+    if(!_HeadView){
+        _HeadView = [[[NSBundle mainBundle] loadNibNamed:@"SearchView" owner:self options:nil] lastObject];
+    }
+}
+
+#pragma mark - 读取数据库在界面显示符合条件的股票
+- (void)showStock:(NSString *)conditionStr {
+    if (conditionStr == nil) //当用户没有输入的时候默认显示
+    {
+        self.stockArr = [[SearchStock shareManager] showDefaultStock];
+    }
+    else //当用户输入条件的时候
+    {
+        //还要判断用户输入的是数字还是字母
+        if ([self isChar:conditionStr]) {
+            self.stockArr = [[SearchStock shareManager] searchStockJP:conditionStr];
+        }else {
+            self.stockArr = [[SearchStock shareManager] searchStockCode:conditionStr];
+        }
+    }
+    [self.tableView reloadData];
+}
+
+#pragma mark -判断输入的字符是否有效
+- (BOOL)isChar:(NSString *)strSource {
+    for (int i = 0; i < strSource.length; ++i)
+    {
+        if(([strSource characterAtIndex:i] >= 'A' && [strSource characterAtIndex:i] <= 'Z') ||
+           ([strSource characterAtIndex:i] >= 'a' && [strSource characterAtIndex:i] <= 'z')) {
+            return YES;
+        }
+    }
+    return  NO;
+}
+
+#pragma mark - 实现WMXPickerTFDelegate的代理方法
+- (void)somethingChanged:(WMXPickerTF *)pickerTF {
+    if (pickerTF == self.searchTextF) {
+        [self showStock:self.searchTextF.text];
+        [self.searchTextF becomeFirstResponder];
+    }
+}
+
+#pragma mark - 实现tableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 44.0f;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.stockArr.count;
+}
+
+- (UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    return _HeadView;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 50.0f;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    SearchStockCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    if (cell == nil) {
+        cell = [[SearchStockCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+    }
+    StockModel *model = [self.stockArr objectAtIndexCheck:indexPath.row];
+    cell.model = model;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.addBtnBlock = ^{
+        BOOL isFav = [[SearchStock shareManager] isExistInTable:model.stockCode];
+        if (isFav) {
+            [[SearchStock shareManager] deleteToTable:model.stockCode];
+            [StockPublic deleteStockFromServerWithStockCode:model.stockCode];
+        } else {
+            [[SearchStock shareManager] insertToTable:model.stockCode];
+            [StockPublic addStockFromServerWithStockCode:model.stockCode];
+        }
+    };
+    return cell;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    StockModel *model = [self.stockArr objectAtIndexCheck:indexPath.row];
+    
+    GeGuDetailViewController *geguVC = [[GeGuDetailViewController alloc]
+                                        initWithStockCode:model.stockCode
+                                        withStockName:model.stockName
+                                        withNaviGation:self.navigationController
+                                        withOptionModel:nil];
+    
+    [self.navigationController pushViewController:geguVC animated:YES];
+}
+
+#pragma mark - 实现scrollView的代理 当tableView上下滚动则辞去输入框响应
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self.searchTextF resignFirstResponder];
+}
+
+#pragma mark - 懒加载数据数组
+-(NSMutableArray *)stockArr {
+    if (_stockArr == nil) {
+        _stockArr = [NSMutableArray array];
+    }
+    return _stockArr;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:YES];
+    self.parentViewController.tabBarController.tabBar.hidden = NO;
+    [self.searchTextF resignFirstResponder];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

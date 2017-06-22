@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ExpHeadView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LHm-qg-zLk">
+                    <rect key="frame" x="10" y="5" width="355" height="34"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="主要指数" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2xQ-MM-k0B">
+                            <rect key="frame" x="0.0" y="0.0" width="118.5" height="34"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="最新价" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hRP-dP-0Nw">
+                            <rect key="frame" x="118.5" y="0.0" width="118" height="34"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="涨跌幅" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YZi-HQ-Azp">
+                            <rect key="frame" x="236.5" y="0.0" width="118.5" height="34"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.90980392156862744" green="0.91764705882352937" blue="0.92156862745098034" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="hRP-dP-0Nw" firstAttribute="width" secondItem="2xQ-MM-k0B" secondAttribute="width" id="0yU-CD-hLJ"/>
+                        <constraint firstItem="hRP-dP-0Nw" firstAttribute="leading" secondItem="2xQ-MM-k0B" secondAttribute="trailing" id="Aoe-Ev-Q7I"/>
+                        <constraint firstItem="YZi-HQ-Azp" firstAttribute="centerY" secondItem="2xQ-MM-k0B" secondAttribute="centerY" id="DCV-n2-SEb"/>
+                        <constraint firstItem="hRP-dP-0Nw" firstAttribute="height" secondItem="2xQ-MM-k0B" secondAttribute="height" id="FaL-x7-2ah"/>
+                        <constraint firstItem="YZi-HQ-Azp" firstAttribute="leading" secondItem="hRP-dP-0Nw" secondAttribute="trailing" id="LbR-2z-P4n"/>
+                        <constraint firstItem="YZi-HQ-Azp" firstAttribute="height" secondItem="2xQ-MM-k0B" secondAttribute="height" id="XYr-He-bS2"/>
+                        <constraint firstItem="2xQ-MM-k0B" firstAttribute="leading" secondItem="LHm-qg-zLk" secondAttribute="leading" id="cWc-lp-GMf"/>
+                        <constraint firstItem="YZi-HQ-Azp" firstAttribute="width" secondItem="2xQ-MM-k0B" secondAttribute="width" id="cue-IS-wdB"/>
+                        <constraint firstAttribute="bottom" secondItem="2xQ-MM-k0B" secondAttribute="bottom" id="g6d-09-XZe"/>
+                        <constraint firstItem="hRP-dP-0Nw" firstAttribute="centerY" secondItem="2xQ-MM-k0B" secondAttribute="centerY" id="w65-4n-89T"/>
+                        <constraint firstAttribute="trailing" secondItem="YZi-HQ-Azp" secondAttribute="trailing" id="xFk-bJ-kiu"/>
+                        <constraint firstItem="2xQ-MM-k0B" firstAttribute="top" secondItem="LHm-qg-zLk" secondAttribute="top" id="y1b-d8-K7j"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="LHm-qg-zLk" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="GD6-q4-dpB"/>
+                <constraint firstAttribute="bottom" secondItem="LHm-qg-zLk" secondAttribute="bottom" constant="5" id="dO8-q1-5BX"/>
+                <constraint firstAttribute="trailing" secondItem="LHm-qg-zLk" secondAttribute="trailing" constant="10" id="xcx-WE-fHD"/>
+                <constraint firstItem="LHm-qg-zLk" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="5" id="zNp-HD-Qjr"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-106" y="35"/>
+        </view>
+    </objects>
+</document>

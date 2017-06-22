@@ -16,6 +16,23 @@
 #import <ReactiveObjC.h>
 #import "UserManager.h"
 #import <SVProgressHUD.h>
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#import "NSArray+SHYUtil.h"
+#import "UIView+Extension.h"
+#import "UIColor+helper.h"
+#import "YYCache/YYCache.h"
+#import "Reachability.h"
+#import "AFNetworking.h"
+#define WEAKSELF() __weak __typeof(&*self)weakSelf = self;
+#define kRGBAColor(r,g,b,a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
+#define kRGBColor(r,g,b) kRGBAColor(r,g,b,1.0f)
+#define kFont(size) [UIFont systemFontOfSize:size]
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 //全局返回通用配置选项
 typedef NS_ENUM(NSInteger, SelectorBackType){
     SelectorBackTypePopBack = 0,

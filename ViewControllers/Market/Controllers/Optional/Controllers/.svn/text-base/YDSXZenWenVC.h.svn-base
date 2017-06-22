@@ -1,0 +1,28 @@
+//
+//  YDSXZenWenVC.h
+//  DZCJ
+//
+//  Created by pipiwu on 15/1/1.
+//  Copyright (c) 2015年 Scasy. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "BasicViewController.h"
+
+typedef NS_ENUM(NSInteger, ZhengWenType) {
+    ZhengWenType_XinWen,
+    ZhengWenType_YanBao
+};
+
+@interface YDSXZenWenVC : BasicViewController {
+    NSMutableData *fetchResult;
+    NSMutableArray *canFixArray;
+    NSArray *cellItem;
+}
+
+@property (nonatomic, strong) UILabel *biaoti;
+@property (nonatomic, strong) UILabel *shijian;
+@property (nonatomic, strong) UITextView *zhengwen;
+@property (nonatomic, assign) ZhengWenType zhengwenStyle;
+- (id)initWithZhengWen:(NSString *)zhengWenURL withType:(ZhengWenType)type;
+@end

@@ -1,0 +1,40 @@
+//
+//  caijinTableViewCell.m
+//  FuWengFactory
+//
+//  Created by pipiwu on 15/5/20.
+//  Copyright (c) 2015年 pipiwu. All rights reserved.
+//
+
+#import "caijinTableViewCell.h"
+
+@implementation CaijinTableViewCell
+
+- (void)setNewsArray:(NSArray *)newsArray {
+    _newsArray = newsArray;
+    self.stockCode.text = newsArray[1]; //股票代码
+    self.IntroductionText.text = newsArray[2]; //
+    self.shijian.text = newsArray[3]; //时间
+}
+
+- (void)setYanBaoArr:(NSArray *)yanBaoArr {
+    _yanBaoArr = yanBaoArr;
+    self.stockCode.text = yanBaoArr[2];
+    self.IntroductionText.text = yanBaoArr[4];
+    self.shijian.text = yanBaoArr[7];
+}
+
+- (void)setFrame:(CGRect)frame {
+    frame.size.height -= 5;
+    frame.origin.y += 5;
+    frame.size.width -= 10;
+    frame.origin.x += 5;
+    [super setFrame:frame];
+}
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

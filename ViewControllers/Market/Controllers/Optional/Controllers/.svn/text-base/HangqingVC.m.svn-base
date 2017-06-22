@@ -1,0 +1,365 @@
+//
+//  TAB3_HangqingVC.m
+//  GuBaProject
+//
+//  Created by pipiwu on 15/6/28.
+//  Copyright (c) 2015年 pipiwu. All rights reserved.
+//
+
+#import "HangqingVC.h"
+#import "WebTableViewCell.h"
+#import "ZiJinTableViewCell.h"
+#import "SearchStock.h"
+
+@interface HangqingVC ()
+{
+    NSInteger refreshFrequency; //刷新时间
+}
+
+@property (nonatomic, strong) NSTimer *importTimer;
+@property (nonatomic, strong) NSMutableArray *favStockArr; //存放自选股的数组：里面是StockMode:stockCode 和stockName
+@property (nonatomic, strong) NSMutableArray *resultData;  //请求行情数据
+@property (nonatomic, strong) NSMutableDictionary *ziJinResultData; //请求资金净流入数据
+
+@end
+
+@implementation HangqingVC
+#define debug 2
+static NSString *const selfStockCell = @"WebTableViewCell";
+static NSString *const ziJinStockCell = @"ZiJinTableViewCell";
+
+- (void)updateWithStyle:(TableStyle)tableStyle {
+    _currentTableStyle = tableStyle;
+    [self startUpdataWithTimer];
+    [self.tableView reloadData];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
+    _currentTableStyle = TableStyle_HangQing;
+    refreshFrequency = 10;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.backgroundColor = [UIColor colorWithHexString:@"#f5f4f9" withAlpha:1.0];
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+    UINib *nib = [UINib nibWithNibName:selfStockCell bundle:nil];
+    [[self tableView] registerNib:nib forCellReuseIdentifier:selfStockCell];
+    UINib *nib1 = [UINib nibWithNibName:ziJinStockCell bundle:nil];
+    [[self tableView] registerNib:nib1 forCellReuseIdentifier:ziJinStockCell];
+    
+}
+
+#pragma mark - DATA
+- (void)configureFetch {
+    [self statisticalAllOwnStock];
+    [self startUpdataWithTimer];
+    [self getResultData];
+}
+
+#pragma mark - 统计自选股
+- (void)statisticalAllOwnStock {
+    if (self.allSelfStocks.count > 0)
+    {
+        [self.allSelfStocks removeAllObjects];
+    }
+    self.favStockArr =[[SearchStock shareManager] allFavStock];
+    for (StockModel *model in self.favStockArr) {
+        [self.allSelfStocks addObject:model.stockCode];
+    }
+}
+
+#pragma mark - TableViewDelegate
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSInteger count = [self.favStockArr count];
+    if (count == 0)
+    {
+        if (self.showBlock)
+        {
+            self.showBlock();
+        }
+    }
+    else
+    {
+        if (self.hideBlock)
+        {
+            self.hideBlock();
+        }
+    }
+    return count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 55;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 40;
+}
+
+- (UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (_currentTableStyle == TableStyle_HangQing)
+    {
+        return [self stockHeadView];
+    }
+    else if (_currentTableStyle == TableStyle_ZiJin)
+    {
+        return [self ziJinHeadView];
+    }
+    return nil;
+}
+
+#pragma mark - 加载行情cell的头部视图
+- (UIView*)stockHeadView {
+    if (!selfStockHeadView)
+    {
+        [[NSBundle mainBundle] loadNibNamed:@"webTitleView" owner:self options:nil];
+    }
+    return selfStockHeadView;
+}
+
+#pragma mark - 加载资金cell的头部视图
+- (UIView*)ziJinHeadView {
+    if (!ziJinHeadView)
+    {
+        [[NSBundle mainBundle] loadNibNamed:@"ZiJinTitleView" owner:self options:nil];
+    }
+    return ziJinHeadView;
+}
+
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (_currentTableStyle == TableStyle_HangQing)
+    {
+        return [self tableViewCellWithHangQing:tableView withPath:indexPath];
+    }
+    else 
+    {
+        return [self tableViewCellWithZiJin:tableView withPath:indexPath];
+    }
+   
+}
+
+#pragma mark - tab页行情cell
+- (UITableViewCell*)tableViewCellWithHangQing:(UITableView*)tableView withPath:(NSIndexPath*)index {
+    WebTableViewCell  *cell = (WebTableViewCell *)[tableView dequeueReusableCellWithIdentifier:selfStockCell];
+    if (cell == nil) {
+       cell=[[WebTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:selfStockCell];
+    }
+    cell.selectionStyle = UITableViewCellAccessoryNone;
+    if (self.favStockArr.count > 0) {
+        StockModel * model = [self.favStockArr objectAtIndexCheck:index.row];//从数据库取出对应的股票
+        cell.stockNameLabel.text = model.stockName;
+        cell.stockCodeLabel.text = model.stockCode;
+    }
+    if (self.resultData.count > 0) {
+        cell.optionalModel = [self.resultData objectAtIndexCheck:index.row];
+    }
+    return cell ;
+}
+
+#pragma mark - tab页资金的cell
+- (UITableViewCell*)tableViewCellWithZiJin:(UITableView*)tableView withPath:(NSIndexPath*)index {
+    ZiJinTableViewCell  *cell = (ZiJinTableViewCell *)[tableView dequeueReusableCellWithIdentifier:ziJinStockCell];
+    if (cell == nil) {
+        cell = [[ZiJinTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ziJinStockCell];
+    }
+    cell.selectionStyle = UITableViewCellAccessoryNone;
+
+    StockModel * model = [self.favStockArr objectAtIndexCheck:index.row];//从数据库取出对应的股票
+    cell.stockNameLabel.text = model.stockName;
+    cell.stockCodeLabel.text = model.stockCode;
+    
+    if (self.resultData.count > 0) {
+        cell.stockModel = [self.resultData objectAtIndexCheck:index.row];
+    }
+    if (self.ziJinResultData.count > 0) {
+        cell.jingLiuRu.text = [NSString stringWithFormat:@"%.1f",[self.ziJinResultData[model.stockCode] floatValue]];
+    }
+    else
+    {
+        cell.jingLiuRu.text = @"--";
+    }
+    return cell ;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return @"删除";
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        StockModel *model = [self.favStockArr objectAtIndexCheck:indexPath.row];
+        [[SearchStock shareManager] deleteToTable:model.stockCode];
+        //通知服务器删除自选股
+        [StockPublic deleteStockFromServerWithStockCode:model.stockCode];
+        [self configureFetch];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath  {
+    StockModel *model = [self.favStockArr objectAtIndexCheck:indexPath.row];
+    OptionalModel *optionModel = [self.resultData objectAtIndexCheck:indexPath.row];
+    [self.delegate pushGeGuDetailViewController:model.stockCode withStockName:model.stockName withAllSelfStock:self.allSelfStocks withOptionModel:optionModel];
+}
+
+#pragma mark - 开启定时器
+- (void)startUpdataWithTimer{
+    if ([_importTimer isValid])
+    {
+        [_importTimer invalidate];
+    }
+    _importTimer = [NSTimer scheduledTimerWithTimeInterval:refreshFrequency target:self selector:@selector(getResultData) userInfo:nil repeats:YES];
+}
+
+#pragma mark - 关闭定时器
+- (void)stopUpdataWithTimer {
+    if ([_importTimer isValid])
+    {
+        [_importTimer setFireDate:[NSDate distantFuture]]; //关闭定时器
+        _importTimer = nil;
+    }
+}
+
+- (void)getResultData {
+    if (self.resultData.count > 0 || self.ziJinResultData.count > 0) {
+        [self.resultData removeAllObjects];
+        [self.ziJinResultData removeAllObjects];
+    }
+    if(self.favStockArr.count > 0)
+    {
+        [self requestWebData]; //请求行情数据
+        if (_currentTableStyle == TableStyle_ZiJin)
+        {
+            [self requestZijinData]; //请求资金净流入的数据
+        }
+    }
+    else
+    {
+        [self.tableView reloadData];
+        [self stopUpdataWithTimer];
+    }
+}
+
+- (void)requestWebData {
+    
+    __weak HangqingVC *tempVC = self;
+    
+    NSMutableString *selectString = [[NSMutableString alloc] init];
+    
+    for (int i = 0; i < self.allSelfStocks.count; i++)
+    {
+        NSString *strTemp = [StockPublic prefixStockCode:self.allSelfStocks[i]];
+        [selectString appendString: [NSString stringWithFormat:@"%@,",strTemp]];
+        [self.ziJinResultData setObject:@"" forKey:strTemp];
+    }
+    NSArray *tempCodeArr = [NSArray arrayWithArray:self.allSelfStocks];
+    NSString *strURL = [selectString substringWithRange:NSMakeRange(0, selectString.length - 1)];
+    
+    NSString *shishiURL = [[NSString alloc] initWithFormat:@"%@/GetQuote.ashx?symbol=%@",[DataProvide sharedStore].strLoginIP, strURL];
+    [[DataProvide sharedStore] HTTPRequestOperationByGet:shishiURL successBlock:^(NSString * responseBody){
+         NSMutableArray *resultMArray = [[DataProvide sharedStore] analysisMoreQuote:responseBody WithCode:tempCodeArr];
+         
+         if (resultMArray.count > 0)
+         {
+             for (OptionalModel *optionalModel in resultMArray)
+             {
+                 [self.resultData addObject: optionalModel];
+             }
+             [tempVC.tableView reloadData];
+         }
+         
+     } failureBlock:^(NSString *error){
+    
+     }];
+}
+
+- (void)requestZijinData {
+     __weak HangqingVC *tempVC = self;
+    NSMutableString *selectString = [[NSMutableString alloc]init];
+    
+    for (int i = 0; i < self.allSelfStocks.count; i++)
+    {
+        NSString *strTemp = self.allSelfStocks[i];
+        [selectString appendString: [NSString stringWithFormat:@"%@|",strTemp]];
+    }
+    NSString *strURL = [selectString substringWithRange:NSMakeRange(0, selectString.length - 1)];
+    
+    NSString *zijinURL = [[NSString alloc] initWithFormat:@"http://api.ihuangpu.com:8094/cgi-bin/GetZjlxData.ashx?RequestType=0&ExtStockCode=%@&DataType=ZJLX",strURL];
+    [[DataProvide sharedStore] HTTPRequestOperationByGet:zijinURL successBlock:^(NSString* responseBody) {
+        
+        NSArray *stringArray = [responseBody  componentsSeparatedByCharactersInSet : [NSCharacterSet  characterSetWithCharactersInString:@"|"]];
+        
+        NSString *strCode = @"";
+        
+        for (int i = 0; i < stringArray.count; i++)
+        {
+            //新增对股票代码的处理
+            NSRange rangeCode = [stringArray[i] rangeOfString:@"stockCode:"];
+            if(rangeCode.location != NSNotFound)
+            {
+                NSInteger  startPos = rangeCode.location + rangeCode.length;
+                //股票代码为六位
+                NSRange ran = NSMakeRange(startPos, 6);
+                strCode = [stringArray[i] substringWithRange:ran];
+            }
+            
+            NSRange rang = [stringArray[i] rangeOfString:@"ZlIn:" options:NSBackwardsSearch];
+            if(rang.location != NSNotFound)
+            {
+                NSInteger  startPos = rang.location + rang.length;
+                
+                NSRange rang1 = [stringArray[i]  rangeOfString:@",CddIn:" options:NSBackwardsSearch];
+                if (rang1.location != NSNotFound)
+                {
+                    NSInteger endPos = rang1.location;
+                    
+                    NSRange ran = NSMakeRange(startPos, endPos-startPos);
+                    NSString *str1 = [stringArray[i] substringWithRange:ran];
+                    
+                    [self.ziJinResultData setObject:str1 forKey:strCode];
+                    
+                }
+            }
+        }
+        [tempVC.tableView reloadData];
+        
+    } failureBlock:^(NSString *error) {
+        
+    }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self stopUpdataWithTimer]; //当切换导航栏上面的【自选股/行情】时会调用这个方法
+}
+
+#pragma mark - 懒加载
+- (NSMutableArray *)allSelfStocks {
+    if (!_allSelfStocks) {
+        _allSelfStocks = [NSMutableArray new];
+    }
+    return _allSelfStocks;
+}
+
+- (NSMutableArray *)resultData {
+    if (!_resultData) {
+        _resultData = [NSMutableArray new];
+    }
+    return _resultData;
+}
+
+- (NSMutableDictionary *)ziJinResultData {
+    if (!_ziJinResultData) {
+        _ziJinResultData = [NSMutableDictionary new];
+    }
+    return _ziJinResultData;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+@end

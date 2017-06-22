@@ -1,0 +1,58 @@
+//
+//  WebTableViewCell.m
+//  FuWengFactory
+//
+//  Created by pipiwu on 15/5/21.
+//  Copyright (c) 2015年 pipiwu. All rights reserved.
+//
+
+#import "WebTableViewCell.h"
+
+@implementation WebTableViewCell
+
+- (void)awakeFromNib {
+    // Initialization code
+    [super awakeFromNib];
+    self.contentView.backgroundColor = [UIColor colorWithHexString:@"#f5f4f9" withAlpha:1.0];
+}
+
+- (void)setOptionalModel:(OptionalModel *)optionalModel {
+    _optionalModel = optionalModel;
+    
+    if (optionalModel) {
+        if (optionalModel.newPrice == 0.0)
+        {
+            self.priceLabel.text    = [NSString stringWithFormat:@"%.2f",optionalModel.closePrice];
+            self.zhangdieLabel.text = @"--";
+            self.zhangfuLabel.text  = @"--";
+            self.zhangdieView.backgroundColor = [UIColor grayColor];
+        }
+        else
+        {
+            self.priceLabel.text    = [NSString stringWithFormat:@"%.2f",optionalModel.newPrice];
+            self.zhangdieLabel.text = [NSString stringWithFormat:@"%.2f",optionalModel.upAndDowVolume];
+            self.zhangfuLabel.text  = [NSString stringWithFormat:@"%.2f%%",optionalModel.upAndDowRate];
+            if (optionalModel.upAndDowVolume > 0)
+            {
+                self.zhangdieView.backgroundColor = [UIColor colorWithHexString:@"#dd2123" withAlpha:1.0];
+            }
+            else
+            {
+                self.zhangdieView.backgroundColor = [UIColor colorWithHexString:@"#41a72d" withAlpha:1.0];
+            }
+        }
+    }else{
+        self.priceLabel.text = @"--";
+        self.zhangdieLabel.text = @"--";
+        self.zhangfuLabel.text = @"--";
+        self.zhangdieView.backgroundColor = [UIColor colorWithHexString:@"#dd2123" withAlpha:1.0];
+    }
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+    
+    // Configure the view for the selected state
+}
+
+@end

@@ -1,0 +1,17 @@
+//
+//  caijinTableViewCell.h
+//  FuWengFactory
+//
+//  Created by pipiwu on 15/5/20.
+//  Copyright (c) 2015年 pipiwu. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface CaijinTableViewCell : UITableViewCell
+@property (weak, nonatomic) NSArray *newsArray;
+@property (weak, nonatomic) NSArray *yanBaoArr;
+@property (weak, nonatomic) IBOutlet UILabel *IntroductionText;
+@property (weak, nonatomic) IBOutlet UILabel *shijian;
+@property (weak, nonatomic) IBOutlet UILabel *stockCode;
+@end

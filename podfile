@@ -10,5 +10,8 @@ pod 'SDCycleScrollView'
 pod 'ReactiveObjC'
 pod ‘SVProgressHUD'
 pod 'WechatOpenSDK'
+pod 'FMDB'
+pod 'Reachability'
+pod 'YYCache'
 end
 

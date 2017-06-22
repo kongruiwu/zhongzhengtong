@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <tableViewCell contentMode="scaleToFill" restorationIdentifier="cellID" selectionStyle="default" indentationWidth="10" rowHeight="60" id="hGK-bu-Fw1" customClass="SearchStockCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hGK-bu-Fw1" id="1KG-HH-pKZ">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="59"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="浦发银行" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="up9-7P-D1H" userLabel="StockName">
+                        <rect key="frame" x="10" y="19.5" width="100" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="100" id="FNj-9j-1Oj"/>
+                            <constraint firstAttribute="height" constant="20" id="toW-b5-KKV"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="600000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eks-ew-5fU" userLabel="StockCode">
+                        <rect key="frame" x="110" y="20" width="100" height="19.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dtg-v6-rZU">
+                        <rect key="frame" x="272" y="10.5" width="18" height="19"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="18" id="M79-Ih-Bd3"/>
+                            <constraint firstAttribute="height" constant="19" id="eqt-Ee-MFY"/>
+                            <constraint firstAttribute="width" secondItem="dtg-v6-rZU" secondAttribute="height" multiplier="1:1" id="iRC-eB-Yj2"/>
+                        </constraints>
+                        <state key="normal" backgroundImage="plus">
+                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                        <state key="selected" backgroundImage="delete.png"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="iRC-eB-Yj2"/>
+                            </mask>
+                        </variation>
+                        <connections>
+                            <action selector="addStock:" destination="hGK-bu-Fw1" eventType="touchUpInside" id="JGN-En-FQa"/>
+                        </connections>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="添加自选" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6bc-u6-7dy">
+                        <rect key="frame" x="251" y="29.5" width="60" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="JAa-md-7vH"/>
+                            <constraint firstAttribute="width" constant="60" id="LSN-2X-EKq"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.82352941176470584" green="0.83137254901960778" blue="0.83529411764705885" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstItem="6bc-u6-7dy" firstAttribute="centerX" secondItem="dtg-v6-rZU" secondAttribute="centerX" id="20S-Sk-eou"/>
+                    <constraint firstItem="eks-ew-5fU" firstAttribute="centerY" secondItem="up9-7P-D1H" secondAttribute="centerY" id="26A-X8-1Ap"/>
+                    <constraint firstItem="eks-ew-5fU" firstAttribute="centerY" secondItem="1KG-HH-pKZ" secondAttribute="centerY" id="3FT-hj-NmK"/>
+                    <constraint firstAttribute="trailing" secondItem="dtg-v6-rZU" secondAttribute="trailing" constant="30" id="4Nl-xJ-0V6"/>
+                    <constraint firstItem="dtg-v6-rZU" firstAttribute="centerY" secondItem="1KG-HH-pKZ" secondAttribute="centerY" constant="-10" id="O1F-Di-NV1"/>
+                    <constraint firstItem="eks-ew-5fU" firstAttribute="width" secondItem="up9-7P-D1H" secondAttribute="width" id="WMQ-cJ-6dg"/>
+                    <constraint firstItem="6bc-u6-7dy" firstAttribute="top" secondItem="dtg-v6-rZU" secondAttribute="bottom" id="Y9O-D0-Mig"/>
+                    <constraint firstItem="eks-ew-5fU" firstAttribute="height" secondItem="up9-7P-D1H" secondAttribute="height" id="g1n-ge-tuA"/>
+                    <constraint firstItem="up9-7P-D1H" firstAttribute="leading" secondItem="1KG-HH-pKZ" secondAttribute="leading" constant="10" id="sJi-3H-YAx"/>
+                    <constraint firstItem="eks-ew-5fU" firstAttribute="centerX" secondItem="1KG-HH-pKZ" secondAttribute="centerX" id="uzz-SJ-79I"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="addLabel" destination="6bc-u6-7dy" id="OLm-HT-Gpe"/>
+                <outlet property="addStockBtn" destination="dtg-v6-rZU" id="JLt-PO-gIZ"/>
+                <outlet property="stockCode" destination="eks-ew-5fU" id="SJJ-Y4-md2"/>
+                <outlet property="stockName" destination="up9-7P-D1H" id="DDJ-lH-k1U"/>
+            </connections>
+            <point key="canvasLocation" x="-774" y="-348"/>
+        </tableViewCell>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+    </objects>
+    <resources>
+        <image name="delete.png" width="18" height="19"/>
+        <image name="plus" width="18" height="19"/>
+    </resources>
+</document>

@@ -1,0 +1,216 @@
+//
+//  NewsTableViewController.m
+//  BigTimeStrategy
+//
+//  @Author: JopYin on 16/7/7.
+//  Copyright © 2016年 安徽黄埔. All rights reserved.
+//
+
+#import "NewsTableViewController.h"
+#import "CaijinTableViewCell.h"
+#import "UIImageView+WebCache.h"
+#import "YDSXZenWenVC.h"
+
+@interface NewsTableViewController ()
+@property (nonatomic, strong) NSMutableArray *fixedData;        //存放请求下来的数据
+@property (nonatomic, strong) NSString *requestUrl;             //保存请求的url
+@property (nonatomic, assign) NSInteger zxtzNum;                //每次加载的数据个数
+@end
+
+static NSString *const CellReuse0 = @"CaijinTableViewCell";
+
+@implementation NewsTableViewController
+#pragma mark - Init
+- (id)initwithNavigation:(UINavigationController*)navi {
+    
+    if (self == [super init]) {
+        self.navi = navi;
+    }
+    return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.tableView.backgroundColor = [UIColor colorWithHexString:@"#F5F4F9" withAlpha:1.0];
+    self.tableView.showsVerticalScrollIndicator = NO;
+    UINib *nib1 = [UINib nibWithNibName:CellReuse0 bundle:nil];
+    [self.tableView  registerNib:nib1 forCellReuseIdentifier:CellReuse0];
+    [self refreashData];
+    self.automaticallyAdjustsScrollViewInsets  = NO;
+//    self.tableView.autoresizesSubviews = NO;
+    _newsType = NEWSTYPE_XinWen;
+    _zxtzNum = 20;
+}
+
+- (void)updateWith:(NEWSTYPE)type withStockCodes:(NSArray *)stockArray {
+    if (self.fixedData.count > 0) {
+        [self.fixedData removeAllObjects];
+    }
+    if (stockArray.count > 0) {
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _newsType = type;
+        NSString *requestURL;
+        if (type == NEWSTYPE_XinWen)
+        {
+            requestURL = @"http://api.ihuangpu.com:8094/cgi-bin/GetStockNews.ashx?where zqdm in(";
+        }
+        else if (type == NEWSTYPE_YanBao)
+        {
+            requestURL = @"http://api.ihuangpu.com:8094/cgi-bin/GetReportData.ashx?type=2&where zqdm in(";
+        }
+        for (int index = 0; index < stockArray.count; index++) {
+            NSString *strTemp = [[NSString alloc] initWithFormat:@"%@,",stockArray[index]];
+            requestURL = [requestURL stringByAppendingString:strTemp];
+        }
+        _requestUrl = [requestURL substringWithRange:NSMakeRange(0, requestURL.length - 1)];
+        [self fetchEntries:_requestUrl];
+    }
+}
+
+- (void)fetchEntries:(NSString *)URLString {
+    NSString *resultStr = [[NSString alloc] initWithFormat:@"%@)&size=%ld",URLString,(long)_zxtzNum];
+    [[DataProvide sharedStore] HTTPRequestOperationByGet:resultStr successBlock:^(NSString* responseBody) {
+        if (responseBody.length == 0) {
+            return ;
+        }
+        [self analisysResult:responseBody];
+    } failureBlock:^(NSString *error) {
+        ShowError(@"网络出错")
+        [self.tableView footerEndRefreshing];
+        [self.tableView headerEndRefreshing];
+        [self.tableView reloadData];
+    }];
+}
+
+- (void)analisysResult:(NSString *)strReslut {
+    if (strReslut.length > 11) {
+        NSString *strrr = [[NSString alloc] initWithString:strReslut];
+        NSArray * arrWriterPos =[strrr componentsSeparatedByString:NSLocalizedString(@"\",\"", nil)];
+        self.fixedData = [NSMutableArray arrayWithArray:arrWriterPos];
+        NSString *_fixedFirst = [arrWriterPos[0] substringFromIndex:11];
+        [self.fixedData replaceObjectAtIndex:0 withObject:_fixedFirst];
+        
+        NSString *_fixedLast = [arrWriterPos[arrWriterPos.count-1] substringWithRange:NSMakeRange(0, [arrWriterPos[arrWriterPos.count-1] length]-2)];
+        [self.fixedData replaceObjectAtIndex:arrWriterPos.count-1 withObject:_fixedLast];
+    }
+    else
+    {
+        [LeafNotification showInController:self withText:@"暂没有相关新闻OR研报" type:LeafNotificationTypeSuccess];
+    }
+    
+    if (self.fixedData.count < _zxtzNum) {
+        self.tableView.footerRefreshingText = @"已经加载全部数据";
+    }
+    [self.tableView footerEndRefreshing];
+    [self.tableView headerEndRefreshing];
+    [self.tableView reloadData];
+}
+
+#pragma mark - TableViewDelegate
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.fixedData.count <= 0) {
+        return 0;
+    }
+    return self.fixedData.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.fixedData.count <= 0) {
+        return 500;
+    }
+    return 70;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    CaijinTableViewCell *caijinCell = [tableView dequeueReusableCellWithIdentifier:CellReuse0];
+    
+    if (caijinCell == nil) {
+        caijinCell = [[CaijinTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellReuse0];
+    }
+    NSArray *cellItem;
+    if (indexPath.row < self.fixedData.count) {
+        cellItem = [[self.fixedData objectAtIndexCheck:indexPath.row] componentsSeparatedByCharactersInSet:[NSCharacterSet  characterSetWithCharactersInString:@","]];
+    }
+    if (_newsType == NEWSTYPE_XinWen)
+    {
+        caijinCell.newsArray = cellItem;
+
+    }
+    else if (_newsType == NEWSTYPE_YanBao && cellItem.count >= 8)
+    {
+        caijinCell.yanBaoArr = cellItem;
+    }
+    caijinCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return  caijinCell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath  {
+    NSArray *arr = [[self.fixedData objectAtIndexCheck:indexPath.row] componentsSeparatedByCharactersInSet:[NSCharacterSet  characterSetWithCharactersInString:@","]];
+    [[NSUserDefaults standardUserDefaults] setInteger:6 forKey:@"currentTAB"];
+   
+    if (_newsType == NEWSTYPE_XinWen)
+    {  //新闻
+        NSString *newURL = [[NSString alloc] initWithFormat:@"http://api.ihuangpu.com:8094/cgi-bin/GetStockNewsDetail.ashx?id=%@",arr[0]];
+        if (_isFromHangqingToGeguhangqing)
+        {
+            YDSXZenWenVC *zenWen = [[YDSXZenWenVC alloc] initWithZhengWen:newURL withType:ZhengWenType_XinWen ];
+            [self.navi pushViewController:zenWen animated:YES];
+        }
+        else
+        {
+            [self.delegate pushZWViewController:newURL withType:ZhengWenType_XinWen];
+        }
+    }
+    else
+    {  //研报
+        NSString *yanURL = [[NSString alloc] initWithFormat:@"http://api.ihuangpu.com:8094/cgi-bin/GetReportDetail.ashx?id=%@",arr[0]];
+        if (_isFromHangqingToGeguhangqing)
+        {
+            YDSXZenWenVC *zenWen = [[YDSXZenWenVC alloc] initWithZhengWen:yanURL withType:ZhengWenType_YanBao];
+            [self.navi pushViewController:zenWen animated:YES];
+        }
+        else
+        {
+            [self.delegate pushZWViewController:yanURL withType:ZhengWenType_YanBao];
+        }
+    }
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
+}
+
+#pragma mark - 第一次加载
+- (void)getData {
+    _zxtzNum = 20;
+    [self.fixedData removeAllObjects];
+    [self fetchEntries:_requestUrl];
+}
+
+#pragma mark - 加载更多
+- (void)getMoreData {
+    _zxtzNum += 20;
+    [self fetchEntries:_requestUrl];
+}
+
+#pragma mark - LazyLoad
+- (NSMutableArray *)fixedData {
+    if (!_fixedData) {
+        self.fixedData = [NSMutableArray arrayWithCapacity:0];
+    }
+    return _fixedData;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

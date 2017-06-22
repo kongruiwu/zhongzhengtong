@@ -76,7 +76,7 @@ creat tabview
  */
 + (UIImageView *)creatArrowImage{
     UIImageView * imgview = [[UIImageView alloc]init];
-    imgview.image = [UIImage imageNamed:@"arrow"];
+    imgview.image = [UIImage imageNamed:@"next"];
     return imgview;
 }
 

@@ -123,7 +123,7 @@
             cell.descLabel.text = @"400-608-8879";
         }
     }else{
-        [cell updateWithTitle:self.titles[indexPath.section * 3 +indexPath.row] image:self.images[indexPath.row * 3 +indexPath.row]];
+        [cell updateWithTitle:self.titles[indexPath.section * 3 +indexPath.row] image:self.images[indexPath.section * 3 +indexPath.row]];
     }
     
     return cell;

@@ -1,0 +1,37 @@
+//
+//  SearchStockCell.m
+//  BigTimeStrategy
+//
+//  @Author: JopYin on 16/7/6.
+//  Copyright © 2016年 安徽黄埔. All rights reserved.
+//
+
+#import "SearchStockCell.h"
+#import "SearchStock.h"
+@implementation SearchStockCell
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    // Initialization code
+    
+}
+- (void)setModel:(StockModel *)model {
+    _model = model;
+    self.stockName.text = model.stockName;
+    self.stockCode.text = model.stockCode;
+    BOOL isFav = [[SearchStock shareManager] isExistInTable:model.stockCode];
+    self.addStockBtn.selected = isFav;
+}
+- (IBAction)addStock:(id)sender {
+    self.addStockBtn.selected = !self.addStockBtn.selected;
+    if (self.addBtnBlock) {
+        self.addBtnBlock();
+    }
+}
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

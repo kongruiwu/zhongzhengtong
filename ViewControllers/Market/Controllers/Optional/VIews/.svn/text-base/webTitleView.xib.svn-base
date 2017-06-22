@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HangqingVC">
+            <connections>
+                <outlet property="selfStockHeadView" destination="JsN-1n-uKA" id="OB7-3i-ZrI"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="JsN-1n-uKA">
+            <rect key="frame" x="0.0" y="0.0" width="372" height="41"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="     名称" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PNA-5w-0qY">
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.8666666666666667" green="0.12941176470588234" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="最新" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XX8-bL-MGZ">
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.2196078431372549" green="0.2196078431372549" blue="0.2196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="涨跌/涨幅" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="adV-7S-ZLX">
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.2196078431372549" green="0.2196078431372549" blue="0.2196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="XX8-bL-MGZ" firstAttribute="width" secondItem="adV-7S-ZLX" secondAttribute="width" id="0Vr-e7-vxH"/>
+                <constraint firstAttribute="bottom" secondItem="PNA-5w-0qY" secondAttribute="bottom" id="0cM-Gb-TO3"/>
+                <constraint firstItem="XX8-bL-MGZ" firstAttribute="leading" secondItem="PNA-5w-0qY" secondAttribute="trailing" id="2ID-2f-HH2"/>
+                <constraint firstItem="adV-7S-ZLX" firstAttribute="leading" secondItem="XX8-bL-MGZ" secondAttribute="trailing" id="Baw-BR-i9Q"/>
+                <constraint firstItem="adV-7S-ZLX" firstAttribute="top" secondItem="XX8-bL-MGZ" secondAttribute="top" id="D36-XV-tAY"/>
+                <constraint firstItem="PNA-5w-0qY" firstAttribute="top" secondItem="JsN-1n-uKA" secondAttribute="top" id="R9w-VN-U50"/>
+                <constraint firstItem="XX8-bL-MGZ" firstAttribute="width" secondItem="PNA-5w-0qY" secondAttribute="width" id="ROL-JM-NAb"/>
+                <constraint firstAttribute="trailing" secondItem="adV-7S-ZLX" secondAttribute="trailing" id="fQC-GC-D3g"/>
+                <constraint firstItem="adV-7S-ZLX" firstAttribute="centerY" secondItem="XX8-bL-MGZ" secondAttribute="centerY" id="fWt-iK-LPG"/>
+                <constraint firstItem="adV-7S-ZLX" firstAttribute="top" secondItem="PNA-5w-0qY" secondAttribute="top" id="lc7-Ek-hsE"/>
+                <constraint firstItem="adV-7S-ZLX" firstAttribute="centerY" secondItem="PNA-5w-0qY" secondAttribute="centerY" id="nqR-HR-glq"/>
+                <constraint firstItem="PNA-5w-0qY" firstAttribute="leading" secondItem="JsN-1n-uKA" secondAttribute="leading" constant="11" id="y6Q-kM-YDX"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-954" y="215.5"/>
+        </view>
+    </objects>
+</document>

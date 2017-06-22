@@ -1,0 +1,43 @@
+//
+//  TAB3_HangqingVC.h
+//  GuBaProject
+//
+//  Created by pipiwu on 15/6/28.
+//  Copyright (c) 2015年 pipiwu. All rights reserved.
+//
+#import "BasicTableViewController.h"
+#import "OptionalModel.h"
+
+@protocol OptionalDelegate <NSObject>
+
+- (void)pushGeGuDetailViewController:(NSString *)stockCode withStockName:(NSString *)StockName withAllSelfStock:(NSArray *)allSelfStock withOptionModel:(OptionalModel *)model;
+
+@end
+
+typedef NS_ENUM(NSInteger, TableStyle) {
+    TableStyle_HangQing,
+    TableStyle_ZiJin
+};
+@interface HangqingVC : BasicTableViewController
+{
+    __weak IBOutlet UIView *selfStockHeadView; //行情头视图
+    
+    __weak IBOutlet UIView *ziJinHeadView;     //资金头视图
+}
+
+@property (assign, nonatomic) TableStyle currentTableStyle;
+
+@property (assign, nonatomic)id <OptionalDelegate> delegate;
+
+@property (nonatomic, copy) dispatch_block_t showBlock;
+@property (nonatomic, copy) dispatch_block_t hideBlock;
+@property (nonatomic, strong) NSMutableArray *allSelfStocks; //已经加入自选股中的数组
+
+- (void)configureFetch;
+- (void)updateWithStyle:(TableStyle)tableStyle;
+
+- (void)startUpdataWithTimer; //开启定时器
+- (void)stopUpdataWithTimer;  //关闭定时器
+
+- (void)statisticalAllOwnStock;
+@end
