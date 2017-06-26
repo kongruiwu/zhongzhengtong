@@ -71,7 +71,7 @@
     }];
     [registBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(@(-Anno750(30)));
-        make.top.equalTo(@(Anno750(35)));
+        make.top.equalTo(@(Anno750(50)));
         make.width.equalTo(@(Anno750(80)));
         make.height.equalTo(@(Anno750(40)));
     }];
@@ -194,6 +194,7 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 - (void)userLogin{
+    [SVProgressHUD show];
     [[NSUserDefaults standardUserDefaults] setValue:self.nameT.text forKey:@"UserName"];
     if ([UserManager instance].isSavePwd) {
         [[NSUserDefaults standardUserDefaults] setValue:self.pwdT.text forKey:@"PassWord"];

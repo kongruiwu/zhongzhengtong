@@ -77,6 +77,7 @@
     if (![UserManager instance].isLog) {
         return;
     }
+    [[UserManager instance] userLogOut];
     UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
     UINavigationController  *nvc = tbc.selectedViewController;
     UIViewController *vc = nvc.visibleViewController;

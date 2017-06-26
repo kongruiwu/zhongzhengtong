@@ -124,17 +124,18 @@
     [[NetWorkManager manager] POST:Page_AskQuest tokenParams:params complete:^(id result) {
         NSDictionary * dic = (NSDictionary *)result;
         if (![dic[@"qState"] isKindOfClass:[NSNull class]] && dic[@"qState"] != nil) {
-            BOOL rec = dic[@"qState"];
+            BOOL rec = [dic[@"qState"] boolValue];
             if (rec) {
                 [ToastView presentToastWithin:self.view.window withIcon:APToastIconNone text:@"问题已提交" duration:2.0f];
                 [self doBack];
             }else{
-                NSNumber * num = dic[@"StrategyID"];
-                if (num.intValue == 0) {
-                    [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"每人每天最多提问5次，请明天再来提问..." duration:1.0f];
+                NSNumber * num = dic[@"AskNum"];
+                if (num.intValue == 5) {
+                    [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"提问已超过5次" duration:1.0f];
                 }else{
                     [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"请求超时" duration:1.0f];
                 }
+                [self doBack];
             }
         }
     } error:^(JSError *error) {

@@ -55,7 +55,7 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     UIView * footer = [Factory creatViewWithColor:[UIColor clearColor]];
-    UIButton * nextBtn = [Factory creatButtonWithTitle:@"下一步"
+    UIButton * nextBtn = [Factory creatButtonWithTitle:@"修改密码"
                                        backGroundColor:[UIColor clearColor]
                                              textColor:KTColor_lightGray
                                               textSize:font750(30)];

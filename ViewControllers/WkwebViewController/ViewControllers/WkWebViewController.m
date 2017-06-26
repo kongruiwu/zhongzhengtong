@@ -82,7 +82,7 @@
 }
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
 //    修改字体大小 300%
-    [ webView evaluateJavaScript:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '250%'" completionHandler:nil];
+    [ webView evaluateJavaScript:@"document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '300%'" completionHandler:nil];
     
     //修改字体颜色
 //    [ webView evaluateJavaScript:@"document.getElementsByTagName('body')[0].style.webkitTextFillColor= '#666666'" completionHandler:nil];

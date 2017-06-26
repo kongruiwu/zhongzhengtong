@@ -235,7 +235,11 @@
                              @"TelPhone":self.phoneTextF.text,
                              @"Code":self.codeTextF.text
                              };
-    [[NetWorkManager manager] POST:Page_CheckSms tokenParams:params complete:^(id result) {
+    NSString * pageurl = Page_CheckSms;
+    if (self.logType == LOGINTYPEREGISTER) {
+        pageurl = Page_SendIosSms;
+    }
+    [[NetWorkManager manager] POST:pageurl tokenParams:params complete:^(id result) {
         ForgetPwdViewController * vc = [ForgetPwdViewController new];
         vc.logType = LOGINTYPESETPWD;
         vc.phoneNum = self.phoneTextF.text;

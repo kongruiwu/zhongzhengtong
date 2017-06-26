@@ -18,6 +18,8 @@
 
 //发送短信验证码
 #define Page_SendSms    @"SendSmsCode/SendSms"
+//注册时使用
+#define Page_SendIosSms @"SendSmsCode/SendSmsIOS"
 //验证code码
 #define Page_CheckSms   @"CheckSmsCode/CheckSms"
 //用户注册
