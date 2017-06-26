@@ -9,6 +9,7 @@
 #import "LoginViewController.h"
 #import "LoginCell.h"
 #import "ForgetPwdViewController.h"
+#import "RootViewController.h"
 @interface LoginViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView * tabview;
@@ -125,7 +126,7 @@
     [savePwd mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@(Anno750(24)));
         make.top.equalTo(loginBtn.mas_bottom).offset(Anno750(20));
-        make.width.equalTo(@(Anno750(150)));
+        make.width.equalTo(@(Anno750(180)));
         make.height.equalTo(@(Anno750(30)));
     }];
     
@@ -208,9 +209,12 @@
         NSDictionary * dic = (NSDictionary *)result;
         [UserManager instance].userInfo = [[UserModel alloc]initWithDictionary:dic];
         [[UserManager instance] checkUserLogin];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    } error:^(JSError *error) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            [[UIApplication sharedApplication].keyWindow setRootViewController:[RootViewController new]];
+        }];
         
+    } error:^(JSError *error) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:error.message duration:1.0f];
     }];
 }
 - (void)savePassword:(UIButton *)button{

@@ -20,10 +20,7 @@
 @end
 
 @implementation MasterCheatsViewController
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    self.tabBarController.tabBar.hidden = YES;
-}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setNavTitle:@"高手秘籍"];
@@ -35,7 +32,7 @@
 - (void)creatUI{
     self.page = 1;
     self.dataArray = [NSMutableArray new];
-    self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT - 49) style:UITableViewStylePlain];
+    self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT - 49 - 64) style:UITableViewStylePlain];
     self.tabview.delegate = self;
     self.tabview.dataSource = self;
     [self.view addSubview:self.tabview];

@@ -194,7 +194,7 @@
 #pragma mark 查看协议
 - (void)pushToProtocolView{
     NSURL * path = [[NSBundle mainBundle] URLForResource:@"register" withExtension:@"html"];
-    WkWebViewController * vc = [[WkWebViewController alloc]initWithTitle:@"服务协议" url:path];
+    WkWebViewController * vc = [[WkWebViewController alloc]initWithTitle:@"服务条款" url:path];
     [self.navigationController pushViewController:vc animated:YES];
 }
 #pragma mark 获取验证码
