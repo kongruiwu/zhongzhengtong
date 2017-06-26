@@ -66,8 +66,11 @@
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    WkWebViewController * webvc = [[WkWebViewController alloc]initWithTitle:@"高手秘籍" content:
-                                   self.dataArray[indexPath.row].Newscontent];
+    WkWebViewController * webvc = [[WkWebViewController alloc]
+                          initWithTitle:self.dataArray[indexPath.row].Newstitle
+                                content:self.dataArray[indexPath.row].Newscontent
+                                   time:self.dataArray[indexPath.row].CreatTime
+                               navTitle:@"高手秘籍"];
     [self.navigationController pushViewController:webvc animated:YES];
 }
 - (void)getData{

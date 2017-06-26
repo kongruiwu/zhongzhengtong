@@ -10,6 +10,6 @@
 #import <WebKit/WebKit.h>
 @interface WkWebViewController : BaseViewController
 @property (nonatomic, strong) WKWebView * webView;
-- (instancetype)initWithTitle:(NSString *)title content:(NSString *)content;
+- (instancetype)initWithTitle:(NSString *)title content:(NSString *)content time:(NSString *)time navTitle:(NSString *)navTitle;
 - (instancetype)initWithTitle:(NSString *)title url:(NSURL *)url;
 @end

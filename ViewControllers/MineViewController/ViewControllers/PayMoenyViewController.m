@@ -155,8 +155,8 @@
     return cell;
 }
 - (void)pushToProtoView{
-    WkWebViewController * vc = [[WkWebViewController alloc]initWithTitle:@"支付协议" content:@""];
-    [self.navigationController pushViewController:vc animated:YES];
+//    WkWebViewController * vc = [[WkWebViewController alloc]initWithTitle:@"支付协议" content:@""];
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end
