@@ -36,7 +36,7 @@
     self.timer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(checkUserInfo) userInfo:nil repeats:YES];
     
     [self updateDataBase];       //每日更新一次数据库
-    
+    NSLog(@"test");
     [[NetWorkManager manager] requestToken];
     [[UserManager instance] updateUserInfo];
     [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
