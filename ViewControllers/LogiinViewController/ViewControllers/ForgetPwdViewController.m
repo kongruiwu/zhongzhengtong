@@ -278,26 +278,20 @@
         return;
     }
     
-    NSDictionary * params =@{
-                             @"TelPhone":self.phoneTextF.text,
-                             @"Code":self.codeTextF.text
-                             };
-    [[NetWorkManager manager] POST:Page_CheckSms tokenParams:params complete:^(id result) {
-        NSDictionary * params = @{
-                                  @"UserName":self.phoneTextF.text,
-                                  @"UserPws":self.pwdTextf.text
-                                  };
-        [[NetWorkManager manager] POST:Page_Register tokenParams:params complete:^(id result) {
-            [ToastView presentToastWithin:self.view.window withIcon:APToastIconNone text:@"注册成功" duration:2.0f];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        } error:^(JSError *error) {
-            
-        }];
+
+    NSDictionary * params = @{
+                              @"UserName":self.phoneTextF.text,
+                              @"UserPws":self.pwdTextf.text,
+                              @"TelPhone":self.phoneTextF.text,
+                              @"Code":self.codeTextF.text
+                              };
+    [[NetWorkManager manager] POST:Page_Register tokenParams:params complete:^(id result) {
+        [ToastView presentToastWithin:self.view.window withIcon:APToastIconNone text:@"注册成功" duration:2.0f];
+        [self.navigationController popToRootViewControllerAnimated:YES];
     } error:^(JSError *error) {
-        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:error.message duration:1.0f];
+        
     }];
-    
-    
+
 }
 #pragma mark 同意协议
 - (void)agreePortocol{
