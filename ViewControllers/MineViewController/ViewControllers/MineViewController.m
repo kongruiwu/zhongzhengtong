@@ -148,6 +148,7 @@
     [WXApi sendReq:req];
 }
 - (void)userLogin{
+    [[UserManager instance] userLogOut];
     UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
     [self presentViewController:nav animated:YES completion:nil];
 }

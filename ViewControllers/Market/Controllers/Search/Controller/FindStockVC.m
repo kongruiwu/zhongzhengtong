@@ -51,10 +51,9 @@
     
     CGFloat textFieldXFloat = searchIconImageView.x + searchIconImageView.width + 10.0;
     self.searchTextField = [[WMXPickerTF alloc] initWithFrame:CGRectMake(textFieldXFloat, 0.0, self.searchBackgroundView.width - textFieldXFloat - 10.0, self.searchBackgroundView.height)];
-    self.searchTextField.placeholder = @"代码/简拼";
+    self.searchTextField.placeholder = @"请输入代码/简拼";
     self.searchTextField.textColor = [UIColor blackColor];
     self.searchTextField.font = [UIFont systemFontOfSize:14.0];
-//    self.searchTextField.returnKeyType = UIReturnKeySearch;
     [self.searchBackgroundView addSubview:self.searchTextField];
     self.searchTextField.pickerDelegate = self;
 }

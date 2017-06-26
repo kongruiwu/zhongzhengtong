@@ -156,6 +156,8 @@
 		8BE081A71EF2746300924EA2 /* MineHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BE081A61EF2746300924EA2 /* MineHeader.m */; };
 		8BE081AA1EF27E4D00924EA2 /* HotNewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BE081A91EF27E4D00924EA2 /* HotNewsViewController.m */; };
 		8BE081AD1EF27F0800924EA2 /* HotNewsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BE081AC1EF27F0800924EA2 /* HotNewsCell.m */; };
+		8BF0778F1EFCE00D008C6E31 /* NullQuestionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BF0778E1EFCE00D008C6E31 /* NullQuestionView.m */; };
+		8BF0779D1EFCF269008C6E31 /* register.html in Resources */ = {isa = PBXBuildFile; fileRef = 8BF0779C1EFCF269008C6E31 /* register.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -452,6 +454,9 @@
 		8BE081A91EF27E4D00924EA2 /* HotNewsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotNewsViewController.m; sourceTree = "<group>"; };
 		8BE081AB1EF27F0800924EA2 /* HotNewsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HotNewsCell.h; sourceTree = "<group>"; };
 		8BE081AC1EF27F0800924EA2 /* HotNewsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HotNewsCell.m; sourceTree = "<group>"; };
+		8BF0778D1EFCE00D008C6E31 /* NullQuestionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NullQuestionView.h; sourceTree = "<group>"; };
+		8BF0778E1EFCE00D008C6E31 /* NullQuestionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NullQuestionView.m; sourceTree = "<group>"; };
+		8BF0779C1EFCF269008C6E31 /* register.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = register.html; sourceTree = "<group>"; };
 		A54DE403E9905A7611686A28 /* Pods-ZhongZhengTong.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZhongZhengTong.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZhongZhengTong/Pods-ZhongZhengTong.release.xcconfig"; sourceTree = "<group>"; };
 		D68D2190349F812EA20E98DC /* libPods-ZhongZhengTong.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZhongZhengTong.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -924,6 +929,7 @@
 		8B1EE3A71EF3BBAE007F361E /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				8BF0779C1EFCF269008C6E31 /* register.html */,
 				8B1EE3A91EF3BBCA007F361E /* LoginViewController.h */,
 				8B1EE3AA1EF3BBCA007F361E /* LoginViewController.m */,
 				8B1EE3AF1EF3C558007F361E /* ForgetPwdViewController.h */,
@@ -1193,6 +1199,8 @@
 				8B1EE3821EF36884007F361E /* ReferenceListCell.m */,
 				8B1EE3871EF36BE2007F361E /* ExpertListCell.h */,
 				8B1EE3881EF36BE2007F361E /* ExpertListCell.m */,
+				8BF0778D1EFCE00D008C6E31 /* NullQuestionView.h */,
+				8BF0778E1EFCE00D008C6E31 /* NullQuestionView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1443,7 +1451,7 @@
 				TargetAttributes = {
 					8BE081221EF2306300924EA2 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = XR5948V657;
+						DevelopmentTeam = CM9MVSEUDD;
 						ProvisioningStyle = Manual;
 					};
 					8BE0813B1EF2306300924EA2 = {
@@ -1496,6 +1504,7 @@
 				62FFCE2B1EFAB1C5000E4821 /* HeadView.xib in Resources */,
 				62E836071EFABE3600E64DB4 /* AdiviserNodataCell.xib in Resources */,
 				62FFCE381EFAB1C5000E4821 /* SearchStockCell.xib in Resources */,
+				8BF0779D1EFCF269008C6E31 /* register.html in Resources */,
 				62FFCE2D1EFAB1C5000E4821 /* SectionHeadView.xib in Resources */,
 				8BE081831EF2327C00924EA2 /* toast_icon_bg@2x.png in Resources */,
 				62FFCE421EFAB1C5000E4821 /* FSFiveViewController.xib in Resources */,
@@ -1584,6 +1593,7 @@
 				62FFCE6F1EFAB572000E4821 /* iPhoneModel.m in Sources */,
 				62E836111EFABEC100E64DB4 /* CustomSlideViewController.m in Sources */,
 				8B1EE3831EF36884007F361E /* ReferenceListCell.m in Sources */,
+				8BF0778F1EFCE00D008C6E31 /* NullQuestionView.m in Sources */,
 				8BE0819E1EF261EB00924EA2 /* EquityListCell.m in Sources */,
 				62FFCE371EFAB1C5000E4821 /* SearchStockCell.m in Sources */,
 				62FFCE411EFAB1C5000E4821 /* FSFiveViewController.m in Sources */,
@@ -1827,14 +1837,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				DEVELOPMENT_TEAM = XR5948V657;
+				DEVELOPMENT_TEAM = CM9MVSEUDD;
 				INFOPLIST_FILE = ZhongZhengTong/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hpkj.yjc;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anhuiDashidai.StrategyPlat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "08344a32-f23f-4e00-b57a-a70314602dd1";
-				PROVISIONING_PROFILE_SPECIFIER = zhongzhengtong;
+				PROVISIONING_PROFILE = "b05b471f-129e-4025-b8cb-d828d093f1d2";
+				PROVISIONING_PROFILE_SPECIFIER = zzt_dev;
 			};
 			name = Debug;
 		};
@@ -1844,14 +1854,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				DEVELOPMENT_TEAM = XR5948V657;
+				DEVELOPMENT_TEAM = CM9MVSEUDD;
 				INFOPLIST_FILE = ZhongZhengTong/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hpkj.yjc;
+				PRODUCT_BUNDLE_IDENTIFIER = com.anhuiDashidai.StrategyPlat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "08344a32-f23f-4e00-b57a-a70314602dd1";
-				PROVISIONING_PROFILE_SPECIFIER = zhongzhengtong;
+				PROVISIONING_PROFILE = "b05b471f-129e-4025-b8cb-d828d093f1d2";
+				PROVISIONING_PROFILE_SPECIFIER = zzt_dev;
 			};
 			name = Release;
 		};

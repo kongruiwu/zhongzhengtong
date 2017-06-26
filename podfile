@@ -13,5 +13,6 @@ pod 'WechatOpenSDK'
 pod 'FMDB'
 pod 'Reachability'
 pod 'YYCache'
+pod 'JPush'
 end
 

@@ -14,7 +14,7 @@
 @property (nonatomic, strong) UITableView * tabview;
 @property (nonatomic, strong) UITextField * nameT;
 @property (nonatomic, strong) UITextField * pwdT;
-
+@property (nonatomic, strong) UIButton * loginBtn;
 
 
 @end
@@ -81,10 +81,18 @@
     footer.frame = CGRectMake(0, 0, UI_WIDTH, Anno750(735));
     UIButton * loginBtn = [Factory creatButtonWithTitle:@"登录"
                                         backGroundColor:[UIColor clearColor]
-                                              textColor:MainRed
+                                              textColor:KTColor_lightGray
                                                textSize:font750(32)];
-    loginBtn.layer.borderColor = MainRed.CGColor;
     loginBtn.layer.borderWidth = 1.0f;
+    [loginBtn setTitleColor:MainRed forState:UIControlStateSelected];
+    self.loginBtn = loginBtn;
+    [RACObserve(self.loginBtn, selected) subscribeNext:^(id  _Nullable x) {
+        if ([x boolValue]) {
+            self.loginBtn.layer.borderColor = MainRed.CGColor;
+        }else{
+            self.loginBtn.layer.borderColor = KTColor_lightGray.CGColor;
+        }
+    }];
     [loginBtn addTarget:self action:@selector(userLogin) forControlEvents:UIControlEventTouchUpInside];
     UIButton * savePwd = [Factory creatButtonWithTitle:@"  记住密码"
                                        backGroundColor:[UIColor clearColor]
@@ -99,7 +107,7 @@
                                                textColor:MainRed
                                                 textSize:font750(28)];
     [forgetBtn addTarget:self action:@selector(pushToforgetPwdViewController) forControlEvents:UIControlEventTouchUpInside];
-    UIButton * phoneBtn = [Factory creatButtonWithTitle:@"客服电话：000-000-0000"
+    UIButton * phoneBtn = [Factory creatButtonWithTitle:@"客服电话：400-608-8879"
                                         backGroundColor:[UIColor clearColor]
                                               textColor:KTColor_darkGray
                                                textSize:font750(26)];
@@ -134,7 +142,7 @@
         make.height.equalTo(@(Anno750(30)));
     }];
     
-    
+    [self checkLoginBtnSate];
     return footer;
 }
 
@@ -145,7 +153,7 @@
     return Anno750(100);
 }
 - (void)callPhone{
-    [Factory callPhoneStr:@"000-000-0000" withVC:self];
+    [Factory callPhoneStr:@"400-608-8879" withVC:self];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -154,6 +162,7 @@
     if (!cell) {
         cell = [[LoginCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid];
     }
+    [cell.textF addTarget:self action:@selector(textchaged:) forControlEvents:UIControlEventEditingChanged];
     if (indexPath.row == 0) {
         [cell updateWithTitle:@"帐号" placeHolder:@"手机号/邮箱"];
         NSString * name = @"";
@@ -214,5 +223,18 @@
     [UserManager instance].isSavePwd = button.selected;
 }
 
-
+-(void)textchaged:(UITextField *)textf{
+    if (self.nameT.text.length > 0 && self.pwdT.text.length>0) {
+        self.loginBtn.selected = YES;
+    }else{
+        self.loginBtn.selected = NO;
+    }
+}
+- (void)checkLoginBtnSate{
+    if (self.nameT.text.length > 0 && self.pwdT.text.length>0) {
+        self.loginBtn.selected = YES;
+    }else{
+        self.loginBtn.selected = NO;
+    }
+}
 @end

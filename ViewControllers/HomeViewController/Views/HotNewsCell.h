@@ -17,7 +17,6 @@
 @property (nonatomic, strong) UILabel * contentLabel;
 @property (nonatomic, strong) UILabel * timeLabel;
 @property (nonatomic, strong) UILabel * tagLabel;
-@property (nonatomic, strong) UILabel * openLabel;
 
 - (void)updateFristCell:(BOOL)rec;
 - (void)updateWithHotNewsModel:(HotNewsModel *)model;

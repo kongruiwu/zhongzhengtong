@@ -15,6 +15,7 @@
     if (self) {
         //本地保存记录
         [[NSUserDefaults standardUserDefaults] setValue:self.UserName forKey:@"UserName"];
+        [[NSUserDefaults standardUserDefaults] setValue:self.UserName forKey:@"LogName"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     return self;

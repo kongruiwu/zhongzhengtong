@@ -78,7 +78,7 @@ typedef NS_ENUM(NSInteger,QuotationType) {
     _segmentBtn.frame = CGRectMake((UI_WIDTH-120)/2, (64 - 25)/2+statueHeight, 120, 25);
     _segmentBtn.backgroundColor = [UIColor whiteColor];
     _segmentBtn.layer.cornerRadius = 5.0f;
-    _segmentBtn.tintColor = MainRed;//[UIColor colorWithHexString:@"#114068"];
+    _segmentBtn.tintColor = HomeBtn2;//[UIColor colorWithHexString:@"#114068"];
     [_segmentBtn setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]} forState:UIControlStateSelected];  //选中segment的字体颜色
     [_segmentBtn setTitleTextAttributes:@{NSForegroundColorAttributeName:KTColor_lightGray} forState:UIControlStateNormal];
     _segmentBtn.selectedSegmentIndex = 0;

@@ -134,10 +134,10 @@
 - (void)updateWithQuestionModel:(QuestionModel *)model{
     [self.userIcon sd_setImageWithURL:[Factory getImageUlr:model.Pic] placeholderImage:[UIImage imageNamed:@"userIcon"]];
     self.userName.text = model.UserName;
-    self.timeLabel.text = model.QTime;
+    self.timeLabel.text = [Factory getTodayTimeType:model.QTime];
     self.nameLabel.text = model.Question;
     if ( model.Answer == nil ||model.Answer.length == 0 ) {
-        self.questionLabel.text = @"老师正在努力解答中...";
+        self.questionLabel.text = @"老师在忙 稍后为你解析...";
         self.questionLabel.textColor = KTColor_lightGray;
         self.questionLabel.numberOfLines = 1;
         self.questionLabel.textAlignment = NSTextAlignmentCenter;
@@ -154,7 +154,7 @@
         self.questionLabel.textColor = KTColor_darkGray;
         
         self.questUserName.text = model.StrategyTitle;
-        self.questTime.text = model.ATime;
+        self.questTime.text = [Factory getTodayTimeType:model.ATime];
         self.questionLabel.text = model.Answer;
         
         CGSize size = [Factory getSize:model.Answer maxSize:CGSizeMake(99999, Anno750(30)) font:[UIFont systemFontOfSize:font750(28)]];

@@ -25,7 +25,6 @@
 @property (nonatomic, strong)NSMutableArray *HuShenArr;  //沪深A股
 
 @property (nonatomic, strong) NSTimer * timer;
-@property (nonatomic, assign)BOOL isShow;
 @end
 
 @implementation AppDelegate
@@ -51,20 +50,31 @@
         [self.window setRootViewController:[RootViewController new]];
     }
     [WXApi registerApp:WXAPPKEY];
-    
+    [self JpushSettingWithDic:launchOptions];
     return YES;
 }
-
-
-
-
-
+- (void)JpushSettingWithDic:(NSDictionary *)launchOptions{
+    [JPUSHService setupWithOption:launchOptions appKey:JPUSHKey channel:@"App Store" apsForProduction:YES advertisingIdentifier:nil];
+    JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
+    entity.types = JPAuthorizationOptionAlert|JPAuthorizationOptionBadge|JPAuthorizationOptionSound;
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+        // 可以添加自定义categories
+        // NSSet<UNNotificationCategory *> *categories for iOS10 or later
+        // NSSet<UIUserNotificationCategory *> *categories for iOS8 and iOS9
+    }
+    [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
+    [JPUSHService setupWithOption:launchOptions appKey:JPUSHKey
+                          channel:@"App Store"
+                 apsForProduction:isProduction
+            advertisingIdentifier:nil];
+    
+}
 
 - (void)checkUserInfo{
     [[UserManager instance] updateUserInfo];
 }
 - (void)userLogOut{
-    if (self.isShow) {
+    if (![UserManager instance].isLog) {
         return;
     }
     UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
@@ -72,14 +82,12 @@
     UIViewController *vc = nvc.visibleViewController;
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"下线通知" message:@"您的帐号已经在其他设备登录" preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction * cannceAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        self.isShow = NO;
         [[UserManager instance] userLogOut];
         UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
         [vc presentViewController:nav animated:YES completion:nil];
     }];
     [alert addAction:cannceAction];
     [vc presentViewController:alert animated:YES completion:nil];
-    self.isShow = YES;
 }
 
 #pragma mark - 更新数据库---每日只更新一次
@@ -190,6 +198,46 @@
     }
     return _HuShenArr;
 }
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    // Required - 注册 DeviceToken
+    [JPUSHService registerDeviceToken:deviceToken];
+}
+// iOS 10 Support
+- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
+    // Required
+    NSDictionary * userInfo = notification.request.content.userInfo;
+    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        [JPUSHService handleRemoteNotification:userInfo];
+    }
+    completionHandler(UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
+}
+
+// iOS 10 Support
+- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+    // Required
+    NSDictionary * userInfo = response.notification.request.content.userInfo;
+    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        [JPUSHService handleRemoteNotification:userInfo];
+    }
+    completionHandler();  // 系统要求执行这个方法
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    // Required, iOS 7 Support
+    [JPUSHService handleRemoteNotification:userInfo];
+    completionHandler(UIBackgroundFetchResultNewData);
+    
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    // Required,For systems with less than or equal to iOS6
+    [JPUSHService handleRemoteNotification:userInfo];
+}
+
+
+
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.

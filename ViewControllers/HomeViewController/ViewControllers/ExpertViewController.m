@@ -10,12 +10,14 @@
 #import "ExpertListCell.h"
 #import "FeedbackViewController.h"
 #import "QuestionModel.h"
+#import "NullQuestionView.h"
 @interface ExpertViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView * tabview;
 @property (nonatomic, strong) NSMutableArray<QuestionModel *> * dataArray;
 @property (nonatomic, strong) UIButton * questBtn;
 @property (nonatomic) int page;
+@property (nonatomic, strong) NullQuestionView * nullQestView;
 
 @end
 
@@ -39,6 +41,7 @@
     if (!self.isMine) {
         [self creatQuestionButton];
         [self drawRightButton];
+        
     }
     
 }
@@ -48,6 +51,16 @@
     self.navigationItem.rightBarButtonItem = rightBaritem;
     [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
     [self.navigationItem.rightBarButtonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:font750(28)],NSFontAttributeName, nil] forState:UIControlStateNormal];
+    self.nullQestView = [[NullQuestionView alloc]initWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT)];
+    self.nullQestView.hidden = YES;
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(PushToUserQuestionViewController)];
+    [self.nullQestView addGestureRecognizer:tap];
+    [self.view addSubview:self.nullQestView];
+    
+}
+- (void)showNullViewWithMessage:(NSString *)message{
+    self.nullQestView.hidden = NO;
+    [self.view bringSubviewToFront:self.nullQestView];
 }
 - (void)checkMineQuestion{
     ExpertViewController * vc = [[ExpertViewController alloc]init];
@@ -132,14 +145,18 @@
         }
         [self.tabview reloadData];
         [self.refreshHeader endRefreshing];
-        [self.refreshFooter endRefreshing];
+        if (arr.count<10) {
+            [self.refreshFooter endRefreshingWithNoMoreData];
+        }else{
+            [self.refreshFooter endRefreshing];
+        }
     } error:^(JSError *error) {
         [self.refreshHeader endRefreshing];
-        [self.refreshFooter endRefreshing];
         if (error.code.integerValue == 103) {
             if (self.dataArray.count == 0) {
                 [self showNullViewWithMessage:@"暂无用户提问..."];
             }else{
+                [self.refreshFooter endRefreshingWithNoMoreData];
                 [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"没有更多了" duration:1.0f];
             }
             

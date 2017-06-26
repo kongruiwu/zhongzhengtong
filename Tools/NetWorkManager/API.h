@@ -57,5 +57,7 @@
 #define Page_SysMes     @"Message/GetSystemMessagebyApp"
 //系统消息列表
 #define Page_SysList    @"Message/GetSystemMessageListbyApp"
+//删除信息
+#define Page_DelMess    @"Message/DelMessagebyId"
 
 #endif /* API_h */

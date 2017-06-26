@@ -23,9 +23,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setNavTitle:@"牛股来了"];
+    [self drawBackButton];
     [self creatUI];
     [self getData];
     [self addRefreshHeader];
+}
+- (void)doBack{
+    self.tabBarController.selectedIndex = 0;
 }
 - (void)addRefreshHeader{
     self.refreshHeader = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getData)];

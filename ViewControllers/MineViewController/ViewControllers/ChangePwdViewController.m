@@ -16,7 +16,7 @@
 @property (nonatomic, strong) UITextField * oldPwdTextF;
 @property (nonatomic, strong) UITextField * pwdTextF;
 @property (nonatomic, strong) UITextField * checkTextF;
-
+@property (nonatomic, strong) UIButton * nextBtn ;
 @end
 
 @implementation ChangePwdViewController
@@ -57,10 +57,10 @@
     UIView * footer = [Factory creatViewWithColor:[UIColor clearColor]];
     UIButton * nextBtn = [Factory creatButtonWithTitle:@"下一步"
                                        backGroundColor:[UIColor clearColor]
-                                             textColor:MainRed
+                                             textColor:KTColor_lightGray
                                               textSize:font750(30)];
+    [nextBtn setTitleColor:MainRed forState:UIControlStateSelected];
     [nextBtn addTarget:self action:@selector(getData) forControlEvents:UIControlEventTouchUpInside];
-    nextBtn.layer.borderColor = MainRed.CGColor;
     nextBtn.layer.borderWidth = 1.0f;
     footer.frame = CGRectMake(0, 0, UI_WIDTH, Anno750(120));
     [footer addSubview:nextBtn];
@@ -69,6 +69,14 @@
         make.right.equalTo(@(Anno750(-24)));
         make.height.equalTo(@(Anno750(80)));
         make.top.equalTo(@(Anno750(30)));
+    }];
+    self.nextBtn = nextBtn;
+    [RACObserve(self.nextBtn, selected) subscribeNext:^(id  _Nullable x) {
+        if ([x boolValue]) {
+            self.nextBtn.layer.borderColor = MainRed.CGColor;
+        }else{
+            self.nextBtn.layer.borderColor = KTColor_lightGray.CGColor;
+        }
     }];
     return footer;
 }
@@ -87,9 +95,14 @@
     }
     cell.inputTextf.secureTextEntry = YES;
     cell.inputTextf.placeholder = self.placeHolders[indexPath.row];
+    [cell.inputTextf addTarget:self action:@selector(textChanged) forControlEvents:UIControlEventEditingChanged];
     return cell;
 }
 - (void)getData{
+    if (self.pwdTextF.text.length< 6) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"密码长度不够6位，请重新输入" duration:1.0f];
+        return;
+    }
     
     if (![self.checkTextF.text isEqualToString:self.pwdTextF.text]) {
         [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"两次密码输入不一致，请重新输入" duration:1.0f];
@@ -110,5 +123,11 @@
         [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:error.message duration:1.0f];
     }];
 }
-
+- (void)textChanged{
+    if (self.oldPwdTextF.text.length>= 6 && self.pwdTextF.text.length>=6 && self.checkTextF.text.length>= 6) {
+        self.nextBtn.selected = YES;
+    }else{
+        self.nextBtn.selected = NO;
+    }
+}
 @end

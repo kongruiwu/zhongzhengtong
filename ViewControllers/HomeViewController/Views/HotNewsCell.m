@@ -36,7 +36,7 @@
                                           fontValue:font750(28)
                                           textColor:KTColor_MainBlack
                                       textAlignment:NSTextAlignmentLeft];
-    self.contentLabel.numberOfLines = 2;
+    self.contentLabel.numberOfLines = 0;
     self.timeLabel = [Factory creatLabelWithText:@"10:17"
                                        fontValue:font750(24)
                                        textColor:KTColor_lightGray
@@ -47,17 +47,13 @@
                                   textAlignment:NSTextAlignmentCenter];
     [Factory setLabel:self.tagLabel BorderColor:MainRed with:1.0f cornerRadius:2.0f];
     
-    self.openLabel = [Factory creatLabelWithText:@"展开"
-                                       fontValue:font750(24)
-                                       textColor:HomeBtn3
-                                   textAlignment:NSTextAlignmentRight];
+
     [self addSubview:self.topline];
     [self addSubview:self.centerImg];
     [self addSubview:self.bottomline];
     [self addSubview:self.contentLabel];
     [self addSubview:self.timeLabel];
     [self addSubview:self.tagLabel];
-    [self addSubview:self.openLabel];
 }
 - (void)layoutSubviews{
     [super layoutSubviews];
@@ -94,11 +90,7 @@
         make.height.equalTo(@(Anno750(40)));
         make.width.equalTo(@(Anno750(80)));
     }];
-    [self.openLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(@0);
-        make.centerY.equalTo(self.timeLabel.mas_centerY);
 
-    }];
 }
 - (void)updateFristCell:(BOOL)rec{
     if (rec) {
@@ -117,17 +109,7 @@
     NSString * time = [model.CREATEDATE substringWithRange:NSMakeRange(11, 5)];
     self.timeLabel.text = time;
     self.tagLabel.text = model.NEWSTYPE;
-    
-    CGSize size = [Factory getSize:model.NEWSTITLE maxSize:CGSizeMake(99999, Anno750(30)) font:[UIFont systemFontOfSize:font750(28)]];
-    self.openLabel.hidden = size.width >= Anno750(750 - 96)* 2 ? NO: YES;
-    if (model.isOpen) {
-        self.openLabel.text = @"收起";
-        self.openLabel.textColor = HomeBtn4;
-        self.contentLabel.numberOfLines = 0;
-    }else{
-        self.openLabel.text = @"展开";
-        self.openLabel.textColor = HomeBtn3;
-        self.contentLabel.numberOfLines = 2;
-    }
+
+
 }
 @end

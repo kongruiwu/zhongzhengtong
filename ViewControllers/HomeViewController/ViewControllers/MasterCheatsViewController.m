@@ -86,14 +86,18 @@
         }
         [self.tabview reloadData];
         [self.refreshHeader endRefreshing];
-        [self.refreshFooter endRefreshing];
+        if (arr.count<10) {
+            [self.refreshFooter endRefreshingWithNoMoreData];
+        }else{
+            [self.refreshFooter endRefreshing];
+        }
     } error:^(JSError *error) {
         [self.refreshHeader endRefreshing];
-        [self.refreshFooter endRefreshing];
         if (error.code.integerValue == 103) {
             if (self.dataArray.count == 0) {
                 [self showNullViewWithMessage:@"暂无高手秘籍信息..."];
             }else{
+                [self.refreshFooter endRefreshingWithNoMoreData];
                 [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"没有更多了" duration:1.0f];
             }
             

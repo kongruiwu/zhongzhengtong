@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger, SelectorBackType){
 
 #define WeCharUserID    @"gh_53368af0ad62"
 #define WXAPPKEY        @"wx62b05b5904c384b3"
+#define JPUSHKey        @""
 
 //750状态下字体适配
 #define font750(x) ((x)/ 1334.0f) * UI_HEGIHT
@@ -60,8 +61,10 @@ typedef NS_ENUM(NSInteger, SelectorBackType){
 
 #ifdef DEBUG
 #   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#define isProduction YES
 #else
 #   define DLog(...)
+#define isProduction NO
 #endif
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]

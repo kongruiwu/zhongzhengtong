@@ -35,6 +35,14 @@
     [self creatUI];
     [self getData];
     [self addRefreshView];
+    [self drawRightButton];
+}
+
+- (void)drawRightButton{
+    UIBarButtonItem * rightBaritem = [[UIBarButtonItem alloc]initWithTitle:@"一键清除" style:UIBarButtonItemStylePlain target:self action:@selector(cleanAllMessage)];
+    self.navigationItem.rightBarButtonItem = rightBaritem;
+    [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
+    [self.navigationItem.rightBarButtonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:font750(28)],NSFontAttributeName, nil] forState:UIControlStateNormal];
 }
 
 - (void)creatUI{
@@ -45,6 +53,8 @@
     self.tabview.dataSource = self;
     [self.view addSubview:self.tabview];
 }
+
+
 - (void)addRefreshView{
     self.refreshHeader = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(updatedata)];
     self.refreshFooter = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(LoadMoreData)];
@@ -78,6 +88,7 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self cleanMessageID:self.dataArray[indexPath.row].ID isShow:YES];
         [self.dataArray removeObjectAtIndex:indexPath.row];
         [self.tabview deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
@@ -133,14 +144,18 @@
         }
         [self.tabview reloadData];
         [self.refreshHeader endRefreshing];
-        [self.refreshFooter endRefreshing];
+        if (arr.count<10) {
+            [self.refreshFooter endRefreshingWithNoMoreData];
+        }else{
+            [self.refreshFooter endRefreshing];
+        }
     } error:^(JSError *error) {
         [self.refreshHeader endRefreshing];
-        [self.refreshFooter endRefreshing];
         if (error.code.integerValue == 103) {
             if (self.dataArray.count == 0) {
                 [self showNullViewWithMessage:@"暂时还没有您的消息..."];
             }else{
+                [self.refreshFooter endRefreshingWithNoMoreData];
                 [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"没有更多了" duration:1.0f];
             }
             
@@ -149,5 +164,24 @@
         }
     }];
 }
-
+- (void)cleanAllMessage{
+    NSArray<MessageModel *> * arr = [NSArray arrayWithArray:self.dataArray];
+    for (int i = 0; i<arr.count; i++) {
+        [self cleanMessageID:arr[i].ID isShow:NO];
+    }
+    [self.dataArray removeAllObjects];
+    [self showNullViewWithMessage:@"暂时还没有您的消息..."];
+}
+- (void)cleanMessageID:(NSString *)messageID isShow:(BOOL)rec{
+    NSDictionary * params = @{
+                              @"Id":messageID
+                              };
+    [[NetWorkManager manager] POST:Page_DelMess tokenParams:params complete:^(id result) {
+        if (rec) {
+            [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"删除成功" duration:1.0f];
+        }
+    } error:^(JSError *error) {
+        
+    }];
+}
 @end

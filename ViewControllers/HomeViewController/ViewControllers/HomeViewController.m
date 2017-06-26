@@ -49,6 +49,7 @@
     [self creatUI];
     [self drawLeftNavButton];
     [self getBannerData];
+
 }
 - (void)drawLeftNavButton{
     UIImage * image = [[UIImage imageNamed:@"left_nav"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];

@@ -39,4 +39,6 @@
 + (CGSize)getSize:(NSString *)text maxSize:(CGSize)maxSize font:(UIFont*)font;
 
 + (NSURL *)getImageUlr:(NSString *)imgUrl;
+
++ (NSString *)getTodayTimeType:(NSString *)timeStr;
 @end

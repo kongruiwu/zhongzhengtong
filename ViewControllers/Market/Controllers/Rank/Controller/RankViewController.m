@@ -167,7 +167,7 @@ static NSString * const CellID = @"StockID";  //定义cell的标识
     WEAKSELF();
     if (section == 0) {
         sectionHead.line.backgroundColor = [UIColor colorWithHexString:@"#C90011"];
-        sectionHead.title.text = @"领涨个股";
+        sectionHead.title.text = @"涨幅榜";
         sectionHead.moreBlock = ^{
             
             weakSelf.partVC.orderType = @"1";   //涨幅
@@ -175,7 +175,7 @@ static NSString * const CellID = @"StockID";  //定义cell的标识
         };
     }else {
         sectionHead.line.backgroundColor = [UIColor colorWithHexString:@"#19BD9C"];
-        sectionHead.title.text = @"领跌个股";
+        sectionHead.title.text = @"跌幅榜";
         sectionHead.moreBlock = ^{
             weakSelf.partVC.orderType = @"0";   //涨幅
             [self.navigationController  pushViewController:weakSelf.partVC animated:YES];

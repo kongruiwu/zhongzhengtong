@@ -81,7 +81,7 @@
         [self.leftImg sd_setImageWithURL:[Factory getImageUlr:model.Pic]];
     }
     self.nameLabel.text = model.Title;
-    self.timeLabel.text = model.CreateDate;
+    self.timeLabel.text = [Factory getTodayTimeType:model.CreateDate];
 }
 - (void)updateWithMasterModel:(MasterModel *)model{
     if (model.Newsthumb ==nil || model.Newsthumb.length == 0) {
@@ -90,6 +90,6 @@
         [self.leftImg sd_setImageWithURL:[Factory getImageUlr:model.Newsthumb]];
     }
     self.nameLabel.text = model.Newstitle;
-    self.timeLabel.text = model.CreatTime;
+    self.timeLabel.text = [Factory getTodayTimeType:model.CreatTime];
 }
 @end

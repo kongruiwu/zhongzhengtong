@@ -19,10 +19,6 @@
 
 @implementation HotNewsViewController
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.tabBarController.tabBar setHidden:YES];
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -42,7 +38,7 @@
 - (void)creatUI{
     self.page = 1;
     self.dataArray = [NSMutableArray new];
-    self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT -49) style:UITableViewStylePlain];
+    self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT -49 - 64) style:UITableViewStylePlain];
     self.tabview.delegate = self;
     self.tabview.dataSource = self;
     [self.view addSubview:self.tabview];
@@ -53,14 +49,7 @@
     return self.dataArray.count;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (!self.dataArray[indexPath.row].isOpen) {
-        return Anno750(155);
-    }
-    CGSize size = [Factory getSize:self.dataArray[indexPath.row].NEWSTITLE maxSize:CGSizeMake(99999, Anno750(30)) font:[UIFont systemFontOfSize:font750(28)]];
-    if (size.width >= Anno750(750 - 96)* 2 ? NO: YES) {
-        return Anno750(155);
-    }
-    size = [Factory getSize:self.dataArray[indexPath.row].NEWSTITLE maxSize:CGSizeMake(Anno750(750 - 96), 99999) font:[UIFont systemFontOfSize:Anno750(28)]];
+    CGSize size = [Factory getSize:self.dataArray[indexPath.row].NEWSTITLE maxSize:CGSizeMake(Anno750(750 - 96), 99999) font:[UIFont systemFontOfSize:Anno750(28)]];
     return Anno750(96)+ size.height;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -77,10 +66,7 @@
     [cell updateWithHotNewsModel:self.dataArray[indexPath.row]];
     return cell;
 }
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    self.dataArray[indexPath.row].isOpen = !self.dataArray[indexPath.row].isOpen;
-    [self.tabview reloadData];
-}
+
 - (void)getData{
     [SVProgressHUD show];
     NSDictionary * params = @{

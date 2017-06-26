@@ -31,16 +31,16 @@
                                                fontValue:font750(28)
                                                textColor:KTColor_darkGray
                                            textAlignment:NSTextAlignmentCenter];
-    UIButton * checkUpdate = [Factory creatButtonWithTitle:@"检查更新"
-                                           backGroundColor:[UIColor clearColor]
-                                                 textColor:MainRed
-                                                  textSize:font750(30)];
-    checkUpdate.layer.borderColor = MainRed.CGColor;
-    checkUpdate.layer.borderWidth = 1.0f;
-    
+//    UIButton * checkUpdate = [Factory creatButtonWithTitle:@"检查更新"
+//                                           backGroundColor:[UIColor clearColor]
+//                                                 textColor:MainRed
+//                                                  textSize:font750(30)];
+//    checkUpdate.layer.borderColor = MainRed.CGColor;
+//    checkUpdate.layer.borderWidth = 1.0f;
+//    
     [self.view addSubview:img];
     [self.view addSubview:versionLabel];
-    [self.view addSubview:checkUpdate];
+//    [self.view addSubview:checkUpdate];
     
     [img mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(@0);
@@ -52,12 +52,12 @@
         make.top.equalTo(img.mas_bottom).offset(Anno750(30));
         make.centerX.equalTo(@0);
     }];
-    [checkUpdate mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@(Anno750(-120)));
-        make.centerX.equalTo(@0);
-        make.width.equalTo(@(Anno750(280)));
-        make.height.equalTo(@(Anno750(80)));
-    }];
+//    [checkUpdate mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.equalTo(@(Anno750(-120)));
+//        make.centerX.equalTo(@0);
+//        make.width.equalTo(@(Anno750(280)));
+//        make.height.equalTo(@(Anno750(80)));
+//    }];
 }
 
 @end

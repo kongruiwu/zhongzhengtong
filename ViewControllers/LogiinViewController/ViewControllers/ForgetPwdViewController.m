@@ -9,12 +9,15 @@
 #import "ForgetPwdViewController.h"
 #import "ChangePwdCell.h"
 #import "WkWebViewController.h"
-@interface ForgetPwdViewController ()<UITableViewDelegate,UITableViewDataSource,ChangePwdCellDelegate>
+@interface ForgetPwdViewController ()<UITableViewDelegate,UITableViewDataSource,ChangePwdCellDelegate,UITextFieldDelegate>
 
 @property (nonatomic, strong) UITableView * tabview;
 @property (nonatomic, strong) NSArray * placeHolders;
 @property (nonatomic, strong) UITextField * phoneTextF;
 @property (nonatomic, strong) UITextField * codeTextF;
+@property (nonatomic, strong) UITextField * nameTextf;
+@property (nonatomic, strong) UITextField * pwdTextf;
+@property (nonatomic, strong) UITextField * ageinTextf;
 @property (nonatomic, strong) UIButton * nextBtn;
 @property (nonatomic, strong) UIButton * selctBtn;
 @property (nonatomic, strong) NSTimer * timer;
@@ -65,7 +68,7 @@
     if (self.logType == LOGINTYPESETPWD) {
         self.placeHolders = @[@"请输入6-18位新密码",@"确认新密码"];
     }else if(self.logType == LOGINTYPEREGISTER){
-        self.placeHolders = @[@"输入手机号",@"输入密码"];
+        self.placeHolders = @[@"输入手机号",@"验证码",@"用户名",@"输入新密码",@"再次输入新密码"];
     }
     
     self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT) style:UITableViewStyleGrouped];
@@ -73,7 +76,6 @@
     self.tabview.dataSource = self;
     [self.view addSubview:self.tabview];
 
-    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -98,10 +100,11 @@
     }
     UIButton * nextBtn = [Factory creatButtonWithTitle:title
                                        backGroundColor:[UIColor clearColor]
-                                             textColor:MainRed
+                                             textColor:KTColor_lightGray
                                               textSize:font750(30)];
     nextBtn.layer.borderColor = MainRed.CGColor;
     nextBtn.layer.borderWidth = 1.0f;
+    [nextBtn setTitleColor:MainRed forState:UIControlStateSelected];
     footer.frame = CGRectMake(0, 0, UI_WIDTH, Anno750(120));
     [nextBtn addTarget:self action:@selector(sureBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [footer addSubview:nextBtn];
@@ -112,6 +115,13 @@
         make.top.equalTo(@(Anno750(30)));
     }];
     self.nextBtn = nextBtn;
+    [RACObserve(self.nextBtn, selected) subscribeNext:^(id  _Nullable x) {
+        if ([x boolValue]) {
+            self.nextBtn.layer.borderColor = MainRed.CGColor;
+        }else{
+            self.nextBtn.layer.borderColor = KTColor_lightGray.CGColor;
+        }
+    }];
     if (self.logType == LOGINTYPEREGISTER) {
         UIButton * selctBtn = [Factory creatButtonWithNormalImage:@"unselect" selectImage:@"select"];
         UIButton * protoBtn = [Factory creatButtonWithTitle:@"我已阅读服务条款"
@@ -149,21 +159,29 @@
     if (!cell) {
         cell = [[ChangePwdCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid];
     }
-    if (indexPath.row == 1) {
-        if (self.logType == LOGINTYPEFOGET) {
+    cell.getcode.hidden = YES;
+    if(indexPath.row == 0){
+        self.phoneTextF = cell.inputTextf;
+    }else if (indexPath.row == 1) {
+        if (self.logType != LOGINTYPESETPWD) {
             self.time = 59;
             cell.getcode.hidden =NO;
             self.getCodeBtn = cell.getcode;
         }
         self.codeTextF = cell.inputTextf;
-    }else{
-        self.phoneTextF = cell.inputTextf;
-        cell.getcode.hidden = YES;
+    }else if(indexPath.row == 2){
+        self.nameTextf = cell.inputTextf;
+    }else if(indexPath.row == 3){
+        self.pwdTextf = cell.inputTextf;
+    }else if(indexPath.row == 4){
+        self.ageinTextf = cell.inputTextf;
     }
     cell.inputTextf.placeholder = self.placeHolders[indexPath.row];
     cell.delegate = self;
+    [cell.inputTextf addTarget:self action:@selector(textchanged:) forControlEvents:UIControlEventEditingChanged];
     return cell;
 }
+
 - (void)sureBtnClick{
     if (self.logType == LOGINTYPEFOGET) {
         [self checkCode];
@@ -175,7 +193,8 @@
 }
 #pragma mark 查看协议
 - (void)pushToProtocolView{
-    WkWebViewController * vc = [[WkWebViewController alloc]initWithTitle:@"服务协议" content:@""];
+    NSURL * path = [[NSBundle mainBundle] URLForResource:@"register" withExtension:@"html"];
+    WkWebViewController * vc = [[WkWebViewController alloc]initWithTitle:@"服务协议" url:path];
     [self.navigationController pushViewController:vc animated:YES];
 }
 #pragma mark 获取验证码
@@ -250,20 +269,53 @@
         [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"您还没有同意服务条款" duration:2.0f];
         return;
     }
-    NSDictionary * params = @{
-                              @"UserName":self.phoneTextF.text,
-                              @"UserPws":self.codeTextF.text
-                              };
-    [[NetWorkManager manager] POST:Page_Register tokenParams:params complete:^(id result) {
-        [ToastView presentToastWithin:self.view.window withIcon:APToastIconNone text:@"注册成功" duration:2.0f];
-        [self.navigationController popToRootViewControllerAnimated:YES];
+    if (self.pwdTextf.text.length <6) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"密码长度不够6位，请重新输入" duration:1.0f];
+        return;
+    }
+    if (![self.pwdTextf.text isEqualToString:self.ageinTextf.text]) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"两次密码输入不一致，请重新输入" duration:2.0f];
+        return;
+    }
+    
+    NSDictionary * params =@{
+                             @"TelPhone":self.phoneTextF.text,
+                             @"Code":self.codeTextF.text
+                             };
+    [[NetWorkManager manager] POST:Page_CheckSms tokenParams:params complete:^(id result) {
+        NSDictionary * params = @{
+                                  @"UserName":self.phoneTextF.text,
+                                  @"UserPws":self.pwdTextf.text
+                                  };
+        [[NetWorkManager manager] POST:Page_Register tokenParams:params complete:^(id result) {
+            [ToastView presentToastWithin:self.view.window withIcon:APToastIconNone text:@"注册成功" duration:2.0f];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        } error:^(JSError *error) {
+            
+        }];
     } error:^(JSError *error) {
-        
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:error.message duration:1.0f];
     }];
+    
+    
 }
 #pragma mark 同意协议
 - (void)agreePortocol{
     self.selctBtn.selected = !self.selctBtn.selected;
 }
-
+- (void)textchanged:(UITextField *)textf{
+    if (self.logType == LOGINTYPEFOGET|| self.logType == LOGINTYPESETPWD) {
+        if (self.phoneTextF.text.length >= 11 && self.codeTextF.text.length>= 4) {
+            self.nextBtn.selected = YES;
+        }else{
+            self.nextBtn.selected = NO;
+        }
+    }else{
+        if (self.phoneTextF.text.length >= 11 && self.codeTextF.text.length>= 4 && self.nameTextf.text.length >0 && self.pwdTextf.text.length>0 && self.ageinTextf.text.length>0 ) {
+            self.nextBtn.selected = YES;
+        }else{
+            self.nextBtn.selected = NO;
+        }
+    }
+}
 @end

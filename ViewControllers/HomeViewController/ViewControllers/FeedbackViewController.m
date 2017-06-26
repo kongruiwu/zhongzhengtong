@@ -111,6 +111,10 @@
 #pragma mark -意见反馈
 - (IBAction)feedback:(id)sender {
     [SVProgressHUD dismiss];
+    if (self.feedbackContent.text.length<5) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"问题字数不的少于5个字符" duration:1.0f];
+        return;
+    }
     NSDictionary * params =@{
                              @"Question":self.feedbackContent.text,
                              @"IsDisplay":@0,

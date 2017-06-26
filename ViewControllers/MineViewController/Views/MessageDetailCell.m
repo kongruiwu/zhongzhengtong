@@ -73,7 +73,7 @@
 }
 - (void)updateWithMessageModel:(MessageModel *)model{
     self.descLabel.text = model.MsgContent;
-    self.timeLabel.text = model.SendDate;
+    self.timeLabel.text = [Factory getTodayTimeType:model.SendDate];
     CGSize size = [Factory getSize:model.MsgContent maxSize:CGSizeMake(999999, Anno750(28)) font:[UIFont systemFontOfSize:font750(28)]];
     self.openLabel.hidden = size.width >= 2 * Anno750(750 - 78) ? NO : YES;
     if (model.isOpen) {

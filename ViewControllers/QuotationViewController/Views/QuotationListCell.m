@@ -139,7 +139,7 @@
     self.downButton.hidden = !rec;
     self.descLabel.text = model.selectedRemark;
     
-    self.timeLabel.text = model.selectedTime;
+    self.timeLabel.text = [Factory getTodayTimeType:model.selectedTime];
     self.downButton.selected = model.isOpen;
     if (model.isOpen) {
         self.descLabel.numberOfLines = 0 ;

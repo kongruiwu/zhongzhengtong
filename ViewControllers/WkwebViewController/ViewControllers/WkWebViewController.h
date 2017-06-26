@@ -11,4 +11,5 @@
 @interface WkWebViewController : BaseViewController
 @property (nonatomic, strong) WKWebView * webView;
 - (instancetype)initWithTitle:(NSString *)title content:(NSString *)content;
+- (instancetype)initWithTitle:(NSString *)title url:(NSURL *)url;
 @end

@@ -42,8 +42,14 @@
     
 }
 - (void)checkUserLogin{
-    id name = [[NSUserDefaults standardUserDefaults] objectForKey:@"UserName"];
-    self.isLog = name != nil ? YES: NO;
+    id name = [[NSUserDefaults standardUserDefaults] objectForKey:@"LogName"];
+    self.isLog = NO;
+    if (name != nil) {
+        NSString * nameStr = name;
+        if (nameStr.length > 0) {
+            self.isLog = YES;
+        }
+    }
     if (self.isLog) {
         self.userName = (NSString *)name;
     }
@@ -51,6 +57,8 @@
 }
 
 - (void)userLogOut{
+    [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"LogName"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     self.userInfo = nil;
     self.isLog = NO;
 }

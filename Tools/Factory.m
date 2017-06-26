@@ -191,4 +191,22 @@ creat tabview
     [imgStr stringByReplacingOccurrencesOfString:@"%5C" withString:@"/"];
     return [NSURL URLWithString:imgStr];
 }
+
++ (NSString *)getTodayTimeType:(NSString *)timeStr{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    //   HH:mm
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSDate *postDate = [NSDate dateWithTimeIntervalSince1970:time(NULL)];
+    NSString *dateStr = [dateFormatter stringFromDate:postDate];
+    NSString * timestring = timeStr;
+    if ([timeStr containsString:dateStr]) {
+        timestring = [NSString stringWithFormat:@"今天 %@",[timeStr substringWithRange:NSMakeRange(11, 5)]];
+    }else{
+        timestring = [timeStr substringWithRange:NSMakeRange(0, timeStr.length - 3)];
+    }
+    
+    return timestring;
+}
+
+
 @end
