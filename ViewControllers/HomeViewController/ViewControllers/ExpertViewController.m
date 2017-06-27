@@ -41,9 +41,8 @@
     if (!self.isMine) {
         [self creatQuestionButton];
         [self drawRightButton];
-        
     }
-    
+    [self creatNullView];
 }
 
 - (void)drawRightButton{
@@ -51,12 +50,13 @@
     self.navigationItem.rightBarButtonItem = rightBaritem;
     [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
     [self.navigationItem.rightBarButtonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:font750(28)],NSFontAttributeName, nil] forState:UIControlStateNormal];
+}
+- (void)creatNullView{
     self.nullQestView = [[NullQuestionView alloc]initWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT)];
     self.nullQestView.hidden = YES;
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(PushToUserQuestionViewController)];
     [self.nullQestView addGestureRecognizer:tap];
     [self.view addSubview:self.nullQestView];
-    
 }
 - (void)showNullViewWithMessage:(NSString *)message{
     self.nullQestView.hidden = NO;
@@ -153,9 +153,6 @@
         self.page++;
         for (int i = 0; i<arr.count; i++) {
             QuestionModel * model = [[QuestionModel alloc]initWithDictionary:arr[i]];
-            if (i == 2) {
-                model.Answer = @"";
-            }
             [self.dataArray addObject:model];
         }
         [self.tabview reloadData];

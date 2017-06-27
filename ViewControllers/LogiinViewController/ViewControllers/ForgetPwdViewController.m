@@ -68,7 +68,7 @@
     if (self.logType == LOGINTYPESETPWD) {
         self.placeHolders = @[@"请输入6-18位新密码",@"确认新密码"];
     }else if(self.logType == LOGINTYPEREGISTER){
-        self.placeHolders = @[@"输入手机号",@"验证码",@"用户名",@"输入新密码",@"再次输入新密码"];
+        self.placeHolders = @[@"输入手机号",@"验证码",@"用户名",@"输入密码",@"再次输入密码"];
     }
     
     self.tabview = [Factory creatTabviewWithFrame:CGRectMake(0, 0, UI_WIDTH, UI_HEGIHT) style:UITableViewStyleGrouped];
@@ -203,7 +203,11 @@
     NSDictionary * params = @{
                               @"TelPhone":self.phoneTextF.text
                               };
-    [[NetWorkManager manager] POST:Page_SendSms tokenParams:params complete:^(id result) {
+    NSString * pageurl = Page_SendSms;
+    if (self.logType == LOGINTYPEREGISTER) {
+        pageurl = Page_SendIosSms;
+    }
+    [[NetWorkManager manager] POST:pageurl tokenParams:params complete:^(id result) {
         [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"短信验证码已发出" duration:2.0f];
         self.getCodeBtn.enabled = NO;
         self.getCodeBtn.layer.borderColor = KTColor_lightGray.CGColor;
@@ -236,9 +240,6 @@
                              @"Code":self.codeTextF.text
                              };
     NSString * pageurl = Page_CheckSms;
-    if (self.logType == LOGINTYPEREGISTER) {
-        pageurl = Page_SendIosSms;
-    }
     [[NetWorkManager manager] POST:pageurl tokenParams:params complete:^(id result) {
         ForgetPwdViewController * vc = [ForgetPwdViewController new];
         vc.logType = LOGINTYPESETPWD;
@@ -302,14 +303,20 @@
     self.selctBtn.selected = !self.selctBtn.selected;
 }
 - (void)textchanged:(UITextField *)textf{
-    if (self.logType == LOGINTYPEFOGET|| self.logType == LOGINTYPESETPWD) {
+    if (self.logType == LOGINTYPEFOGET) {
         if (self.phoneTextF.text.length >= 11 && self.codeTextF.text.length>= 4) {
             self.nextBtn.selected = YES;
         }else{
             self.nextBtn.selected = NO;
         }
-    }else{
+    }else if(self.logType == LOGINTYPEREGISTER){
         if (self.phoneTextF.text.length >= 11 && self.codeTextF.text.length>= 4 && self.nameTextf.text.length >0 && self.pwdTextf.text.length>0 && self.ageinTextf.text.length>0 ) {
+            self.nextBtn.selected = YES;
+        }else{
+            self.nextBtn.selected = NO;
+        }
+    }else if(self.logType == LOGINTYPESETPWD){
+        if (self.phoneTextF.text.length >= 6 && self.codeTextF.text.length >= 6) {
             self.nextBtn.selected = YES;
         }else{
             self.nextBtn.selected = NO;

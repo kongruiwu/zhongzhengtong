@@ -71,7 +71,7 @@
     }];
     [registBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(@(-Anno750(30)));
-        make.top.equalTo(@(Anno750(50)));
+        make.top.equalTo(@(Anno750(90)));
         make.width.equalTo(@(Anno750(80)));
         make.height.equalTo(@(Anno750(40)));
     }];

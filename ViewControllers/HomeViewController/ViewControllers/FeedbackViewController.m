@@ -131,7 +131,7 @@
             }else{
                 NSNumber * num = dic[@"AskNum"];
                 if (num.intValue == 5) {
-                    [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"提问已超过5次" duration:1.0f];
+                    [ToastView presentToastWithin:self.view.window withIcon:APToastIconNone text:@"提问已超过5次" duration:1.0f];
                 }else{
                     [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"请求超时" duration:1.0f];
                 }

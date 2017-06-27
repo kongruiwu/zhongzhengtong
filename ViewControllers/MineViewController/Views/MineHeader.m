@@ -73,7 +73,12 @@
 
 - (void)updateUseinfo{
     self.nameLabel.text = [UserManager instance].userInfo.UserName;
-    self.timeLabel.text = [NSString stringWithFormat:@"到期时间：%@",[UserManager instance].userInfo.OverdueDate];
+    if ([UserManager instance].userInfo.OverdueDate && [UserManager instance].userInfo.OverdueDate.length >0) {
+        self.timeLabel.hidden = NO;
+        self.timeLabel.text = [NSString stringWithFormat:@"到期时间：%@",[UserManager instance].userInfo.OverdueDate];
+    }else{
+        self.timeLabel.hidden = YES;
+    }
     [self.userIcon sd_setImageWithURL:[Factory getImageUlr:[UserManager instance].userInfo.Pic] placeholderImage:[UIImage imageNamed:@"userIcon"]];
 }
 @end
