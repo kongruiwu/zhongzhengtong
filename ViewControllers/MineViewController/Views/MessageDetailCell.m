@@ -53,7 +53,7 @@
     [super layoutSubviews];
     [self.descLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@(Anno750(24)));
-        make.right.equalTo(@(-Anno750(54)));
+        make.right.equalTo(@(-Anno750(24)));
         make.top.equalTo(@(Anno750(30)));
     }];
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -61,8 +61,8 @@
         make.top.equalTo(self.descLabel.mas_bottom).offset(Anno750(20));
     }];
     [self.openLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(@(Anno750(-10)));
-        make.bottom.equalTo(self.descLabel.mas_bottom);
+        make.right.equalTo(@(Anno750(-34)));
+        make.centerY.equalTo(self.timeLabel.mas_centerY);
     }];
     [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@(Anno750(24)));
@@ -75,7 +75,7 @@
     self.descLabel.text = model.MsgContent;
     self.timeLabel.text = [Factory getTodayTimeType:model.SendDate];
     CGSize size = [Factory getSize:model.MsgContent maxSize:CGSizeMake(999999, Anno750(28)) font:[UIFont systemFontOfSize:font750(28)]];
-    self.openLabel.hidden = size.width >= 2 * Anno750(750 - 78) ? NO : YES;
+    self.openLabel.hidden = size.width >= 2 * Anno750(750 - 48) ? NO : YES;
     if (model.isOpen) {
         self.descLabel.numberOfLines = 0;
         self.openLabel.text = @"收起";

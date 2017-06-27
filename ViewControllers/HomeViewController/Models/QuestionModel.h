@@ -26,6 +26,6 @@
 @property (nonatomic, strong) NSString * NickName;
 /**用户名称*/
 @property (nonatomic, strong) NSString * UserName;
-
+@property (nonatomic, assign) BOOL nameOpen;
 @property (nonatomic, assign) BOOL isOpen;
 @end

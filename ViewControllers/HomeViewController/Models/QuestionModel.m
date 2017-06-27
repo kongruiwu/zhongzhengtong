@@ -14,6 +14,7 @@
     self = [super initWithDictionary:dic];
     if (self) {
         self.isOpen = NO;
+        self.nameOpen = NO;
     }
     return self;
 }

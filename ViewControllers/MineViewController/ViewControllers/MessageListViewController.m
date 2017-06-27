@@ -69,7 +69,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (self.dataArray[indexPath.row].isOpen) {
-        CGSize size = [Factory getSize:self.dataArray[indexPath.row].MsgContent maxSize:CGSizeMake(Anno750(750 - 78), 999999) font:[UIFont systemFontOfSize:font750(28)]];
+        CGSize size = [Factory getSize:self.dataArray[indexPath.row].MsgContent maxSize:CGSizeMake(Anno750(750 - 48), 999999) font:[UIFont systemFontOfSize:font750(28)]];
         return Anno750(120)+ size.height;
     }
     return Anno750(180);

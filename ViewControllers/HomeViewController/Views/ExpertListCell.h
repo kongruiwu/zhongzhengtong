@@ -9,6 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "ConfigHeader.h"
 #import "QuestionModel.h"
+
+@protocol ExpertListCellDelegate <NSObject>
+
+- (void)openNameLabel:(UIButton *)button;
+
+@end
+
 @interface ExpertListCell : UITableViewCell
 
 @property (nonatomic, strong) UIImageView * userIcon;
@@ -19,7 +26,10 @@
 @property (nonatomic, strong) UILabel * questUserName;
 @property (nonatomic, strong) UILabel * questionLabel;
 @property (nonatomic, strong) UILabel * questTime;
-@property (nonatomic, strong) UILabel * openLabel;
+@property (nonatomic, strong) UIButton * downButton;
 @property (nonatomic, strong) UIView * lineView;
+@property (nonatomic, strong) UIButton * nameDown;
+@property (nonatomic, strong) UIButton * clearButton;
+@property (nonatomic, assign) id delegate;
 - (void)updateWithQuestionModel:(QuestionModel *)model;
 @end

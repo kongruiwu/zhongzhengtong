@@ -11,7 +11,7 @@
 #import "FeedbackViewController.h"
 #import "QuestionModel.h"
 #import "NullQuestionView.h"
-@interface ExpertViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface ExpertViewController ()<UITableViewDelegate,UITableViewDataSource,ExpertListCellDelegate>
 
 @property (nonatomic, strong) UITableView * tabview;
 @property (nonatomic, strong) NSMutableArray<QuestionModel *> * dataArray;
@@ -97,14 +97,22 @@
     return self.dataArray.count;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    CGSize size = CGSizeMake(0, 0);
+    if (self.dataArray[indexPath.row].nameOpen) {
+        size = [Factory getSize:self.dataArray[indexPath.row].Question maxSize:CGSizeMake(Anno750(750 - 174), 99999) font:[UIFont systemFontOfSize:font750(28)]];
+    }else{
+        size = CGSizeMake(0, Anno750(28));
+    }
     if (self.dataArray[indexPath.row].Answer == nil || self.dataArray[indexPath.row].Answer.length == 0) {
-        return Anno750(220);
+        return Anno750(192) + size.height;
     }
+    CGSize answerSize = CGSizeMake(0, 0);
     if (self.dataArray[indexPath.row].isOpen) {
-        CGSize size = [Factory getSize:self.dataArray[indexPath.row].Answer maxSize:CGSizeMake(Anno750(750 - 198), 999999) font:[UIFont systemFontOfSize:font750(28)]];
-        return Anno750(240) + size.height;
+        answerSize = [Factory getSize:self.dataArray[indexPath.row].Answer maxSize:CGSizeMake(Anno750(750 - 198), 999999) font:[UIFont systemFontOfSize:font750(28)]];
+    }else{
+        answerSize = CGSizeMake(0, Anno750(60));
     }
-    return Anno750(300);
+    return Anno750(212) + size.height + answerSize.height;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString * cellid = @"ExpertListCell";
@@ -113,10 +121,17 @@
         cell = [[ExpertListCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid];
     }
     [cell updateWithQuestionModel:self.dataArray[indexPath.row]];
+    cell.delegate = self;
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     self.dataArray[indexPath.row].isOpen = ! self.dataArray[indexPath.row].isOpen;
+    [self.tabview reloadData];
+}
+- (void)openNameLabel:(UIButton *)btn{
+    ExpertListCell * cell = (ExpertListCell *)[btn superview];
+    NSIndexPath * indexpath = [self.tabview indexPathForCell:cell];
+    self.dataArray[indexpath.row].nameOpen = !self.dataArray[indexpath.row].nameOpen;
     [self.tabview reloadData];
 }
 - (void)getData{

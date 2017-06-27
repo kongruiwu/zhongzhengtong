@@ -51,12 +51,7 @@
                                        textColor:KTColor_lightGray
                                    textAlignment:NSTextAlignmentLeft];
     self.descLabel.numberOfLines =1;
-    self.downButton = [Factory creatButtonWithTitle:@"展开"
-                                    backGroundColor:[UIColor clearColor]
-                                          textColor:HomeBtn3
-                                           textSize:font750(24)];
-    [self.downButton setTitle:@"收起" forState:UIControlStateSelected];
-    [self.downButton setTitleColor:HomeBtn4 forState:UIControlStateSelected];
+    self.downButton = [Factory creatButtonWithNormalImage:@"down" selectImage:@"up"];
     self.downButton.userInteractionEnabled  = NO ;
     self.lineView = [Factory creatLineView];
     
@@ -96,7 +91,7 @@
     }];
     
     [self.downButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.descLabel.mas_right);
+        make.left.equalTo(self.descLabel.mas_right).offset(Anno750(6));
         make.bottom.equalTo(self.descLabel.mas_bottom);
         make.height.equalTo(@(Anno750(24)));
     }];
