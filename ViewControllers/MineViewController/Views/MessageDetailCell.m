@@ -42,7 +42,6 @@
     self.openLabel = [Factory creatLabelWithText:@"展开"
                                        fontValue:font750(24)
                                        textColor:HomeBtn3 textAlignment:NSTextAlignmentRight];
-    
     [self addSubview:self.descLabel];
     [self addSubview:self.timeLabel];
     [self addSubview:self.lineView];
