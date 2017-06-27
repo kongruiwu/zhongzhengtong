@@ -1454,7 +1454,7 @@
 				TargetAttributes = {
 					8BE081221EF2306300924EA2 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = CM9MVSEUDD;
+						DevelopmentTeam = XR5948V657;
 						ProvisioningStyle = Manual;
 					};
 					8BE0813B1EF2306300924EA2 = {
@@ -1841,14 +1841,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				DEVELOPMENT_TEAM = CM9MVSEUDD;
+				DEVELOPMENT_TEAM = XR5948V657;
 				INFOPLIST_FILE = ZhongZhengTong/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.anhuiDashidai.StrategyPlat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hpkj.yjc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b05b471f-129e-4025-b8cb-d828d093f1d2";
-				PROVISIONING_PROFILE_SPECIFIER = zzt_dev;
+				PROVISIONING_PROFILE = "c992051f-03a7-4b98-b7ef-475f236ad3a7";
+				PROVISIONING_PROFILE_SPECIFIER = zhongzhengtong;
 			};
 			name = Debug;
 		};
@@ -1858,14 +1858,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				DEVELOPMENT_TEAM = CM9MVSEUDD;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = XR5948V657;
 				INFOPLIST_FILE = ZhongZhengTong/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.anhuiDashidai.StrategyPlat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hpkj.yjc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b05b471f-129e-4025-b8cb-d828d093f1d2";
-				PROVISIONING_PROFILE_SPECIFIER = zzt_dev;
+				PROVISIONING_PROFILE = "7553b4cb-b7d4-4d54-ae31-a41db4886fd9";
+				PROVISIONING_PROFILE_SPECIFIER = distribution;
 			};
 			name = Release;
 		};
