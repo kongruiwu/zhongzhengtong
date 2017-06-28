@@ -18,7 +18,7 @@
 #import "YDConfigurationHelper.h"
 #import "SearchStock.h"
 #import <WXApi.h>
-@interface AppDelegate ()<WXApiDelegate>
+@interface AppDelegate ()<WXApiDelegate,UserMangerDelegate>
 
 @property (nonatomic, strong)NSMutableArray *SHArr;      //上证指数
 @property (nonatomic, strong)NSMutableArray *SZArr;      //深证指数
@@ -31,17 +31,11 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:@"userLogOut" object:nil];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(checkUserInfo) userInfo:nil repeats:YES];
-    
+    [self checkUserLoginStatus];
     [self updateDataBase];       //每日更新一次数据库
-    [[NetWorkManager manager] requestToken];
-    [[UserManager instance] updateUserInfo];
-    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
-    [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
-    [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
-    [IQKeyboardManager sharedManager].shouldShowTextFieldPlaceholder = NO;
+    [self RequestSetting];
+    [self toolsSetting];
+    [self JpushSettingWithDic:launchOptions];
     self.window = [[UIWindow alloc]initWithFrame:UI_BOUNDS];
     [self.window makeKeyAndVisible];
     if (![[NSUserDefaults standardUserDefaults] objectForKey:@"Frist"]) {
@@ -49,9 +43,23 @@
     }else{
         [self.window setRootViewController:[RootViewController new]];
     }
-    [WXApi registerApp:WXAPPKEY];
-    [self JpushSettingWithDic:launchOptions];
     return YES;
+}
+- (void)checkUserLoginStatus{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLogOut) name:@"userLogOut" object:nil];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(checkUserInfo) userInfo:nil repeats:YES];
+}
+- (void)RequestSetting{
+    [[NetWorkManager manager] requestToken];
+    [[UserManager instance] updateUserInfo];
+    [UserManager instance].delegate = self;
+}
+- (void)toolsSetting{
+    [WXApi registerApp:WXAPPKEY];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+    [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
+    [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
+    [IQKeyboardManager sharedManager].shouldShowTextFieldPlaceholder = NO;
 }
 - (void)JpushSettingWithDic:(NSDictionary *)launchOptions{
     [JPUSHService setupWithOption:launchOptions appKey:JPUSHKey channel:@"App Store" apsForProduction:YES advertisingIdentifier:nil];
@@ -72,6 +80,12 @@
 
 - (void)checkUserInfo{
     [[UserManager instance] updateUserInfo];
+}
+- (void)UserLoginJpushSetting{
+    [JPUSHService setTags:nil alias:[UserManager instance].userInfo.ID fetchCompletionHandle:nil];
+}
+- (void)UserLogOutJpushSetting{
+    [JPUSHService setTags:nil alias:@"" fetchCompletionHandle:nil];
 }
 - (void)userLogOut{
     if (![UserManager instance].isLog) {
@@ -202,32 +216,32 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    // Required - 注册 DeviceToken
     [JPUSHService registerDeviceToken:deviceToken];
 }
 // iOS 10 Support
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
-    // Required
     NSDictionary * userInfo = notification.request.content.userInfo;
     if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
     }
+    [[JpushHandler handler] handerJpushMessage:userInfo withForground:YES];
     completionHandler(UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
 }
 
 // iOS 10 Support
 - (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
-    // Required
     NSDictionary * userInfo = response.notification.request.content.userInfo;
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
     }
-    completionHandler();  // 系统要求执行这个方法
+    [[JpushHandler handler] handerJpushMessage:userInfo withForground:NO];
+    completionHandler();
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // Required, iOS 7 Support
     [JPUSHService handleRemoteNotification:userInfo];
+    [[JpushHandler handler] handerJpushMessage:userInfo withForground:NO];
     completionHandler(UIBackgroundFetchResultNewData);
     
 }
@@ -235,6 +249,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // Required,For systems with less than or equal to iOS6
     [JPUSHService handleRemoteNotification:userInfo];
+    [[JpushHandler handler] handerJpushMessage:userInfo withForground:NO];
 }
 
 
@@ -252,7 +267,11 @@
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    
+    [JPUSHService setBadge:0];
 }
 
 

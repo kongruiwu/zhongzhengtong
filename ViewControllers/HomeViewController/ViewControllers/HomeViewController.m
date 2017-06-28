@@ -17,10 +17,9 @@
 #import "BannerDetailViewController.h"
 #import "LoginViewController.h"
 #import "MasterCheatsViewController.h"
-
-
-
-@interface HomeViewController ()<UITableViewDelegate,UITableViewDataSource,SDCycleScrollViewDelegate,HomeListDelegate>
+#import "JpushHandler.h"
+#import "MessageListViewController.h"
+@interface HomeViewController ()<UITableViewDelegate,UITableViewDataSource,SDCycleScrollViewDelegate,HomeListDelegate,JpushHanderDlegate>
 
 @property (nonatomic, strong) UITableView * tabview;
 @property (nonatomic, strong) SDCycleScrollView * bannerViw;
@@ -172,5 +171,37 @@
     vc.bannerID = self.banners[index].Id;
     vc.bannerTitle = self.banners[index].Title;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)pushToViewController:(JPUSHTYPE)type{
+    switch (type) {
+        case JPUSHTYPESYSMESSAGE:
+        {
+            MessageListViewController * vc = [MessageListViewController new];
+            vc.isPush = NO;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case JPUSHTYPESTOCK:
+        {
+            self.tabBarController.selectedIndex = 2;
+        }
+            break;
+        case JPUSHTYPEREFERENCE:
+        {
+            ReferenceViewController * vc = [ReferenceViewController new];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case JPUSHTYPEQUESTION:
+        {
+            ExpertViewController * vc = [ExpertViewController new];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        default:
+            
+            break;
+    }
 }
 @end

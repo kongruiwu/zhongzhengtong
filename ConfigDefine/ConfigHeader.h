@@ -41,8 +41,8 @@ typedef NS_ENUM(NSInteger, SelectorBackType){
 };
 
 #define WeCharUserID    @"gh_53368af0ad62"
-#define WXAPPKEY        @"wx62b05b5904c384b3"
-#define JPUSHKey        @""
+#define WXAPPKEY        @"wx4ebceb482260877a"
+#define JPUSHKey        @"5eeed89188bb83f60829bd06"
 
 //750状态下字体适配
 #define font750(x) ((x)/ 1334.0f) * UI_HEGIHT

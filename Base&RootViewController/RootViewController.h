@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ConfigHeader.h"
+#import "JpushHandler.h"
 @interface RootViewController : UITabBarController
 
 @end

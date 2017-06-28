@@ -36,6 +36,9 @@
                               @"UserPws":@"1"};
     [[NetWorkManager manager] GET:Page_UserInfo tokenParams:params complete:^(id result) {
         self.userInfo = [[UserModel alloc]initWithDictionary:(NSDictionary *)result];
+        if ([self.delegate respondsToSelector:@selector(UserLoginJpushSetting)]) {
+            [self.delegate UserLoginJpushSetting];
+        }
     } error:^(JSError *error) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"userLogOut" object:nil];
     }];
@@ -59,6 +62,9 @@
 - (void)userLogOut{
     [[NSUserDefaults standardUserDefaults] setValue:@"" forKey:@"LogName"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    if ([self.delegate respondsToSelector:@selector(UserLogOutJpushSetting)]) {
+        [self.delegate UserLogOutJpushSetting];
+    }
     self.userInfo = nil;
     self.isLog = NO;
 }

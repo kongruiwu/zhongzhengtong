@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <JPUSHService.h>
 //IOS10 注册apns 所需头文件
 #ifdef NSFoundationVersionNumber_iOS_9_x_Max
 #import <UserNotifications/UserNotifications.h>
 #endif
+#import <JPUSHService.h>
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate,JPUSHRegisterDelegate>
 
 @property (strong, nonatomic) UIWindow *window;

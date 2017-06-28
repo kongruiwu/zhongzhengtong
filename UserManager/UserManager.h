@@ -9,7 +9,17 @@
 #import <Foundation/Foundation.h>
 #import "UserModel.h"
 #import "ConfigHeader.h"
+
+@protocol UserMangerDelegate <NSObject>
+
+- (void)UserLoginJpushSetting;
+- (void)UserLogOutJpushSetting;
+
+@end
+
+
 @interface UserManager : NSObject
+
 + (instancetype)instance;
 
 /**是否登录*/
@@ -22,6 +32,8 @@
 @property (nonatomic, strong) UserModel * userInfo;
 /**是否保存了密码*/
 @property (nonatomic, assign) BOOL isSavePwd;
+
+@property (nonatomic, assign) id<UserMangerDelegate> delegate;
 
 - (void)checkUserLogin;
 - (void)userLogOut;

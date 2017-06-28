@@ -33,7 +33,8 @@
     NSArray * selectImages = @[@"mine_selected",@"quotation_selected",@"equity_selected",@"mine_selected"];
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:MainRed, NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
 
-    UINavigationController * nav_home = [[UINavigationController alloc]initWithRootViewController:[HomeViewController new]];
+    HomeViewController * home = [HomeViewController new];
+    UINavigationController * nav_home = [[UINavigationController alloc]initWithRootViewController:home];
     nav_home.title = titles[0];
     nav_home.tabBarItem.image = [[UIImage imageNamed:images[0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     nav_home.tabBarItem.selectedImage = [[UIImage imageNamed:selectImages[0]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -55,7 +56,7 @@
     
     self.viewControllers = @[nav_home,nav_equt,nav_quot,nav_mine];
     
-    
-    }
+    [[JpushHandler handler] registerDelgate:home];
+}
 
 @end

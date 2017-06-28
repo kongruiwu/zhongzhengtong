@@ -142,10 +142,10 @@
     }
 }
 - (void)payMoney{
-    JumpToBizProfileReq * req = [[JumpToBizProfileReq alloc]init];
-    req.profileType = WXBizProfileType_Device;
-    req.username = WeCharUserID;
-    [WXApi sendReq:req];
+//    JumpToBizProfileReq * req = [[JumpToBizProfileReq alloc]init];
+//    req.profileType = WXBizProfileType_Device;
+//    req.username = WeCharUserID;
+//    [WXApi sendReq:req];
 }
 - (void)userLogin{
     [[UserManager instance] userLogOut];
