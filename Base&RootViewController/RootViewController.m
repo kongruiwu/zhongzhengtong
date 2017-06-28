@@ -58,5 +58,11 @@
     
     [[JpushHandler handler] registerDelgate:home];
 }
-
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
+    NSInteger index = [self.tabBar.items indexOfObject:self.tabBar.selectedItem];
+    UINavigationController * nav = self.viewControllers[index];
+    UIViewController * vc = nav.visibleViewController;
+    [vc.navigationController popToRootViewControllerAnimated:NO];
+    
+}
 @end

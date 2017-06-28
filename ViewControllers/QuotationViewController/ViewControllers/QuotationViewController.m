@@ -30,6 +30,10 @@
 }
 - (void)doBack{
     self.tabBarController.selectedIndex = 0;
+    UITabBarController *tbc = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    UINavigationController  *nvc = tbc.viewControllers[0];
+    UIViewController *vc = nvc.visibleViewController;
+    [vc.navigationController popToRootViewControllerAnimated:YES];
 }
 - (void)addRefreshHeader{
     self.refreshHeader = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getData)];
