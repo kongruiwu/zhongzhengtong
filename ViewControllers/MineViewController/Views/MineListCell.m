@@ -53,8 +53,6 @@
     [self.leftImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@(Anno750(24)));
         make.centerY.equalTo(@0);
-        make.width.equalTo(@(Anno750(24)));
-        make.height.equalTo(@(Anno750(24)));
     }];
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.leftImg.mas_right).offset(Anno750(20));

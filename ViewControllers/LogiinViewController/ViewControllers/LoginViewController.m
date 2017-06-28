@@ -125,13 +125,13 @@
     }];
     [savePwd mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@(Anno750(24)));
-        make.top.equalTo(loginBtn.mas_bottom).offset(Anno750(20));
+        make.top.equalTo(loginBtn.mas_bottom).offset(Anno750(40));
         make.width.equalTo(@(Anno750(180)));
         make.height.equalTo(@(Anno750(30)));
     }];
     
     [forgetBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(loginBtn.mas_bottom).offset(Anno750(20));
+        make.top.equalTo(loginBtn.mas_bottom).offset(Anno750(40));
         make.width.equalTo(@(Anno750(150)));
         make.height.equalTo(@(Anno750(30)));
         make.right.equalTo(@(-Anno750(24)));
@@ -165,7 +165,7 @@
     }
     [cell.textF addTarget:self action:@selector(textchaged:) forControlEvents:UIControlEventEditingChanged];
     if (indexPath.row == 0) {
-        [cell updateWithTitle:@"帐号" placeHolder:@"手机号/邮箱"];
+        [cell updateWithTitle:@"帐号" placeHolder:@"请输入用户名"];
         NSString * name = @"";
         if ([[NSUserDefaults standardUserDefaults] objectForKey:@"UserName"]) {
             name = [[NSUserDefaults standardUserDefaults] objectForKey:@"UserName"];

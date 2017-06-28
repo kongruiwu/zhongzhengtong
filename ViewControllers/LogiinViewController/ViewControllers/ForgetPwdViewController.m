@@ -173,8 +173,10 @@
         self.nameTextf = cell.inputTextf;
     }else if(indexPath.row == 3){
         self.pwdTextf = cell.inputTextf;
+        cell.inputTextf.secureTextEntry = YES;
     }else if(indexPath.row == 4){
         self.ageinTextf = cell.inputTextf;
+        cell.inputTextf.secureTextEntry = YES;
     }
     cell.inputTextf.placeholder = self.placeHolders[indexPath.row];
     cell.delegate = self;
@@ -252,8 +254,13 @@
 
 #pragma mark 用户重置密码
 - (void)resetPassWord{
+    if (self.phoneTextF.text.length < 6 || self.codeTextF.text.length<6) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"密码长度部得低于6位" duration:1.0f];
+        return;
+    }
     if (![self.phoneTextF.text isEqualToString:self.codeTextF.text]) {
         [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"两次密码不一致，请重新输入" duration:1.0f];
+        return;
     }
     NSDictionary * params = @{
                               @"Phone":self.phoneNum,
@@ -294,7 +301,7 @@
         [ToastView presentToastWithin:self.view.window withIcon:APToastIconNone text:@"注册成功" duration:2.0f];
         [self.navigationController popToRootViewControllerAnimated:YES];
     } error:^(JSError *error) {
-        
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:error.message duration:1.0f];
     }];
 
 }
