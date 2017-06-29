@@ -241,18 +241,14 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // Required, iOS 7 Support
     [JPUSHService handleRemoteNotification:userInfo];
-    [[JpushHandler handler] handerJpushMessage:userInfo withForground:NO];
+    if (application.applicationState == UIApplicationStateActive) {
+        [[JpushHandler handler] handerJpushMessage:userInfo withForground:YES];
+    }else{
+        [[JpushHandler handler] handerJpushMessage:userInfo withForground:NO];
+    }
     completionHandler(UIBackgroundFetchResultNewData);
     
 }
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    // Required,For systems with less than or equal to iOS6
-    [JPUSHService handleRemoteNotification:userInfo];
-    [[JpushHandler handler] handerJpushMessage:userInfo withForground:NO];
-}
-
-
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

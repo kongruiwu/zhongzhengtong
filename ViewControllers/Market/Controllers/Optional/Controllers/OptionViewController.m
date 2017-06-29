@@ -116,7 +116,6 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
     } failure:^(NSString *error) {
     }];
 
-    
     if (self.favStockArr.count == 0) {
         [self.tableView reloadData];
         [self stopTimer];
