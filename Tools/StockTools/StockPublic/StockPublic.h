@@ -122,4 +122,22 @@
  *  @return 返回处理后的数据
  */
 + (NSString *)roundUp:(float)number afterPoint:(int)position;
+
+/**
+ *  @author JopYin, 2016-07-11
+ *
+ *  通知服务器添加自选股
+ *
+ *  @param stockCode 股票代码
+ */
++ (void)addStockFromServerWithStockCode:(NSString *)stockCode;
+
+/**
+ *  @author JopYin, 2016-07-11
+ *
+ *  通知服务器删除自选股
+ *
+ *  @param stockCode 要删除的股票代码
+ */
++ (void)deleteStockFromServerWithStockCode:(NSString *)stockCode;
 @end

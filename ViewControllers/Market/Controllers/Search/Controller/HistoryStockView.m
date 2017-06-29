@@ -105,8 +105,10 @@ static NSString *const FindCell = @"SearchStockCell";
     cell.addBtnBlock = ^{
         BOOL isFav = [[SearchStock shareManager] isExistInTable:model.stockCode];
         if (isFav) {
+            [StockPublic deleteStockFromServerWithStockCode:model.stockCode];
             [[SearchStock shareManager] deleteToTable:model.stockCode];
         } else {
+            [StockPublic addStockFromServerWithStockCode:model.stockCode];
             [[SearchStock shareManager] insertToTable:model.stockCode];
         }
     };

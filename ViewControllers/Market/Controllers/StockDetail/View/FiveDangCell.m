@@ -1,16 +1,14 @@
 //
-//  FSFiveViewController.m
-//  YunZhangCaiJing
+//  FiveDangCell.m
+//  JinShiDai
 //
-//  @Author: JopYin on 16/3/31.
-//  Copyright © 2016年 JopYin. All rights reserved.
+//  Created by JopYin on 2017/6/29.
+//  Copyright © 2017年 尹争荣. All rights reserved.
 //
 
-#import "FSFiveViewController.h"
-#import "StockPublic.h"
-
-@interface FSFiveViewController ()
-
+#import "FiveDangCell.h"
+#import "ConfigHeader.h"
+@interface FiveDangCell()
 @property (weak, nonatomic) IBOutlet UILabel *sell5A;
 @property (weak, nonatomic) IBOutlet UILabel *sell5B;
 @property (weak, nonatomic) IBOutlet UILabel *sell4A;
@@ -21,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *sell2B;
 @property (weak, nonatomic) IBOutlet UILabel *sell1A;
 @property (weak, nonatomic) IBOutlet UILabel *sell1B;
+
 
 @property (weak, nonatomic) IBOutlet UILabel *buy1A;
 @property (weak, nonatomic) IBOutlet UILabel *buy1B;
@@ -33,12 +32,15 @@
 @property (weak, nonatomic) IBOutlet UILabel *buy5A;
 @property (weak, nonatomic) IBOutlet UILabel *buy5B;
 
-
 @end
 
-@implementation FSFiveViewController
+@implementation FiveDangCell
 
-- (void)updateUIWithData:(QuoteModel *)model{
+- (void)setModel:(QuoteModel *)model {
+    if (model == nil) {
+        return ;
+    }
+    _model = model;
     NSArray *sellPriceArr = [[NSArray alloc] initWithObjects:_sell1A, _sell2A,_sell3A,_sell4A,_sell5A, nil];
     NSArray *sellVolArr = [[NSArray alloc] initWithObjects:_sell1B, _sell2B,_sell3B,_sell4B,_sell5B, nil];
     NSArray *buyPriceArr = [[NSArray alloc] initWithObjects:_buy1A, _buy2A,_buy3A,_buy4A,_buy5A, nil];
@@ -55,28 +57,27 @@
         buyVol.text  = [StockPublic caldata:model.buyVOL[i]];
         
         if ([model.sellPrice[i] floatValue] >= [model.closePrice floatValue]) {
-            sellPrice.textColor = UIColorFromRGB(0xC90011);//[UIColor colorWithHexString:@"#C90011"];
+            sellPrice.textColor = [UIColor colorWithHexString:@"#EF564A"];
         }else{
-            sellPrice.textColor = UIColorFromRGB(0x19BD9C);//[UIColor colorWithHexString:@"#19BD9C"];
+            sellPrice.textColor = [UIColor colorWithHexString:@"#09C999"];
         }
         if ([model.buyPrice[i] floatValue] >= [model.closePrice floatValue]) {
-            buyPrice.textColor = UIColorFromRGB(0xC90011);//[UIColor colorWithHexString:@"#C90011"];
+            buyPrice.textColor = [UIColor colorWithHexString:@"#EF564A"];
         }else{
-            buyPrice.textColor = UIColorFromRGB(0x19BD9C);//[UIColor colorWithHexString:@"#19BD9C"];
+            buyPrice.textColor = [UIColor colorWithHexString:@"#09C999"];
         }
     }
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    // Initialization code
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
 
+    // Configure the view for the selected state
+}
 
 @end

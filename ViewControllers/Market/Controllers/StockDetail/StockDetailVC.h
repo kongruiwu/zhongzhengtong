@@ -10,6 +10,6 @@
 
 @interface StockDetailVC : BaseViewController
 
-- (id)initWithStockCode:(NSString *)stockCode withStockName:(NSString *)stockName;
+- (instancetype)initWithStockCode:(NSString *)stockCode withStockName:(NSString *)stockName;
 
 @end

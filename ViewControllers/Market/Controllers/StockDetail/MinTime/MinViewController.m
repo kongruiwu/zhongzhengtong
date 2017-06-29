@@ -11,23 +11,11 @@
 #import "MinModel.h"
 #import "DataProvide.h"
 
-
 @interface MinViewController ()<YKLineChartViewDelegate>
 
 @property (nonatomic, strong)NSMutableArray *minDataArr;
-
 @property (nonatomic,strong)YKTimeDataset *dataSet;
-
 @property (nonatomic, strong) NSTimer *minTimer;
-
-@property (weak, nonatomic) IBOutlet UIButton *minFiveBtn;
-
-@property (weak, nonatomic) IBOutlet UIButton *minDetailBtn;
-
-@property (weak,nonatomic) UIButton *tmpBtn;
-
-@property (nonatomic,strong)UIViewController *tmpVC;     //临时存储右侧视图正在显示的控制器
-
 @end
 
 @implementation MinViewController
@@ -60,6 +48,23 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [self stopTimer];
 }
+#pragma mark - 开启定时器
+- (void)startTimer{
+    if ([_minTimer isValid])
+    {
+        [_minTimer invalidate];
+    }
+    _minTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(getMinData) userInfo:nil repeats:YES];
+}
+#pragma mark - 关闭定时器
+- (void)stopTimer {
+    if ([_minTimer isValid])
+    {
+        [_minTimer setFireDate:[NSDate distantFuture]]; //关闭定时器
+        _minTimer = nil;
+    }
+}
+
 #pragma mark - 获取分时接口数据
 - (void)getMinData{
     if (self.stockCode == nil) {
@@ -93,15 +98,6 @@
     [super viewDidLoad];
     [self getMinData];
     [self setupMinTimeView];
-
-    //设置成交明细的边框
-    if (self.isExp) {
-        //隐藏右侧部分
-        self.rightWidth.constant = 0.5;
-        self.MinDetail.hidden = YES;
-    }else{
-        [self setupMinDetail];
-    }
 }
 
 #pragma mark --设置分时图的一些基本元素
@@ -124,83 +120,12 @@
     self.minTimeView.detailDataAttDic = @{NSFontAttributeName:[UIFont systemFontOfSize:6],NSBackgroundColorAttributeName:[UIColor clearColor],NSForegroundColorAttributeName:[UIColor colorWithRed:179/255.0 green:186/255.0 blue:194/255.0 alpha:1.0]};
 }
 
-- (void)setupMinDetail {
-    self.MinDetail.layer.borderWidth = 0.2;
-    self.MinDetail.layer.borderColor = [[UIColor colorWithRed:125/255.0 green:125/255.0 blue:125/255.0 alpha:0.5] CGColor];
-    self.minFiveBtn.enabled = NO;
-    self.tmpBtn = self.minFiveBtn;
-    
-    self.fiveViewController = [[FSFiveViewController alloc] init];
-    self.fiveViewController.view.frame = self.minDetailView.bounds;
-    [self addChildViewController:self.fiveViewController];
-    [self.minDetailView addSubview:self.fiveViewController.view];
-}
-
-#pragma mark - 开启定时器
-- (void)startTimer{
-    if ([_minTimer isValid])
-    {
-        [_minTimer invalidate];
-    }
-    _minTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(getMinData) userInfo:nil repeats:YES];
-}
-#pragma mark - 关闭定时器
-- (void)stopTimer {
-    if ([_minTimer isValid])
-    {
-        [_minTimer setFireDate:[NSDate distantFuture]]; //关闭定时器
-        _minTimer = nil;
-    }
-}
-
-- (IBAction)minDetail:(id)sender {
-    [self setSelectButton:sender];
-    [self replaceRightController:self.fiveViewController newController:self.detailTBVC];
-}
-
-- (IBAction)minFive:(id)sender {
-    [self setSelectButton:sender];
-    [self replaceRightController:self.detailTBVC newController:self.fiveViewController];
-}
-
-#pragma mark - 还原未点击的按钮状态 设置被点击按钮状态
-- (void)setSelectButton:(UIButton *)selBtn{
-    self.tmpBtn.enabled = YES;
-    selBtn.enabled = NO;
-    self.tmpBtn = selBtn;
-}
-
-#pragma mark - 加载分时右侧五档或者明细
-- (void)replaceRightController:(UIViewController *)oldController newController:(UIViewController *)newController{
-    newController.view.frame = self.minDetailView.bounds;
-    [self addChildViewController:newController];
-    [oldController willMoveToParentViewController:nil];
-    [self.minDetailView addSubview:newController.view];
-    __weak id weakSelf = self;
-    [self transitionFromViewController:oldController toViewController:newController duration:0.3 options:UIViewAnimationOptionTransitionNone animations:^{
-    } completion:^(BOOL finished) {
-        [oldController.view removeFromSuperview];
-        [oldController removeFromParentViewController];
-        [newController didMoveToParentViewController:weakSelf];
-        _tmpVC = newController;
-    }];
-}
-
 #pragma mark - 懒加载
 - (NSMutableArray *)minDataArr {
     if (_minDataArr == nil) {
         _minDataArr = [NSMutableArray array];
     }
     return _minDataArr;
-}
-
-- (FSDetailTableViewController *)detailTBVC{
-    if (_detailTBVC == nil) {
-        _detailTBVC = [[FSDetailTableViewController alloc] init];
-        _detailTBVC.stockCode = _stockCode;
-        _detailTBVC.preClose = _preClose;
-    }
-    return _detailTBVC;
 }
 
 -(void)beginAppearanceTransition:(BOOL)isAppearing animated:(BOOL)animated{

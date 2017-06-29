@@ -15,6 +15,7 @@
 #import "StockPublic.h"
 #import "FindStockVC.h"
 #import "StockDetailVC.h"
+#import "ServerStockModel.h"
 
 @interface OptionViewController ()<UITableViewDataSource,UITableViewDelegate,InvestNoDelegate>
 
@@ -41,11 +42,9 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.favStockArr =[[SearchStock shareManager] allFavStock];     //取出自选股表中的股票
-    [self startTimer];
+    [self requestStockList];
+    self.favStockArr =[[SearchStock shareManager] allFavStock];
     [self getStockData];
-    
-    
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -70,6 +69,31 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
     }
 }
 
+#pragma mark - 同步自选股列表
+- (void)requestStockList{
+    NSDictionary *dic = @{
+                          @"PageIndex":@"1",
+                          @"PageSize":@"100",
+                          @"UserId":[UserManager instance].userInfo.ID
+                          };
+    [[NetWorkManager manager] GET:Page_StockList tokenParams:dic complete:^(id result) {
+        [[SearchStock shareManager] deleteAllStock];
+        if ([result isKindOfClass:[NSArray class]]) {
+            [result enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                ServerStockModel *model = [[ServerStockModel alloc] initWithDictionary:obj];
+                BOOL isFavStock = [[SearchStock shareManager] isExistInTable:model.StockCode];
+                if (!isFavStock) {
+                    [[SearchStock shareManager] insertToTable:model.StockCode];
+                }
+            }];
+        }
+        self.favStockArr =[[SearchStock shareManager] allFavStock];     //取出自选股表中的股票
+        [self startTimer];
+    } error:^(JSError *error) {
+        
+    }];
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -78,7 +102,6 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([StockCell class]) bundle:nil] forCellReuseIdentifier:CellID];
     [self.tableView registerNib:[UINib nibWithNibName:NSStringFromClass([InvestNoDataCell class]) bundle:nil] forCellReuseIdentifier:NoCell];
-    [self getStockData];
 }
 
 - (void)getStockData {
@@ -90,7 +113,6 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
             [self updateStockExp];
         }
     } failure:^(NSString *error) {
-        [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"行情服务器异常" duration:2.0f];
     }];
 
     
@@ -108,11 +130,9 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
             if (data.count > 0) {
                 [self.resultData removeAllObjects];
                 [self.resultData addObjectsFromArray:data];
-                [self.tableView reloadData];
             }
-            
+            [self.tableView reloadData];
         } failure:^(NSString *error) {
-            [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"行情服务器异常" duration:2.0f];
         }];
     }
 }
@@ -202,8 +222,8 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         StockModel *model = [self.favStockArr objectAtIndexCheck:indexPath.row];
         [[SearchStock shareManager] deleteToTable:model.stockCode];
-        //通知服务器删除自选股
-//        [StockPublic deleteStockFromServerWithStockCode:item.securityID];
+        
+        [StockPublic deleteStockFromServerWithStockCode:model.stockCode];   //通知服务器删除自选股
         self.favStockArr =[[SearchStock shareManager] allFavStock];
         [self startTimer];
         [self getStockData];

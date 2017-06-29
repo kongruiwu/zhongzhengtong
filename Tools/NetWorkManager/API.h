@@ -62,4 +62,10 @@
 //删除信息
 #define Page_DelMess    @"Message/DelMessagebyId"
 
+
+//自选股列表
+#define Page_StockList  @"StrategyPool/GetStockOptionalList"
+//操作自选股票
+#define Page_Stock      @"StrategyPool/GetStockOptionalByType"
+
 #endif /* API_h */

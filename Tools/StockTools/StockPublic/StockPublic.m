@@ -164,4 +164,37 @@
     roundedOunces = [ouncesDecimal decimalNumberByRoundingAccordingToBehavior:roundingBehavior];
     return [NSString stringWithFormat:@"%@",roundedOunces];
 }
+
+#pragma mark -通知服务器添加自选股
++ (void)addStockFromServerWithStockCode:(NSString *)stockCode {
+    NSString *stockName =  [[SearchStock shareManager] searchStockName:stockCode];
+    NSDictionary *dic = @{
+                          @"OperType":@"1",
+                          @"StockName":stockName,
+                          @"StockCode":stockCode,
+                          @"UserId":[UserManager instance].userInfo.ID
+                          };
+    [[NetWorkManager manager] POST:Page_Stock tokenParams:dic complete:^(id result) {
+        [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"添加成功" duration:1.0];
+    } error:^(JSError *error) {
+        [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:error.message duration:1.0];
+    }];
+    
+}
+
+#pragma mark - 通知服务器删除自选股
++ (void)deleteStockFromServerWithStockCode:(NSString *)stockCode {
+    NSString *stockName =  [[SearchStock shareManager] searchStockName:stockCode];
+    NSDictionary *dic = @{
+                          @"OperType":@"2",
+                          @"StockName":stockName,
+                          @"StockCode":stockCode,
+                          @"UserId":[UserManager instance].userInfo.ID
+                          };
+    [[NetWorkManager manager] POST:Page_Stock tokenParams:dic complete:^(id result) {
+        [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"删除成功" duration:1.0];
+    } error:^(JSError *error) {
+        [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:error.message duration:1.0];
+    }];
+}
 @end

@@ -20,7 +20,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *lowPrice;
 @property (weak, nonatomic) IBOutlet UILabel *VOL;
 @property (weak, nonatomic) IBOutlet UILabel *amount;
+@property (weak, nonatomic) IBOutlet UILabel *closePrice;
 @property (weak, nonatomic) IBOutlet UILabel *jingLiu;  //资金金流入
+
+@property (weak, nonatomic) IBOutlet UIButton *addStock;        //添加自选按钮
 
 @property (weak, nonatomic) IBOutlet UIButton *fenShiBtn;
 @property (weak, nonatomic) IBOutlet UIButton *dayBtn;
@@ -29,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *hourBtn;
 
 @property (weak, nonatomic) IBOutlet UIView *btnBackView;  //分时、日线、周线的背景view
+@property (weak, nonatomic) IBOutlet UIView *headView;
 
 @property (weak,nonatomic) UIButton *tmpBtn;
 
@@ -45,43 +49,52 @@
 }
 
 #pragma mark - 更新上部分
-- (void)updateUI:(QuoteModel *)model{
+
+- (void)setModel:(QuoteModel *)model {
+    _model = model;
+    
     if ([model.change floatValue] < 0) {
-        UIColor *color = [UIColor colorWithHexString:@"19BD9C"];
-        self.price.textColor = color;
-        self.rate.textColor = color;
-        self.change.textColor = color;
-        self.rate.text = [NSString stringWithFormat:@"↓%@",model.changeRate];
-    }else if ([model.change floatValue] > 0){
-        UIColor *color = [UIColor colorWithHexString:@"C90011"];
-        self.price.textColor = color;
-        self.change.textColor = color;
-        self.rate.textColor = color;
-        self.rate.text = [NSString stringWithFormat:@"↑%@",model.changeRate];
-    }else{
-        UIColor *color = [UIColor blackColor];
-        self.price.textColor = color;
-        self.change.textColor = color;
-        self.rate.textColor = color;
-        self.rate.text = model.changeRate;
+        self.headView.backgroundColor = kRGBColor(9, 201, 153);
+    }else if ([model.change floatValue] >= 0){
+        self.headView.backgroundColor = kRGBColor(239, 86, 74);
     }
-    NSMutableAttributedString *AttributedStr = [[NSMutableAttributedString alloc] initWithString:model.price];
-    [AttributedStr addAttribute:NSFontAttributeName
-                          value:[UIFont fontWithName:@"Avenir-Roman" size:14.f]
-                          range:NSMakeRange(model.price.length-2, 2)];
-    self.price.attributedText = AttributedStr;
+    
+    BOOL isFav = [[SearchStock shareManager] isExistInTable:model.stockCode];
+    self.addStock.selected = isFav;
+    
+    self.price.text = model.price;
     self.change.text = model.change;
-    self.openPrice.text = [NSString stringWithFormat:@"  开盘:%@",model.openPrice];
-    self.highPrice.text = [NSString stringWithFormat:@"  最高:%@",model.highPrice];
-    self.lowPrice.text = [NSString stringWithFormat:@"  最低:%@",model.lowPrice];
-    self.VOL.text = [NSString stringWithFormat:@"成交量:%@",[StockPublic calculateFloat:[model.VOL floatValue]]];
-    self.amount.text = [NSString stringWithFormat:@"成交额:%@",[StockPublic changePrice:[model.amount floatValue]]];
+    self.rate.text = model.changeRate;
+    
+    self.closePrice.text = model.closePrice;
+    self.openPrice.text = model.openPrice;
+    self.highPrice.text = model.highPrice;
+    self.lowPrice.text = model.lowPrice;
+    self.VOL.text = [NSString stringWithFormat:@"%@",[StockPublic calculateFloat:[model.VOL floatValue]]];
+    self.amount.text = [NSString stringWithFormat:@"%@",[StockPublic changePrice:[model.amount floatValue]]];
+}
+
+#pragma mark- 公共方法用于更新界面--- 用setModel代替
+- (void)updateUI:(QuoteModel *)model{
+    BOOL isFav = [[SearchStock shareManager] isExistInTable:model.stockCode];
+    self.addStock.selected = isFav;
+    
+    self.price.text = model.price;
+    self.change.text = model.change;
+    self.rate.text = model.changeRate;
+    
+    self.closePrice.text = model.closePrice;
+    self.openPrice.text = model.openPrice;
+    self.highPrice.text = model.highPrice;
+    self.lowPrice.text = model.lowPrice;
+    self.VOL.text = [NSString stringWithFormat:@"%@",[StockPublic calculateFloat:[model.VOL floatValue]]];
+    self.amount.text = [NSString stringWithFormat:@"%@",[StockPublic changePrice:[model.amount floatValue]]];
     
 }
 
 #pragma mark - 赋值资金金流入
 - (void)updateZiJin:(NSString *)ziJin{
-    self.jingLiu.text = [NSString stringWithFormat:@"净流:%@",ziJin];
+    self.jingLiu.text = [NSString stringWithFormat:@"%@",ziJin];
 }
 
 
@@ -124,7 +137,18 @@
     if ([self.delegate respondsToSelector:@selector(hourKLine)]) {
         [self.delegate hourKLine];
     }
-    
+}
+
+
+- (IBAction)addStock:(id)sender {
+    self.addStock.selected = !self.addStock.selected;
+    if ([[SearchStock shareManager] isExistInTable:self.model.stockCode]) {
+        [StockPublic deleteStockFromServerWithStockCode:self.model.stockCode]; //向服务器删除自选
+        [[SearchStock shareManager] deleteToTable:self.model.stockCode];
+    }else {
+        [StockPublic addStockFromServerWithStockCode:self.model.stockCode];  //向服务器添加自选
+        [[SearchStock shareManager] insertToTable:self.model.stockCode];
+    }
 }
 
 #pragma mark - 还原未点击的按钮状态 设置被点击按钮状态
@@ -140,6 +164,7 @@
     [super layoutSubviews];
     self.btnBackView.layer.borderWidth = 0.5;
     self.btnBackView.layer.borderColor = [[UIColor colorWithHexString:@"7D7D7D"] CGColor];
+    [self.addStock setLayerCornerRadius:2.0f borderWidth:1.0 borderColor:kRGBColor(255,255, 255)];
     
 }
 

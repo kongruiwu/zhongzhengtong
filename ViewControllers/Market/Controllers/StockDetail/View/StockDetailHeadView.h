@@ -26,12 +26,14 @@
 
 @property (weak, nonatomic) IBOutlet UIView *KLineView;
 
+@property (nonatomic,strong)QuoteModel *model;
+
 +(instancetype)headView;
 
 /**
     更新上部分的内容
  */
-- (void)updateUI:(QuoteModel *)model;
+//- (void)updateUI:(QuoteModel *)model;
 
 //赋值资金金流入
 - (void)updateZiJin:(NSString *)ziJin;
