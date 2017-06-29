@@ -94,6 +94,8 @@ static NSString *const FiveCell = @"FiveDangCell";
 
 #pragma mark - 请求头部行情数据
 - (void)getStockData {
+    [self getFenBiData];
+    
     NSString *preStockCode = [StockPublic prefixStockCode:self.stockCode];
     [[DataProvide sharedStore] getShiShiDataWithURL:preStockCode success:^(NSArray *data) {
         if (data.count > 0) {
