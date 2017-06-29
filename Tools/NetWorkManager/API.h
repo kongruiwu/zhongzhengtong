@@ -27,9 +27,9 @@
 //用户登陆
 #define Page_login      @"User/UserLogin"
 //修改密码
-#define Page_ChangePwd  @"Password/UpdatePassword"
+#define Page_ChangePwd  @"User/ModifyPassword"
 //重置密码
-#define Page_ResetPwd   @"Password/FogetPassword"
+#define Page_ResetPwd   @"User/ForgetPassword"
 //获取用户信息
 #define Page_UserInfo   @"User/UserLoginCheck"
 //首页banner

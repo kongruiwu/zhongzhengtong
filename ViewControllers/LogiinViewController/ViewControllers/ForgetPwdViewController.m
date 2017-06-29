@@ -263,7 +263,7 @@
         return;
     }
     NSDictionary * params = @{
-                              @"Phone":self.phoneNum,
+                              @"TelPhone":self.phoneNum,
                               @"NewPassword":self.phoneTextF.text,
                               @"ConfirmPassword":self.codeTextF.text
                               };

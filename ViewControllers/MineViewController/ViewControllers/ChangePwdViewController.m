@@ -110,7 +110,7 @@
     }
 
     NSDictionary * params = @{
-                              @"UserId":[UserManager instance].userInfo.ID,
+                              @"UserName":[UserManager instance].userInfo.UserName,
                               @"OldPassword":self.oldPwdTextF.text,
                               @"NewPassword":self.pwdTextF.text,
                               @"ConfirmPassword":self.checkTextF.text
