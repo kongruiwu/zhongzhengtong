@@ -37,6 +37,7 @@
                                       textColor:MainRed
                                        textSize:font750(26)];
     self.buyBtn.layer.cornerRadius = 2.0f;
+    self.buyBtn.hidden = YES;
     [self addSubview:self.groundImg];
     [self addSubview:self.userIcon];
     [self addSubview:self.nameLabel];

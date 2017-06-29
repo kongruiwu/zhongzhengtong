@@ -43,8 +43,6 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self requestStockList];
-    self.favStockArr =[[SearchStock shareManager] allFavStock];
-    [self getStockData];
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -71,23 +69,26 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
 
 #pragma mark - 同步自选股列表
 - (void)requestStockList{
+    [SVProgressHUD show];
+    self.favStockArr = [NSMutableArray new];
     NSDictionary *dic = @{
                           @"PageIndex":@"1",
                           @"PageSize":@"100",
                           @"UserId":[UserManager instance].userInfo.ID
                           };
     [[NetWorkManager manager] GET:Page_StockList tokenParams:dic complete:^(id result) {
-        [[SearchStock shareManager] deleteAllStock];
         if ([result isKindOfClass:[NSArray class]]) {
             [result enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                ServerStockModel *model = [[ServerStockModel alloc] initWithDictionary:obj];
-                BOOL isFavStock = [[SearchStock shareManager] isExistInTable:model.StockCode];
+                QuoteModel *model = [[QuoteModel alloc] initWithDictionary:obj];
+                BOOL isFavStock = [[SearchStock shareManager] isExistInTable:model.stockCode];
                 if (!isFavStock) {
-                    [[SearchStock shareManager] insertToTable:model.StockCode];
+                    [[SearchStock shareManager] insertToTable:model.stockCode];
                 }
+                [self.favStockArr addObject:model];
             }];
         }
-        self.favStockArr =[[SearchStock shareManager] allFavStock];     //取出自选股表中的股票
+        [self.tableView reloadData];
+        [self getStockData];
         [self startTimer];
     } error:^(JSError *error) {
         
@@ -131,6 +132,7 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
                 [self.resultData removeAllObjects];
                 [self.resultData addObjectsFromArray:data];
             }
+            self.favStockArr = self.resultData;
             [self.tableView reloadData];
         } failure:^(NSString *error) {
         }];
@@ -221,8 +223,8 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         StockModel *model = [self.favStockArr objectAtIndexCheck:indexPath.row];
-        [[SearchStock shareManager] deleteToTable:model.stockCode];
         
+        [[SearchStock shareManager] deleteToTable:model.stockCode];
         [StockPublic deleteStockFromServerWithStockCode:model.stockCode];   //通知服务器删除自选股
         self.favStockArr =[[SearchStock shareManager] allFavStock];
         [self startTimer];

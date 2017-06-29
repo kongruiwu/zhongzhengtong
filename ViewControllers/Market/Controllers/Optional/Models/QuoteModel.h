@@ -7,8 +7,8 @@
 // 这个model主要用于处理行情数据和行情报价牌
 
 #import <Foundation/Foundation.h>
-
-@interface QuoteModel : NSObject
+#import "BaseModel.h"
+@interface QuoteModel : BaseModel
 
 @property (nonatomic,copy)NSString *stockCode;
 @property (nonatomic,copy)NSString *stockName;
