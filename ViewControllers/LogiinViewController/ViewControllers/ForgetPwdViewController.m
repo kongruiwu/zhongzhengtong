@@ -273,6 +273,10 @@
         [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"两次密码不一致，请重新输入" duration:1.0f];
         return;
     }
+    if ([self.phoneTextF.text containsString:@" "]) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"字符中不能包含空格等特殊字符，请重新输入" duration:1.0f];
+        return;
+    }
     NSDictionary * params = @{
                               @"TelPhone":self.phoneNum,
                               @"NewPassword":self.phoneTextF.text,
