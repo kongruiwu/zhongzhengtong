@@ -99,8 +99,8 @@
     return cell;
 }
 - (void)getData{
-    if (self.pwdTextF.text.length< 6) {
-        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"密码长度不够6位，请重新输入" duration:1.0f];
+    if (self.pwdTextF.text.length< 6 || self.pwdTextF.text.length>18) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"密码长度位数为6～18位，请重新输入" duration:1.0f];
         return;
     }
     

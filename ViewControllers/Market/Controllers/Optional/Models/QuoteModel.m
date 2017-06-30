@@ -37,5 +37,13 @@
     }
     return _sellVOL;
 }
-
+- (instancetype)initWithDictionary:(NSDictionary *)dic{
+    self = [super initWithDictionary:dic];
+    if (self) {
+        if (dic[@"StockCode"]) {
+            self.stockCode  = dic[@"StockCode"];
+        }
+    }
+    return self;
+}
 @end

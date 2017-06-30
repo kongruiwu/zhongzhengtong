@@ -160,13 +160,19 @@
         cell = [[ChangePwdCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellid];
     }
     cell.getcode.hidden = YES;
+    cell.inputTextf.secureTextEntry = NO;
     if(indexPath.row == 0){
         self.phoneTextF = cell.inputTextf;
+        if (self.logType == LOGINTYPESETPWD) {
+            cell.inputTextf.secureTextEntry = YES;
+        }
     }else if (indexPath.row == 1) {
         if (self.logType != LOGINTYPESETPWD) {
             self.time = 59;
             cell.getcode.hidden =NO;
             self.getCodeBtn = cell.getcode;
+        }else{
+            cell.inputTextf.secureTextEntry = YES;
         }
         self.codeTextF = cell.inputTextf;
     }else if(indexPath.row == 2){
@@ -201,6 +207,11 @@
 }
 #pragma mark 获取验证码
 - (void)userGetCode{
+    if (self.phoneTextF.text.length < 11) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"手机号必须要大于11位，且必须为数字" duration:1.0f];
+        return;
+    }
+    
     [SVProgressHUD show];
     NSDictionary * params = @{
                               @"TelPhone":self.phoneTextF.text
@@ -254,8 +265,8 @@
 
 #pragma mark 用户重置密码
 - (void)resetPassWord{
-    if (self.phoneTextF.text.length < 6 || self.codeTextF.text.length<6) {
-        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"密码长度不得低于6位" duration:1.0f];
+    if (self.phoneTextF.text.length < 6 || self.phoneTextF.text.length>18 || self.codeTextF.text.length<6 || self.codeTextF.text.length>18) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"密码长度位数为6～18位，请重新输入" duration:1.0f];
         return;
     }
     if (![self.phoneTextF.text isEqualToString:self.codeTextF.text]) {
@@ -281,8 +292,8 @@
         [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"您还没有同意服务条款" duration:2.0f];
         return;
     }
-    if (self.pwdTextf.text.length <6) {
-        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"密码长度不够6位，请重新输入" duration:1.0f];
+    if (self.pwdTextf.text.length <6 || self.pwdTextf.text.length>18) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"密码长度位数为6～18位，请重新输入" duration:1.0f];
         return;
     }
     if (![self.pwdTextf.text isEqualToString:self.ageinTextf.text]) {
@@ -294,7 +305,7 @@
     NSDictionary * params = @{
                               @"UserName":self.phoneTextF.text,
                               @"UserPws":self.pwdTextf.text,
-                              @"TelPhone":self.phoneTextF.text,
+                              @"TelPhone":self.nameTextf.text,
                               @"Code":self.codeTextF.text
                               };
     [[NetWorkManager manager] POST:Page_Register tokenParams:params complete:^(id result) {

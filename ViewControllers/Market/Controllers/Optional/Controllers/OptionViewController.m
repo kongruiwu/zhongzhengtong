@@ -131,7 +131,18 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
                 [self.resultData removeAllObjects];
                 [self.resultData addObjectsFromArray:data];
             }
-            self.favStockArr = self.resultData;
+            if (self.favStockArr.count>self.resultData.count) {
+                for (int i = 0; i<self.resultData.count; i++) {
+                    StockModel * model = self.resultData[i];
+                    for (int  j = 0; j<self.favStockArr.count; j++) {
+                        StockModel * jmodel = self.favStockArr[j];
+                        if ([model.stockCode isEqualToString:jmodel.stockCode]) {
+                            [self.favStockArr replaceObjectAtIndex:j withObject:model];
+                        }
+                    }
+                }
+            }
+//            self.favStockArr = self.resultData;
             [self.tableView reloadData];
         } failure:^(NSString *error) {
         }];
@@ -198,7 +209,7 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
     if (cell == nil) {
         cell = [[StockCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellID];
     }
-    cell.model = [self.resultData objectAtIndexCheck:indexPath.row];
+    cell.model = [self.favStockArr objectAtIndexCheck:indexPath.row];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }

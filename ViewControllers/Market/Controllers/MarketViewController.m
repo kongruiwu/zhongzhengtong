@@ -99,7 +99,7 @@ typedef NS_ENUM(NSInteger,QuotationType) {
     [self.view addSubview:self.optionalVC.view];
 }
 - (void)refreshData{
-
+    [SVProgressHUD show];
     if ([self.segmentBtn selectedSegmentIndex] == 0) {
         [self.optionalVC requestStockList];
     }else{

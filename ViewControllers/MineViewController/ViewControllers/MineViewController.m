@@ -148,9 +148,17 @@
 //    [WXApi sendReq:req];
 }
 - (void)userLogin{
-    [[UserManager instance] userLogOut];
-    UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
-    [self presentViewController:nav animated:YES completion:nil];
+    UIAlertController * alertControler = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定是否要退出登录？" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction * cannce = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction * sure = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[UserManager instance] userLogOut];
+        UINavigationController * nav = [[UINavigationController alloc]initWithRootViewController:[LoginViewController new]];
+        [self presentViewController:nav animated:YES completion:nil];
+    }];
+    [alertControler addAction:cannce];
+    [alertControler addAction:sure];
+    [self presentViewController:alertControler animated:YES completion:nil];
+    
 }
 
 @end

@@ -213,12 +213,13 @@ static NSString *const FiveCell = @"FiveDangCell";
 
 #pragma  mark - 创建导航栏
 - (void)setupSearchBtn{
-    UIButton *searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    searchBtn.frame = CGRectMake(0, 0, 20, 20);
-    [searchBtn setImage:[UIImage imageNamed:@"Navi_search"] forState:UIControlStateNormal];
-    [searchBtn addTarget:self action:@selector(navigationBarRightButton) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *search = [[UIBarButtonItem alloc] initWithCustomView:searchBtn];
-    self.navigationItem.rightBarButtonItem = search;
+    UIImage * searchImg = [[UIImage imageNamed:@"Navi_search"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];;
+    UIImage * refreshImg = [[UIImage imageNamed:@"refresh"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIBarButtonItem * search = [[UIBarButtonItem alloc]initWithImage:searchImg style:UIBarButtonItemStylePlain target:self action:@selector(navigationBarRightButton)];
+    
+    UIBarButtonItem * refresh = [[UIBarButtonItem alloc]initWithImage:refreshImg style:UIBarButtonItemStylePlain target:self action:@selector(refreshData)];
+    
+    [self.navigationItem setRightBarButtonItems:@[refresh,search]];
 }
 
 #pragma mark - 导航栏右侧搜索按钮点击事件
@@ -226,7 +227,9 @@ static NSString *const FiveCell = @"FiveDangCell";
     FindStockVC *find = [[FindStockVC alloc] init];
     [self.navigationController pushViewController:find animated:YES];
 }
-
+- (void)refreshData{
+    [self getStockData];
+}
 #pragma mark - 初始化tableView
 - (void)setupTableView {
     self.headView = [StockDetailHeadView headView];
