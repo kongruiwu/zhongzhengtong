@@ -167,12 +167,20 @@
 
 #pragma mark -通知服务器添加自选股
 + (void)addStockFromServerWithStockCode:(NSString *)stockCode {
-    NSString *stockName =  [[SearchStock shareManager] searchStockName:stockCode];
+    StockModel * model =  [[SearchStock shareManager] searchModel:stockCode];
+    NSString * str = @"沪深A股";
+    if (model.isFav == 1) {
+        str = @"上证指数";
+    }else if(model.isFav == 2){
+        str = @"深证指数";
+    }
     NSDictionary *dic = @{
                           @"OperType":@"1",
-                          @"StockName":stockName,
+                          @"StockName":model.stockName,
                           @"StockCode":stockCode,
-                          @"UserId":[UserManager instance].userInfo.ID
+                          @"UserId":[UserManager instance].userInfo.ID,
+                          @"StockType":str,
+                          @"StockPY": model.JP
                           };
     [[NetWorkManager manager] POST:Page_Stock tokenParams:dic complete:^(id result) {
         [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"添加成功" duration:1.0];
@@ -184,12 +192,20 @@
 
 #pragma mark - 通知服务器删除自选股
 + (void)deleteStockFromServerWithStockCode:(NSString *)stockCode {
-    NSString *stockName =  [[SearchStock shareManager] searchStockName:stockCode];
+    StockModel * model =  [[SearchStock shareManager] searchModel:stockCode];
+    NSString * str = @"沪深A股";
+    if (model.isFav == 1) {
+        str = @"上证指数";
+    }else if(model.isFav == 2){
+        str = @"深证指数";
+    }
     NSDictionary *dic = @{
                           @"OperType":@"2",
-                          @"StockName":stockName,
+                          @"StockName":model.stockName,
                           @"StockCode":stockCode,
-                          @"UserId":[UserManager instance].userInfo.ID
+                          @"UserId":[UserManager instance].userInfo.ID,
+                          @"StockType":str,
+                          @"StockPY": model.JP
                           };
     [[NetWorkManager manager] POST:Page_Stock tokenParams:dic complete:^(id result) {
         [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"删除成功" duration:1.0];

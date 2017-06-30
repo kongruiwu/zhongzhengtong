@@ -255,7 +255,7 @@
 #pragma mark 用户重置密码
 - (void)resetPassWord{
     if (self.phoneTextF.text.length < 6 || self.codeTextF.text.length<6) {
-        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"密码长度部得低于6位" duration:1.0f];
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"密码长度不得低于6位" duration:1.0f];
         return;
     }
     if (![self.phoneTextF.text isEqualToString:self.codeTextF.text]) {

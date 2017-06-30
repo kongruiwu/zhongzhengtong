@@ -140,8 +140,20 @@
     FMResultSet *requestSet = [dataBase executeQuery:sql];
     while (requestSet.next) {
          stockName = [requestSet stringForColumn:@"stockName"];
+        
     }
     return stockName;
+}
+#pragma mark - 根据股票代码返回对应的股票名称
+- (NSString *)searchStockJPstring:(NSString *)stockCode{
+    NSString *stockJP = @"";
+    NSString *sql = [NSString stringWithFormat:@"select * from stock where stockCode = '%@'",stockCode];
+    FMResultSet *requestSet = [dataBase executeQuery:sql];
+    while (requestSet.next) {
+        stockJP = [requestSet stringForColumn:@"JP"];
+        
+    }
+    return stockJP;
 }
 
 #pragma mark- 条件查找对应的股票 :输入数字 即按照股票代码查找
@@ -154,6 +166,7 @@
         stockModel.isFav = [resultSet intForColumn:@"isFav"];
         stockModel.stockCode = [resultSet stringForColumn:@"stockCode"];
         stockModel.stockName = [resultSet stringForColumn:@"stockName"];
+        stockModel.JP = [resultSet stringForColumn:@"JP"];
     }
     return stockModel;
 }

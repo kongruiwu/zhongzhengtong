@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface RankViewController : UIViewController
-
+- (void)getStockData;
 @end

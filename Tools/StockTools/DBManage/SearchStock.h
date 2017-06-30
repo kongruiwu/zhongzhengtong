@@ -40,6 +40,8 @@ typedef  NS_ENUM(NSInteger, SearchResult) {
 
 - (NSString *)searchStockName:(NSString *)stockCode;
 
+/**查询股票简拼*/
+- (NSString *)searchStockJPstring:(NSString *)stockCode;
 // 条件查找对应的股票 :输入数字 即按照股票代码查找
 - (StockModel *)searchModel:(NSString *)stockCode;
 

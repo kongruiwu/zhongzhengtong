@@ -224,7 +224,7 @@ static NSString *const FiveCell = @"FiveDangCell";
 #pragma mark - 导航栏右侧搜索按钮点击事件
 - (void)navigationBarRightButton {
     FindStockVC *find = [[FindStockVC alloc] init];
-    [self.navigationController  pushViewController:find animated:YES];
+    [self.navigationController pushViewController:find animated:YES];
 }
 
 #pragma mark - 初始化tableView

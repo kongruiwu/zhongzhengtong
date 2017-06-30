@@ -85,20 +85,29 @@ typedef NS_ENUM(NSInteger,QuotationType) {
     [_segmentBtn addTarget:self action:@selector(choose:) forControlEvents:UIControlEventValueChanged];
     self.navigationItem.titleView = _segmentBtn;
     
-    UIButton* someButton= [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 21)];
-    UIImage* image= [UIImage imageNamed:@"Navi_search"] ;
-    [someButton setBackgroundImage:image forState:UIControlStateNormal];
-    [someButton setShowsTouchWhenHighlighted:NO];
-    [someButton addTarget:self action:@selector(navigationBarRightButton) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem* someBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:someButton];
-    [self.navigationItem setRightBarButtonItem:someBarButtonItem];
+    UIImage * searchImg = [[UIImage imageNamed:@"Navi_search"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];;
+    UIImage * refreshImg = [[UIImage imageNamed:@"refresh"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIBarButtonItem * search = [[UIBarButtonItem alloc]initWithImage:searchImg style:UIBarButtonItemStylePlain target:self action:@selector(navigationBarRightButton)];
+    
+    UIBarButtonItem * refresh = [[UIBarButtonItem alloc]initWithImage:refreshImg style:UIBarButtonItemStylePlain target:self action:@selector(refreshData)];
+    
+    [self.navigationItem setRightBarButtonItems:@[refresh,search]];
     
     
     [self addChildViewController:self.optionalVC];
     self.currentVC = self.optionalVC;
     [self.view addSubview:self.optionalVC.view];
 }
+- (void)refreshData{
 
+    if ([self.segmentBtn selectedSegmentIndex] == 0) {
+        [self.optionalVC requestStockList];
+    }else{
+        [self.quoteVC getStockData];
+    }
+    
+    
+}
 #pragma mark - CNNavigationBarDelegate
 - (void)navigationBarRightButton{
 //    if (![NetworkRequestTools isExistenceNetWork]) {

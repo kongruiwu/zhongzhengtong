@@ -10,5 +10,5 @@
 #import "QuoteModel.h"
 #import "ConfigHeader.h"
 @interface OptionViewController : UIViewController
-
+- (void)requestStockList;
 @end
