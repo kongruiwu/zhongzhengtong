@@ -99,6 +99,11 @@
     return cell;
 }
 - (void)getData{
+    if ([self.pwdTextF.text containsString:@" "]) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"字符中不能包含空格等特殊字符，请重新输入" duration:1.0f];
+        return;
+    }
+    
     if (self.pwdTextF.text.length< 6 || self.pwdTextF.text.length>18) {
         [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"密码长度位数为6～18位，请重新输入" duration:1.0f];
         return;

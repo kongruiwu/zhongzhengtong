@@ -191,6 +191,14 @@
 }
 
 - (void)sureBtnClick{
+    if (self.phoneTextF.text.length == 0 || self.codeTextF.text.length == 0 || self.nameTextf.text.length == 0 || self.pwdTextf.text.length == 0 || self.ageinTextf.text.length == 0) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"请正确输入，数据不能为空" duration:2.0f];
+        return ;
+    }
+    if ([self.phoneTextF.text containsString:@" "]|| [self.codeTextF.text containsString:@" "] || [self.nameTextf.text containsString:@" "]|| [self.pwdTextf.text containsString:@" "] || [self.ageinTextf.text containsString: @" "]) {
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"字符中不能包含空格等特殊字符，请重新输入" duration:1.0f];
+        return;
+    }
     if (self.logType == LOGINTYPEFOGET) {
         [self checkCode];
     }else if(self.logType == LOGINTYPEREGISTER){
@@ -208,7 +216,7 @@
 #pragma mark 获取验证码
 - (void)userGetCode{
     if (self.phoneTextF.text.length < 11) {
-        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"手机号必须要大于11位，且必须为数字" duration:1.0f];
+        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"请输入正确的手机号" duration:1.0f];
         return;
     }
     
@@ -271,10 +279,6 @@
     }
     if (![self.phoneTextF.text isEqualToString:self.codeTextF.text]) {
         [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"两次密码不一致，请重新输入" duration:1.0f];
-        return;
-    }
-    if ([self.phoneTextF.text containsString:@" "]) {
-        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"字符中不能包含空格等特殊字符，请重新输入" duration:1.0f];
         return;
     }
     NSDictionary * params = @{

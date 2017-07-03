@@ -194,6 +194,7 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 - (void)userLogin{
+    
     [SVProgressHUD show];
     [[NSUserDefaults standardUserDefaults] setValue:self.nameT.text forKey:@"UserName"];
     if ([UserManager instance].isSavePwd) {
