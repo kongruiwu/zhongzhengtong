@@ -1825,7 +1825,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hpkj.yjc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6cc35442-41ed-4a61-8aca-43e3b1c693a9";
+				PROVISIONING_PROFILE = "8c6eb1ee-08dd-4372-88b7-c10426b6501f";
 				PROVISIONING_PROFILE_SPECIFIER = zhongzhengtong;
 			};
 			name = Debug;
@@ -1844,8 +1844,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hpkj.yjc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "59bfbd09-5844-4acb-81e5-aa4fc5e76143";
-				PROVISIONING_PROFILE_SPECIFIER = distribution;
+				PROVISIONING_PROFILE = "0fed74ab-24ce-41c5-98b8-b3f8f4be21ca";
+				PROVISIONING_PROFILE_SPECIFIER = zhongzhengtongdistrion;
 			};
 			name = Release;
 		};
