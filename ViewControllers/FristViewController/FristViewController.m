@@ -57,7 +57,6 @@
     
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    NSLog(@"%f",scrollView.contentOffset.x);
     if (scrollView.contentOffset.x > UI_WIDTH * (self.images.count - 1) + 20) {
         [[UIApplication sharedApplication].keyWindow setRootViewController:[RootViewController new]];
     }

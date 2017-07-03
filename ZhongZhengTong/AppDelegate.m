@@ -62,7 +62,6 @@
     [IQKeyboardManager sharedManager].shouldShowTextFieldPlaceholder = NO;
 }
 - (void)JpushSettingWithDic:(NSDictionary *)launchOptions{
-    [JPUSHService setupWithOption:launchOptions appKey:JPUSHKey channel:@"App Store" apsForProduction:YES advertisingIdentifier:nil];
     JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
     entity.types = JPAuthorizationOptionAlert|JPAuthorizationOptionBadge|JPAuthorizationOptionSound;
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {

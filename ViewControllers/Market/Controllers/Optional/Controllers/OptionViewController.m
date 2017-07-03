@@ -141,8 +141,9 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
                         }
                     }
                 }
+            }else{
+                self.favStockArr = self.resultData;
             }
-//            self.favStockArr = self.resultData;
             [self.tableView reloadData];
         } failure:^(NSString *error) {
         }];
