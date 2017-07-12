@@ -51,6 +51,7 @@
     
 }
 - (void)pushToViewController:(NSNumber *)type{
+    self.currentVC = [self getCurrentVC];
     switch ([type integerValue]) {
         case JPUSHTYPESYSMESSAGE:
         {
@@ -62,7 +63,6 @@
         case JPUSHTYPESTOCK:
         {
             self.currentVC.tabBarController.selectedIndex = 2;
-//            self.tabBarController.selectedIndex = 2;
         }
             break;
         case JPUSHTYPEREFERENCE:
@@ -81,6 +81,13 @@
             
             break;
     }
+}
+- (UIViewController *)getCurrentVC
+{
+    UITabBarController *tbc = (UITabBarController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+    UINavigationController  *nvc = tbc.selectedViewController;
+    UIViewController *vc = nvc.visibleViewController;
+    return vc;
 }
 
 - (void)registerDelgate:(id)obj{
