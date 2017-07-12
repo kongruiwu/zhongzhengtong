@@ -81,7 +81,8 @@
     [[UserManager instance] updateUserInfo];
 }
 - (void)UserLoginJpushSetting{
-    [JPUSHService setTags:nil alias:[UserManager instance].userInfo.ID fetchCompletionHandle:nil];
+    [JPUSHService setTags:nil alias:[NSString stringWithFormat:@"%@",[UserManager instance].userInfo.ID] fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
+    }];
 }
 - (void)UserLogOutJpushSetting{
     [JPUSHService setTags:nil alias:@"" fetchCompletionHandle:nil];
