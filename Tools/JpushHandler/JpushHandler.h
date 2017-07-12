@@ -26,8 +26,12 @@ typedef NS_ENUM(NSInteger, JPUSHTYPE){
 @interface JpushHandler : NSObject
 
 @property (nonatomic, assign) id<JpushHanderDlegate> delegate;
+
+@property (nonatomic, strong) UIViewController * currentVC;
+
 + (instancetype)handler;
 //注册代理
 - (void)registerDelgate:(id)obj;
+
 - (void)handerJpushMessage:(NSDictionary *)message withForground:(BOOL)rec;
 @end

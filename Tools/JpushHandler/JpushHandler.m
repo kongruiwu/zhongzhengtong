@@ -7,7 +7,9 @@
 //
 
 #import "JpushHandler.h"
-
+#import "MessageListViewController.h"
+#import "ReferenceViewController.h"
+#import "ExpertViewController.h"
 @implementation JpushHandler
 
 + (instancetype)handler{
@@ -33,7 +35,8 @@
         UIAlertAction * cannce = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
         UIAlertAction * sure = [UIAlertAction actionWithTitle:@"去看看" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             if (self.delegate&& [self.delegate respondsToSelector:@selector(pushToViewController:)] ) {
-                [self.delegate pushToViewController:[type integerValue]];
+//                [self.delegate pushToViewController:[type integerValue]];
+                [self pushToViewController:type];
             }
         }];
         [alert addAction:cannce];
@@ -47,6 +50,39 @@
     
     
 }
+- (void)pushToViewController:(NSNumber *)type{
+    switch ([type integerValue]) {
+        case JPUSHTYPESYSMESSAGE:
+        {
+            MessageListViewController * vc = [MessageListViewController new];
+            vc.isPush = NO;
+            [self.currentVC.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case JPUSHTYPESTOCK:
+        {
+            self.currentVC.tabBarController.selectedIndex = 2;
+//            self.tabBarController.selectedIndex = 2;
+        }
+            break;
+        case JPUSHTYPEREFERENCE:
+        {
+            ReferenceViewController * vc = [ReferenceViewController new];
+            [self.currentVC.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case JPUSHTYPEQUESTION:
+        {
+            ExpertViewController * vc = [ExpertViewController new];
+            [self.currentVC.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        default:
+            
+            break;
+    }
+}
+
 - (void)registerDelgate:(id)obj{
     if (obj != nil) {
         self.delegate = obj;

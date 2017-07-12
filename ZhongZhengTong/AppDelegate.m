@@ -224,6 +224,7 @@
     if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [JPUSHService handleRemoteNotification:userInfo];
     }
+    [JpushHandler handler].currentVC = [self getCurrentVC];
     [[JpushHandler handler] handerJpushMessage:userInfo withForground:YES];
     completionHandler(UNNotificationPresentationOptionAlert); // 需要执行这个方法，选择是否提醒用户，有Badge、Sound、Alert三种类型可以选择设置
 }
@@ -241,13 +242,20 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // Required, iOS 7 Support
     [JPUSHService handleRemoteNotification:userInfo];
+//    [[JpushHandler handler] handerJpushMessage:userInfo withForground:NO];
     if (application.applicationState == UIApplicationStateActive) {
+        [JpushHandler handler].currentVC = [self getCurrentVC];
         [[JpushHandler handler] handerJpushMessage:userInfo withForground:YES];
     }else{
         [[JpushHandler handler] handerJpushMessage:userInfo withForground:NO];
     }
     completionHandler(UIBackgroundFetchResultNewData);
     
+}
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+       // Required,For systems with less than or equal to iOS6
+        [JPUSHService handleRemoteNotification:userInfo];
+       [[JpushHandler handler] handerJpushMessage:userInfo withForground:NO];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -278,6 +286,13 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+- (UIViewController *)getCurrentVC
+{
+    UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
+    UINavigationController  *nvc = tbc.selectedViewController;
+    UIViewController *vc = nvc.visibleViewController;
+    return vc;
 }
 
 
