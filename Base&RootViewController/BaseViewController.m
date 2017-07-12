@@ -54,7 +54,6 @@
     }
 }
 - (void)navSetting{
-    
     self.navigationController.navigationBar.barTintColor = MainRed;
 }
 - (void)RefreshSetting{

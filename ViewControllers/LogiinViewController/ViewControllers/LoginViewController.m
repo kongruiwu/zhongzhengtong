@@ -56,24 +56,13 @@
     UIView * header  = [Factory creatViewWithColor:[UIColor whiteColor]];
     header.frame = CGRectMake(0, 0, UI_WIDTH, Anno750(400));
     UIImageView * logoImg = [Factory creatImageViewWithImage:@"textlogo"];
-    UIButton * registBtn = [Factory creatButtonWithTitle:@"注册"
-                                         backGroundColor:[UIColor clearColor]
-                                               textColor:KTColor_darkGray
-                                                textSize:font750(30)];
-    [registBtn addTarget:self action:@selector(pushToregisterviewController) forControlEvents:UIControlEventTouchUpInside];
+    
     [header addSubview:logoImg];
-    [header addSubview:registBtn];
     [logoImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(@0);
         make.centerY.equalTo(@0);
         make.width.equalTo(@(Anno750(450)));
         make.height.equalTo(@(Anno750(100)));
-    }];
-    [registBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(@(-Anno750(30)));
-        make.top.equalTo(@(Anno750(90)));
-        make.width.equalTo(@(Anno750(80)));
-        make.height.equalTo(@(Anno750(40)));
     }];
     return header;
 }
@@ -113,9 +102,19 @@
                                               textColor:KTColor_darkGray
                                                textSize:font750(26)];
     [phoneBtn addTarget:self action:@selector(callPhone) forControlEvents:UIControlEventTouchUpInside];
+    UIButton * registBtn = [Factory creatButtonWithTitle:@"没有帐号？点我注册"
+                                         backGroundColor:[UIColor clearColor]
+                                               textColor:MainRed
+                                                textSize:font750(30)];
+    registBtn.layer.borderColor = MainRed.CGColor;
+    registBtn.layer.borderWidth = 1.0f;
+    registBtn.layer.cornerRadius = Anno750(35);
+    [registBtn addTarget:self action:@selector(pushToregisterviewController) forControlEvents:UIControlEventTouchUpInside];
+    
     [footer addSubview:loginBtn];
     [footer addSubview:savePwd];
     [footer addSubview:forgetBtn];
+    [footer addSubview:registBtn];
     [footer addSubview:phoneBtn];
     [loginBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@(Anno750(24)));
@@ -135,6 +134,12 @@
         make.width.equalTo(@(Anno750(150)));
         make.height.equalTo(@(Anno750(30)));
         make.right.equalTo(@(-Anno750(24)));
+    }];
+    [registBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(@0);
+        make.top.equalTo(forgetBtn.mas_bottom).offset(Anno750(60));
+        make.width.equalTo(@(Anno750(400)));
+        make.height.equalTo(@(Anno750(70)));
     }];
     [phoneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(@0);
