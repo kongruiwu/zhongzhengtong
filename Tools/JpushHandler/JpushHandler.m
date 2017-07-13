@@ -35,7 +35,6 @@
         UIAlertAction * cannce = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
         UIAlertAction * sure = [UIAlertAction actionWithTitle:@"去看看" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             if (self.delegate&& [self.delegate respondsToSelector:@selector(pushToViewController:)] ) {
-//                [self.delegate pushToViewController:[type integerValue]];
                 [self pushToViewController:type];
             }
         }];

@@ -71,12 +71,12 @@
     footer.frame = CGRectMake(0, 0, UI_WIDTH, Anno750(735));
     UIButton * loginBtn = [Factory creatButtonWithTitle:@"登录"
                                         backGroundColor:[UIColor clearColor]
-                                              textColor:KTColor_lightGray
+                                              textColor:MainRed
                                                textSize:font750(32)];
     loginBtn.layer.borderWidth = 1.0f;
-    [loginBtn setTitleColor:MainRed forState:UIControlStateSelected];
+    [loginBtn setTitleColor:KTColor_lightGray forState:UIControlStateDisabled];
     self.loginBtn = loginBtn;
-    [RACObserve(self.loginBtn, selected) subscribeNext:^(id  _Nullable x) {
+    [RACObserve(self.loginBtn, enabled) subscribeNext:^(id  _Nullable x) {
         if ([x boolValue]) {
             self.loginBtn.layer.borderColor = MainRed.CGColor;
         }else{
@@ -236,16 +236,16 @@
 
 -(void)textchaged:(UITextField *)textf{
     if (self.nameT.text.length > 0 && self.pwdT.text.length>0) {
-        self.loginBtn.selected = YES;
+        self.loginBtn.enabled = YES;
     }else{
-        self.loginBtn.selected = NO;
+        self.loginBtn.enabled = NO;
     }
 }
 - (void)checkLoginBtnSate{
     if (self.nameT.text.length > 0 && self.pwdT.text.length>0) {
-        self.loginBtn.selected = YES;
+        self.loginBtn.enabled = YES;
     }else{
-        self.loginBtn.selected = NO;
+        self.loginBtn.enabled = NO;
     }
 }
 @end

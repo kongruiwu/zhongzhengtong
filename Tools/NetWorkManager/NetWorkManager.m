@@ -52,12 +52,12 @@
             }
 #ifdef DEBUG
             else{
-                [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"Token获取失败" duration:2.0f];
+//                [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"Token获取失败" duration:2.0f];
             }
 #endif
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
 #ifdef DEBUG
-            [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"Token获取失败" duration:2.0f];
+//            [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"Token获取失败" duration:2.0f];
 #endif
         }];
         
@@ -82,7 +82,7 @@
                 jserror.message = dic[@"msg"];
                 errorblock(jserror);
     #ifdef DEBUG
-                [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:[NSString stringWithFormat:@"错误码：%@  \n 错误信息 %@",jserror.code,jserror.message] duration:2.0f];
+//                [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:[NSString stringWithFormat:@"错误码：%@  \n 错误信息 %@",jserror.code,jserror.message] duration:2.0f];
     #endif
             }
             [SVProgressHUD dismiss];
@@ -91,9 +91,12 @@
             JSError * jserror = [[JSError alloc]init];
             jserror.code = [NSString stringWithFormat:@"%ld",error.code];
             jserror.message = error.description;
+            if (error.code == -1009) {
+                jserror.message = @"网络错误";
+            }
             errorblock(jserror);
     #ifdef DEBUG
-            [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:[NSString stringWithFormat:@"错误码：%@  \n 错误信息 %@",jserror.code,jserror.message] duration:2.0f];
+//            [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:[NSString stringWithFormat:@"错误码：%@  \n 错误信息 %@",jserror.code,jserror.message] duration:2.0f];
     #endif
         }];
     
@@ -128,12 +131,12 @@
             }
 #ifdef DEBUG
             else{
-                [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"Token获取失败" duration:2.0f];
+//                [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"Token获取失败" duration:2.0f];
             }
 #endif
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
 #ifdef DEBUG
-            [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"Token获取失败" duration:2.0f];
+//            [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"Token获取失败" duration:2.0f];
 #endif
         }];
         
@@ -158,7 +161,7 @@
             jserror.message = dic[@"msg"];
             errorblock(jserror);
 #ifdef DEBUG
-            [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:[NSString stringWithFormat:@"错误码：%@  \n 错误信息 %@",jserror.code,jserror.message] duration:2.0f];
+//            [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:[NSString stringWithFormat:@"错误码：%@  \n 错误信息 %@",jserror.code,jserror.message] duration:2.0f];
 #endif
         }
         [SVProgressHUD dismiss];
@@ -167,9 +170,12 @@
         JSError * jserror = [[JSError alloc]init];
         jserror.code = [NSString stringWithFormat:@"%ld",error.code];
         jserror.message = error.description;
+        if (error.code == -1009) {
+            jserror.message = @"网络错误";
+        }
         errorblock(jserror);
 #ifdef DEBUG
-        [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:[NSString stringWithFormat:@"错误码：%@  \n 错误信息 %@",jserror.code,jserror.message] duration:2.0f];
+//        [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:[NSString stringWithFormat:@"错误码：%@  \n 错误信息 %@",jserror.code,jserror.message] duration:2.0f];
 #endif
     }];
     
@@ -198,12 +204,12 @@
             self.lastGetTokenTime = [NSNumber numberWithLong:time(NULL)];
         }else{
 #ifdef DEBUG
-            [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"Token获取失败" duration:2.0f];
+//            [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"Token获取失败" duration:2.0f];
 #endif
             }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
 #ifdef DEBUG
-        [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"Token获取失败" duration:2.0f];
+//        [ToastView presentToastWithin:[UIApplication sharedApplication].keyWindow withIcon:APToastIconNone text:@"Token获取失败" duration:2.0f];
 #endif
     }];
 }

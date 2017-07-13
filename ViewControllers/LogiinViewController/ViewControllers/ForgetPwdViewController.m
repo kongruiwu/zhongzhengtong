@@ -100,11 +100,12 @@
     }
     UIButton * nextBtn = [Factory creatButtonWithTitle:title
                                        backGroundColor:[UIColor clearColor]
-                                             textColor:KTColor_lightGray
+                                             textColor:MainRed
                                               textSize:font750(30)];
+    nextBtn.enabled = NO;
     nextBtn.layer.borderColor = MainRed.CGColor;
     nextBtn.layer.borderWidth = 1.0f;
-    [nextBtn setTitleColor:MainRed forState:UIControlStateSelected];
+    [nextBtn setTitleColor:KTColor_lightGray forState:UIControlStateDisabled];
     footer.frame = CGRectMake(0, 0, UI_WIDTH, Anno750(120));
     [nextBtn addTarget:self action:@selector(sureBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [footer addSubview:nextBtn];
@@ -115,7 +116,7 @@
         make.top.equalTo(@(Anno750(30)));
     }];
     self.nextBtn = nextBtn;
-    [RACObserve(self.nextBtn, selected) subscribeNext:^(id  _Nullable x) {
+    [RACObserve(self.nextBtn, enabled) subscribeNext:^(id  _Nullable x) {
         if ([x boolValue]) {
             self.nextBtn.layer.borderColor = MainRed.CGColor;
         }else{
@@ -191,10 +192,6 @@
 }
 
 - (void)sureBtnClick{
-    if (self.phoneTextF.text.length == 0 || self.codeTextF.text.length == 0 || self.nameTextf.text.length == 0 || self.pwdTextf.text.length == 0 || self.ageinTextf.text.length == 0) {
-        [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"请正确输入，数据不能为空" duration:2.0f];
-        return ;
-    }
     if ([self.phoneTextF.text containsString:@" "]|| [self.codeTextF.text containsString:@" "] || [self.nameTextf.text containsString:@" "]|| [self.pwdTextf.text containsString:@" "] || [self.ageinTextf.text containsString: @" "]) {
         [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"字符中不能包含空格等特殊字符，请重新输入" duration:1.0f];
         return;
@@ -331,21 +328,21 @@
 - (void)textchanged:(UITextField *)textf{
     if (self.logType == LOGINTYPEFOGET) {
         if (self.phoneTextF.text.length >= 11 && self.codeTextF.text.length>= 4) {
-            self.nextBtn.selected = YES;
+            self.nextBtn.enabled = YES;
         }else{
-            self.nextBtn.selected = NO;
+            self.nextBtn.enabled = NO;
         }
     }else if(self.logType == LOGINTYPEREGISTER){
         if (self.phoneTextF.text.length >= 11 && self.codeTextF.text.length>= 4 && self.nameTextf.text.length >0 && self.pwdTextf.text.length>0 && self.ageinTextf.text.length>0 ) {
-            self.nextBtn.selected = YES;
+            self.nextBtn.enabled = YES;
         }else{
-            self.nextBtn.selected = NO;
+            self.nextBtn.enabled = NO;
         }
     }else if(self.logType == LOGINTYPESETPWD){
         if (self.phoneTextF.text.length >= 6 && self.codeTextF.text.length >= 6) {
-            self.nextBtn.selected = YES;
+            self.nextBtn.enabled = YES;
         }else{
-            self.nextBtn.selected = NO;
+            self.nextBtn.enabled = NO;
         }
     }
 }

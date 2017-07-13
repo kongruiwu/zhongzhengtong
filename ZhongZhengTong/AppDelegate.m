@@ -241,7 +241,6 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     // Required, iOS 7 Support
     [JPUSHService handleRemoteNotification:userInfo];
-//    [[JpushHandler handler] handerJpushMessage:userInfo withForground:NO];
     if (application.applicationState == UIApplicationStateActive) {
         [[JpushHandler handler] handerJpushMessage:userInfo withForground:YES];
     }else{
@@ -285,15 +284,5 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
-
-
-- (UIViewController *)getCurrentVC
-{
-    UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
-    UINavigationController  *nvc = tbc.selectedViewController;
-    UIViewController *vc = nvc.visibleViewController;
-    return vc;
-}
-
 
 @end
