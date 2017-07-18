@@ -81,7 +81,9 @@
     [[UserManager instance] updateUserInfo];
 }
 - (void)UserLoginJpushSetting{
-    [JPUSHService setTags:nil alias:[NSString stringWithFormat:@"%@",[UserManager instance].userInfo.ID] fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
+    NSMutableSet *tags = [NSMutableSet set];
+    [tags addObject:@"10000000"];
+    [JPUSHService setTags:tags alias:[NSString stringWithFormat:@"%@",[UserManager instance].userInfo.ID] fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias) {
     }];
 }
 - (void)UserLogOutJpushSetting{
@@ -251,7 +253,7 @@
 }
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
        // Required,For systems with less than or equal to iOS6
-        [JPUSHService handleRemoteNotification:userInfo];
+       [JPUSHService handleRemoteNotification:userInfo];
        [[JpushHandler handler] handerJpushMessage:userInfo withForground:NO];
 }
 

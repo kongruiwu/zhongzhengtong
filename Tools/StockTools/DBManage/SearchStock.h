@@ -48,6 +48,8 @@ typedef  NS_ENUM(NSInteger, SearchResult) {
 //根据股票代码确定此支股票是否为指数  YES即为指数，NO就是普通股票
 - (NSInteger)searStockIsFav:(NSString *)stockCode;
 
+- (BOOL)isExistInStock:(NSString *)stockCode;
+
 /**************************************操作自选股favStock表*************************************************/
 //增加
 - (BOOL)insertToTable:(NSString *)stockCode;

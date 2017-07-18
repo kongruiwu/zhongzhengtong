@@ -93,7 +93,6 @@
             }else{
                 [ToastView presentToastWithin:self.view withIcon:APToastIconNone text:@"没有更多了" duration:1.0f];
             }
-            
         }else{
             [self showNullViewWithMessage:@"网络好像有问题..."];
         }

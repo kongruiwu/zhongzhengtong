@@ -80,6 +80,7 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
         if ([result isKindOfClass:[NSArray class]]) {
             [result enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 QuoteModel *model = [[QuoteModel alloc] initWithDictionary:obj];
+                
                 BOOL isFavStock = [[SearchStock shareManager] isExistInTable:model.stockCode];
                 if (!isFavStock) {
                     [[SearchStock shareManager] insertToTable:model.stockCode];
@@ -234,7 +235,6 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         StockModel *model = [self.favStockArr objectAtIndexCheck:indexPath.row];
-        
         [[SearchStock shareManager] deleteToTable:model.stockCode];
         [StockPublic deleteStockFromServerWithStockCode:model.stockCode];   //通知服务器删除自选股
         self.favStockArr =[[SearchStock shareManager] allFavStock];

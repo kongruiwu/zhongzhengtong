@@ -182,6 +182,14 @@
     }
     return isFav;
 }
+
+#pragma mark - 查询某只股票是否在表stock中
+- (BOOL)isExistInStock:(NSString *)stockCode {
+    NSString *sql = [NSString stringWithFormat:@"select stockCode from stock where stockCode = '%@'",stockCode];
+    FMResultSet *result = [dataBase executeQuery:sql];
+    return [result next];
+}
+
 /*********************************对自选股favStock表的操作**************************************/
 #pragma mark - 对favStock表操作
 #pragma mark - 增加自选股
