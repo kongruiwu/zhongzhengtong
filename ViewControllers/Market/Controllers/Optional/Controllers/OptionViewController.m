@@ -80,12 +80,13 @@ static NSString * const NoCell = @"NoCell";  //定义cell的标识
         if ([result isKindOfClass:[NSArray class]]) {
             [result enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 QuoteModel *model = [[QuoteModel alloc] initWithDictionary:obj];
-                
-                BOOL isFavStock = [[SearchStock shareManager] isExistInTable:model.stockCode];
-                if (!isFavStock) {
-                    [[SearchStock shareManager] insertToTable:model.stockCode];
+                if ([[SearchStock shareManager] isExistInStock:model.stockCode]) {
+                    BOOL isFavStock = [[SearchStock shareManager] isExistInTable:model.stockCode];
+                    if (!isFavStock) {
+                        [[SearchStock shareManager] insertToTable:model.stockCode];
+                    }
+                    [self.favStockArr addObject:model];
                 }
-                [self.favStockArr addObject:model];
             }];
         }
         [self.tableView reloadData];
