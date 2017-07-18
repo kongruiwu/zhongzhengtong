@@ -73,6 +73,7 @@
         case JPUSHTYPEQUESTION:
         {
             ExpertViewController * vc = [ExpertViewController new];
+            vc.isMine = YES;
             [self.currentVC.navigationController pushViewController:vc animated:YES];
         }
             break;

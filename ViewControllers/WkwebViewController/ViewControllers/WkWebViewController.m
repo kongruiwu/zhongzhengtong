@@ -75,7 +75,7 @@
                                                    encoding:NSUTF8StringEncoding
                                                       error:nil];
      htmlCont = [htmlCont stringByReplacingOccurrencesOfString:@"ReplaceTitle" withString:self.newsTitle];
-    htmlCont = [htmlCont stringByReplacingOccurrencesOfString:@"ReplaceTime" withString:self.timeString];
+    htmlCont = [htmlCont stringByReplacingOccurrencesOfString:@"ReplaceTime" withString:[Factory getTodayTimeType:self.timeString]];
     htmlCont = [htmlCont stringByReplacingOccurrencesOfString:@"ReplaceContent" withString:self.contentStr];
     
     return htmlCont;
