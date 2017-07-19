@@ -87,7 +87,7 @@
     }];
 }
 - (void)UserLogOutJpushSetting{
-    [JPUSHService setTags:nil alias:@"" fetchCompletionHandle:nil];
+    [JPUSHService setTags:[NSMutableSet setWithObject:@""] alias:@"" fetchCompletionHandle:nil];
 }
 - (void)userLogOut{
     if (![UserManager instance].isLog) {
@@ -117,8 +117,16 @@
     NSString *stringDate = [format stringFromDate:date];
     NSString *stirng = [YDConfigurationHelper getStringValueForConfigurationKey:@"isToday"];
     if (![stirng isEqualToString:stringDate]){
+        //不是同一天
+        [YDConfigurationHelper setBoolValueForConfigurationKey:@"isUpdateSqlit" withValue:NO];
         [YDConfigurationHelper setStringValueForConfigurationKey:@"isToday" withValue:stringDate];
         [self getStocks];
+    }else{
+        //是同一天
+        if (![YDConfigurationHelper getBoolValueForConfigurationKey:@"isUpdateSqlit"]) {
+            //没有成功更新数据库
+            [self getStocks];
+        }
     }
 }
 
@@ -137,7 +145,7 @@
                         StockModel *model = [[StockModel alloc] init];
                         model.isFav = 2;
                         [model setValuesForKeysWithDictionary:self.SZArr[i]];
-                        //                        [[SearchStock shareManager] replaceStock:model];  //多线程操作数据库会导致崩溃或丢失数据
+//                        [[SearchStock shareManager] replaceStock:model];  //多线程操作数据库会导致崩溃或丢失数据
                         [[SearchStock shareManager] replaceStockInQueue:model];
                     }
                     [YDConfigurationHelper setIntergerValueForConfigurationKey:@"SZExp" withValue:self.SZArr.count];
@@ -186,6 +194,7 @@
                         [[SearchStock shareManager] replaceStockInQueue:model];
                     }
                     [YDConfigurationHelper setIntergerValueForConfigurationKey:@"HuShenA" withValue:self.HuShenArr.count];
+                    [YDConfigurationHelper setBoolValueForConfigurationKey:@"isUpdateSqlit" withValue:YES];
                 });
             }
         }

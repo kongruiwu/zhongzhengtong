@@ -168,6 +168,9 @@
 #pragma mark -通知服务器添加自选股
 + (void)addStockFromServerWithStockCode:(NSString *)stockCode {
     StockModel * model =  [[SearchStock shareManager] searchModel:stockCode];
+    if (model.stockCode == nil) {
+        return ;
+    }
     NSString * str = @"沪深A股";
     if (model.isFav == 1) {
         str = @"上证指数";
